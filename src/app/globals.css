@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "AppleFont";
+  src: url("/assets/fonts/SFPRODISPLAYBOLD.OTF") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "AppleFont";
+  src: url("/assets/fonts/SFPRODISPLAYMEDIUM.OTF") format("opentype");
+  font-weight: medium;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "AppleFont";
+  src: url("/assets/fonts/SFPRODISPLAYREGULAR.OTF") format("opentype");
+  font-weight: regular;
+  font-style: normal;
+}
+
+@theme {
+  --color-custombg: #ececec;
+  --color-text: #000000;
+  --color-textHover: #444444;
+  --color-light: #939393;
+  --font-apple: "AppleFont", sans-serif;
+  --shadow-light: 3px 3px 15px rgba(0, 0, 0, 0.1);
+  --shadow-strong: 5px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+button {
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+textarea:focus,
+textarea:active,
+input:focus,
+input:active {
+  box-shadow: none;
+  outline: none;
+}
+
+ul,
+ol,
+li {
+  list-style-type: none;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+select {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background: transparent;
+  appearance: none;
+  box-shadow: none;
+}
+
+select:focus,
+select:hover {
+  outline: none;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+::selection {
+  background: #000000;
+  color: #ececec;
+}
+
+.userSection {
+  @apply py-36;
+}
+
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply 
+    min-w-[320px]
+    bg-custombg text-text
+    text-base
+
+    lg:text-xl 
+  }
+
+  h1 {
+    @apply text-4xl font-bold
+  }
+
+  label {
+    @apply 
+    w-20 text-end font-bold
+    break-keep
+    text-sm
+
+    lg:w-30 lg:text-xl
+  }
+
+  @media (max-width: 1023.98px) {
+    body {
+      @apply text-lg
+    }
+
+    h1 {
+      @apply text-3xl
+    }
+
+  }
+}
+
+@layer components {
+  .global-px {
+    @apply px-10 lg:px-40 2xl:px-80;
+  }
+
+  .btn-strong {
+    @apply 
+    min-w-36 h-12
+    px-5 py-1
+
+    rounded-full bg-custombg shadow-light
+    
+    hover:text-textHover
+    hover:shadow-strong
+    lg:px-10 lg:py-2;
+  }
+
+  .register-label {
+    @apply
+    w-28 text-end font-bold
+    lg:w-40
+  }
+
+  .register-label-box {
+    @apply
+    flex items-center gap-5
+
+    lg:gap-10
+  }
+}
