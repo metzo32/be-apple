@@ -42,10 +42,10 @@ export default function RegisterPage() {
   };
 
   return (
-    <section className="py-48 flex flex-col items-center justify-center">
+    <section className="py-24 flex flex-col items-center justify-center">
       <h1>회원가입</h1>
       <form
-        className="pt-20 lg:pt-30 flex flex-col gap-30 items-center justify-center"
+        className="pt-20 lg:pt-30 flex flex-col gap-20 items-center justify-center"
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col gap-5 lg:gap-10">

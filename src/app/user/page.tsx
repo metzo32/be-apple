@@ -1,17 +1,19 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
+import SelectComp from "./SelectComp";
+import LoadingScreen from "@/components/LoadingScreen";
 import WishCard from "@/components/WishCard";
 import AddButton from "@/components/AddButton";
 import { macbookData } from "../../../public/fakeData/macbookData";
-import SelectComp from "./SelectComp";
 import SignOut from "@/components/SignOut";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import LoadingScreen from "@/components/LoadingScreen";
+import { useUserInfo } from "@/stores/useUserInfo";
 
 export default function UserPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const userData = useUserInfo((state) => state.userInfo);
 
   const router = useRouter();
 
@@ -29,7 +31,7 @@ export default function UserPage() {
   ) : (
     <div className="relative">
       <section className="userSection flex flex-col items-center gap-10">
-        <h1 className="text-4xl font-bold">안녕하세요, userId 님.</h1>
+        <h1 className="text-4xl font-bold">안녕하세요, {userData?.name} 님.</h1>
         <SignOut />
       </section>
 

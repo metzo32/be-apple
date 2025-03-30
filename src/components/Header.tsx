@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import ButtonBasic from "./designs/ButtonMild";
 import ButtonStrong from "./designs/ButtonStrong";
+import { useUserInfo } from "@/stores/useUserInfo";
 
 interface HeaderDataProps {
   text: string;
@@ -14,17 +15,18 @@ type HeaderText = " " | "로그인" | "내 페이지";
 
 export default function Header() {
   const [text, setText] = useState<HeaderText>(" ");
+  const userData = useUserInfo((state) => state.userInfo);
   const router = useRouter();
   const path = usePathname();
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
+    if (userData) {
       setText("내 페이지");
     } else {
       setText("로그인");
     }
-  }, []);
+    console.log("헤더데이터", userData)
+  }, [userData]);
 
   const headerBtnData: HeaderDataProps[] = [
     {
@@ -45,7 +47,7 @@ export default function Header() {
     if (path === "/user") {
       return;
     } else {
-      router.push("login");
+      router.push("/login");
     }
   };
 

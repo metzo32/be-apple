@@ -2,15 +2,21 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { get } from "@/api/api";
+import { fetchSignIn } from "@/components/fetch/fetchSignIn";
 import ButtonBasic from "@/components/designs/ButtonMild";
 import ButtonStrong from "@/components/designs/ButtonStrong";
-import { fetchSignIn } from "@/components/fetch/fetchSignIn";
 import LoadingScreen from "@/components/LoadingScreen";
+import GoogleButton from "@/components/GoogleButton";
+import KakaoButton from "@/components/KakaoButton";
+
+import { useUserInfo } from "@/stores/useUserInfo";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [remember, setRemember] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { setUserInfo } = useUserInfo();
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,6 +32,8 @@ export default function LoginPage() {
 
     if (response) {
       alert("로그인 성공!");
+      const user = response.user;
+      setUserInfo(user); // zustand 저장
 
       if (remember) {
         localStorage.setItem("savedUserEmail", email);
@@ -42,9 +50,20 @@ export default function LoginPage() {
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
-      router.replace("/user");
+      // 토큰이 있으면 유저 정보를 다시 불러와서 zustand에 저장
+      get("/user/me")
+        .then((res) => {
+          const user = res.data;
+          setUserInfo(user);
+          router.replace("/user");
+        })
+        .catch((err) => {
+          console.error("유저 정보 불러오기 실패:", err);
+          localStorage.removeItem("accessToken");
+          setIsLoading(false); // 실패 시 로그인 페이지 보여줌
+        });
     } else {
-      setIsLoading(false);
+      setIsLoading(false); // 토큰 없으면 로그인 페이지 보여줌
     }
   }, []);
 
@@ -54,16 +73,15 @@ export default function LoginPage() {
       setFormData((prev) => ({ ...prev, email: savedEmail }));
       setRemember(true);
     }
-    console.log("로컬 아이디:", savedEmail);
   }, []);
 
   return isLoading ? (
-   <LoadingScreen/>
+    <LoadingScreen />
   ) : (
-    <section className="py-48 flex flex-col items-center justify-center">
+    <section className="py-32 flex flex-col items-center justify-center">
       <h1>로그인</h1>
       <form
-        className="pt-24 flex flex-col gap-30 items-center justify-center"
+        className="pt-24 flex flex-col gap-24 items-center justify-center"
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col gap-10">
@@ -109,6 +127,11 @@ export default function LoginPage() {
               내 정보 기억하기
             </label>
           </div>
+        </div>
+
+        <div className="flex gap-10">
+          <GoogleButton />
+          <KakaoButton />
         </div>
 
         <div className="flex flex-col gap-10">
