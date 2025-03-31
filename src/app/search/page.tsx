@@ -2,7 +2,7 @@
 
 import ButtonStrong from "@/components/designs/ButtonStrong";
 import { useState } from "react";
-import SearchCard from "@/components/SearchCard";
+import SearchCard from "@/components/Search/SearchCard";
 import { macbookData } from "../../../public/fakeData/macbookData";
 
 export default function SearchPage() {
@@ -13,7 +13,7 @@ export default function SearchPage() {
 
   return (
     <div className={`flex flex-col gap-10  ${isShowAll ? "pt-0" : "pt-72"}`}>
-      {!isShowAll ? <h1 className="text-4xl font-bold">또는...</h1> : null}
+      {/* {!isShowAll ? <h1 className="text-4xl font-bold">또는...</h1> : null}
       <div className="py-16 flex flex-col items-center gap-10">
         {!isShowAll ? (
           <>
@@ -27,11 +27,16 @@ export default function SearchPage() {
         {isShowAll ? (
           <div className="w-full py-24 grid grid-cols-4 gap-20">
             {macbookData.map((item, index) => (
-              <SearchCard key={index} title={item.title} image={item.image} details={item.details}/>
+              <SearchCard
+                key={index}
+                title={item.title}
+                image={item.image}
+                details={item.details}
+              />
             ))}
           </div>
         ) : null}
-      </div>
+      </div> */}
     </div>
   );
 }

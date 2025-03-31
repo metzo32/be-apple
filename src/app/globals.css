@@ -86,36 +86,33 @@ select:hover {
 
 @layer base {
   body {
-    @apply 
-    min-w-[320px]
+    @apply min-w-[320px]
     bg-custombg text-text
     text-base
 
-    lg:text-xl 
+    lg:text-xl;
   }
 
   h1 {
-    @apply text-4xl font-bold
+    @apply text-4xl font-bold;
   }
 
   label {
-    @apply 
-    w-20 text-end font-bold
+    @apply w-20 text-end font-bold
     break-keep
     text-sm
 
-    lg:w-30 lg:text-xl
+    lg:w-30 lg:text-xl;
   }
 
   @media (max-width: 1023.98px) {
     body {
-      @apply text-lg
+      @apply text-lg;
     }
 
     h1 {
-      @apply text-3xl
+      @apply text-3xl;
     }
-
   }
 }
 
@@ -125,27 +122,25 @@ select:hover {
   }
 
   .btn-strong {
-    @apply 
-    min-w-36 h-12
+    @apply h-10
     px-5 py-1
+    flex justify-center items-center
 
     rounded-full bg-custombg shadow-light
     
     hover:text-textHover
     hover:shadow-strong
-    lg:px-10 lg:py-2;
+    lg:px-8 lg:py-3;
   }
 
   .register-label {
-    @apply
-    w-28 text-end font-bold
-    lg:w-40
+    @apply w-28 text-end font-bold
+    lg:w-40;
   }
 
   .register-label-box {
-    @apply
-    flex items-center gap-5
+    @apply flex items-center gap-5
 
-    lg:gap-10
+    lg:gap-10;
   }
 }

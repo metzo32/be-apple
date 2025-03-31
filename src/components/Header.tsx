@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import ButtonBasic from "./designs/ButtonMild";
 import ButtonStrong from "./designs/ButtonStrong";
 import { useUserInfo } from "@/stores/useUserInfo";
+import Image from "next/image";
 
 interface HeaderDataProps {
   text: string;
@@ -25,23 +26,8 @@ export default function Header() {
     } else {
       setText("로그인");
     }
-    console.log("헤더데이터", userData)
+    console.log("헤더데이터", userData);
   }, [userData]);
-
-  const headerBtnData: HeaderDataProps[] = [
-    {
-      text: "홈",
-      route: "/",
-    },
-    {
-      text: "검색",
-      route: "/search",
-    },
-    {
-      text: "상세",
-      route: "/details",
-    },
-  ];
 
   const handleClick = () => {
     if (path === "/user") {
@@ -52,14 +38,16 @@ export default function Header() {
   };
 
   return (
-    <header className="global-px py-5 flex justify-between">
-      {headerBtnData.map((item, index) => (
-        <ButtonBasic
-          key={index}
-          text={item.text}
-          onClick={() => router.push(item.route)}
+    <header className="global-px py-6 flex justify-between items-center">
+      <button className="relative w-[40px] h-[40px] xl:w-[50px] xl:h-[50px]">
+        <Image
+          src="/assets/images/apple.png"
+          alt="홈"
+          fill
+          className="object-cover"
+          onClick={() => router.push("/")}
         />
-      ))}
+      </button>
 
       <ButtonStrong text={text} onClick={handleClick} />
     </header>

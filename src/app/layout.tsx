@@ -16,7 +16,9 @@ export default function RootLayout({
     <html lang="kr">
       <body>
         <Header />
-        <div className="global-px">{children}</div>
+        <div className="global-px">
+        {children}
+        </div>
       </body>
     </html>
   );

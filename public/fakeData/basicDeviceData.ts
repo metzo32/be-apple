@@ -35,11 +35,11 @@ export const basicDeviceData: DeviceData[] = [
     //     image: "/assets/images/watchUltra201.png",
     //     alt: "애플워치울트라2",
     // },
-    {
-        id: 5,
-        title: "전체",
-        details: [],
-        image: "/assets/images/airtag01.png",
-        alt: "에어태그",
-    },
+    // {
+    //     id: 5,
+    //     title: "전체",
+    //     details: [],
+    //     image: "/assets/images/airtag01.png",
+    //     alt: "에어태그",
+    // },
 ]

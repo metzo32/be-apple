@@ -1,9 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { fetchProduct } from "@/components/fetch/fetchProduct";
+import { useEffect, useState } from "react";
 
-export default function MacbookPage() {
+interface ParamsProps {
+  params: {
+    keyword: string;
+  };
+}
+
+export default function MacPage({ params }: ParamsProps) {
   const [selected, setSelected] = useState("");
+  const category = params.keyword;
+  
   const options = [
     { value: "웹개발", label: "웹개발" },
     { value: "서버개발", label: "서버개발" },
@@ -13,6 +22,13 @@ export default function MacbookPage() {
     { value: "문서작업", label: "문서작업" },
     { value: "게임", label: "게임" },
   ];
+
+  useEffect(() => {
+    if (category) {
+      fetchProduct({ category });
+      console.log("카테고리:", category);
+    }
+  }, [category]);
 
   return (
     <div className="py-36">
