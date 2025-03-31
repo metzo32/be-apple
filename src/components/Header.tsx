@@ -1,40 +1,32 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import ButtonBasic from "./designs/ButtonMild";
+import { useRouter } from "next/navigation";
 import ButtonStrong from "./designs/ButtonStrong";
-import { useUserInfo } from "@/stores/useUserInfo";
+import { useUserStore } from "@/stores/useUserStore";
 import Image from "next/image";
-
-interface HeaderDataProps {
-  text: string;
-  route: string;
-}
 
 type HeaderText = " " | "로그인" | "내 페이지";
 
 export default function Header() {
   const [text, setText] = useState<HeaderText>(" ");
-  const userData = useUserInfo((state) => state.userInfo);
+  const [nextPath, setNextPath] = useState<string>("/login");
   const router = useRouter();
-  const path = usePathname();
+  const { user } = useUserStore();
 
   useEffect(() => {
-    if (userData) {
-      setText("내 페이지");
-    } else {
+    if (!user) {
       setText("로그인");
+      setNextPath("/login");
+    } else {
+      setText("내 페이지");
+      setNextPath("/user");
     }
-    console.log("헤더데이터", userData);
-  }, [userData]);
+    console.log("헤더데이터", user);
+  }, [user]);
 
   const handleClick = () => {
-    if (path === "/user") {
-      return;
-    } else {
-      router.push("/login");
-    }
+    router.push(nextPath);
   };
 
   return (

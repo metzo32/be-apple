@@ -9,29 +9,29 @@ import WishCard from "@/components/WishCard";
 import AddButton from "@/components/AddButton";
 import { macbookData } from "../../../public/fakeData/macbookData";
 import SignOut from "@/components/SignOut";
-import { useUserInfo } from "@/stores/useUserInfo";
+import { useUserStore } from "@/stores/useUserStore";
 
 export default function UserPage() {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const userData = useUserInfo((state) => state.userInfo);
-
+  const { user } = useUserStore();
+  const [checking, setChecking] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    if (!token) {
-      router.push("/login");
-    } else {
-      setIsLoading(false);
-    }
-  }, []);
 
-  return isLoading ? (
-    <LoadingScreen />
-  ) : (
+    if (!token || !user) {
+      router.replace("/login");
+    } else {
+      setChecking(false);
+    }
+  }, [user]);
+
+  if (checking) return <LoadingScreen />;
+
+  return (
     <div className="relative">
       <section className="userSection flex flex-col items-center gap-10">
-        <h1 className="text-4xl font-bold">안녕하세요, {userData?.name} 님.</h1>
+        <h1 className="text-4xl font-bold">안녕하세요, {user?.name} 님.</h1>
         <SignOut />
       </section>
 
@@ -59,6 +59,7 @@ export default function UserPage() {
           <WishCard />
         </div>
       </section>
+
       <SelectComp />
     </div>
   );

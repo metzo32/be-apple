@@ -2,22 +2,37 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { get } from "@/api/api";
+import Image from "next/image";
 import { fetchSignIn } from "@/components/fetch/fetchSignIn";
 import ButtonBasic from "@/components/designs/ButtonMild";
 import ButtonStrong from "@/components/designs/ButtonStrong";
 import LoadingScreen from "@/components/LoadingScreen";
 import GoogleButton from "@/components/GoogleButton";
 import KakaoButton from "@/components/KakaoButton";
-
-import { useUserInfo } from "@/stores/useUserInfo";
+import { useUserStore } from "@/stores/useUserStore";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [remember, setRemember] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { setUserInfo } = useUserInfo();
+  const [remember, setRemember] = useState(false);
+  const [checkingToken, setCheckingToken] = useState(true);
+  const { setUserInfo } = useUserStore();
   const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
+    if (token) {
+      router.push("/user");
+    } else {
+      setCheckingToken(false);
+    }
+
+    const savedEmail = localStorage.getItem("savedUserEmail");
+    if (savedEmail) {
+      setFormData((prev) => ({ ...prev, email: savedEmail }));
+      setRemember(true);
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -26,14 +41,15 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const { email, password } = formData;
+
     const response = await fetchSignIn({ email, password });
 
-    if (response) {
+    if (response && response.accessToken) {
       alert("로그인 성공!");
-      const user = response.user;
-      setUserInfo(user); // zustand 저장
+
+      localStorage.setItem("accessToken", response.accessToken);
+      setUserInfo(response.user);
 
       if (remember) {
         localStorage.setItem("savedUserEmail", email);
@@ -41,41 +57,15 @@ export default function LoginPage() {
         localStorage.removeItem("savedUserEmail");
       }
 
-      router.push("/");
+      router.push("/user");
     } else {
       alert("로그인 실패");
     }
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      // 토큰이 있으면 유저 정보를 다시 불러와서 zustand에 저장
-      get("/user/me")
-        .then((res) => {
-          const user = res.data;
-          setUserInfo(user);
-          router.replace("/user");
-        })
-        .catch((err) => {
-          console.error("유저 정보 불러오기 실패:", err);
-          localStorage.removeItem("accessToken");
-          setIsLoading(false); // 실패 시 로그인 페이지 보여줌
-        });
-    } else {
-      setIsLoading(false); // 토큰 없으면 로그인 페이지 보여줌
-    }
-  }, []);
+  const rememberMe = () => setRemember((prev) => !prev);
 
-  useEffect(() => {
-    const savedEmail = localStorage.getItem("savedUserEmail");
-    if (savedEmail) {
-      setFormData((prev) => ({ ...prev, email: savedEmail }));
-      setRemember(true);
-    }
-  }, []);
-
-  return isLoading ? (
+  return checkingToken ? (
     <LoadingScreen />
   ) : (
     <section className="py-32 flex flex-col items-center justify-center">
@@ -85,25 +75,27 @@ export default function LoginPage() {
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col gap-10">
-          <div className="flex items-center  gap-5 lg:gap-10">
-            <label htmlFor="username">아이디</label>
+          <div className="flex items-center gap-5 lg:gap-10">
+            <label htmlFor="email">아이디</label>
             <input
               id="email"
               name="email"
               type="text"
               value={formData.email}
               onChange={handleChange}
+              autoComplete="username"
               required
               className="w-40 lg:w-60 border-b-2 border-text"
             />
           </div>
-          <div className="flex items-center  gap-5 lg:gap-10">
+          <div className="flex items-center gap-5 lg:gap-10">
             <label htmlFor="password">비밀번호</label>
             <input
               id="password"
               name="password"
               type="password"
               onChange={handleChange}
+              autoComplete="current-password"
               required
               className="w-40 lg:w-60 border-b-2 border-text"
             />
@@ -114,11 +106,20 @@ export default function LoginPage() {
               type="checkbox"
               id="rememberMe"
               checked={remember}
-              onChange={() => setRemember(!remember)}
-              // className="hidden"
+              onChange={rememberMe}
+              className="hidden"
             />
-            <span className="text-2xl text-primary">
-              {/* {remember ? <AiFillFire /> : <AiOutlineFire />} */}
+            <span onClick={rememberMe} className="cursor-pointer">
+              <Image
+                src={
+                  remember
+                    ? "/assets/icons/check_active.svg"
+                    : "/assets/icons/check_passive.svg"
+                }
+                alt="체크"
+                width={20}
+                height={20}
+              />
             </span>
             <label
               htmlFor="rememberMe"

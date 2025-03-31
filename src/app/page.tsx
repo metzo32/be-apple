@@ -1,4 +1,5 @@
 import GoSearchButton from "@/components/GoSearchButton";
+import SignOut from "@/components/SignOut";
 import Image from "next/image";
 
 export default function HomePage() {
@@ -26,6 +27,7 @@ export default function HomePage() {
           height={180}
         />
       </section>
+        <SignOut/>
     </div>
   );
 }

@@ -3,21 +3,35 @@
 import { useEffect } from "react";
 import LoadingScreen from "@/components/LoadingScreen";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useUserStore } from "@/stores/useUserStore";
+import { get } from "@/api/api";
 
 export default function CallbackGooglePage() {
-  const router = useRouter()
+  const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("accessToken");
+  const { setUserInfo } = useUserStore();
 
-    useEffect(() => {
+  useEffect(() => {
+    const fetchUserInfo = async () => {
       if (token) {
         localStorage.setItem("accessToken", token);
-        router.push("/")
-        console.log("구글 로그인 토큰:", token);
+        try {
+          const res = await get("/user/me");
+          setUserInfo(res.data);
+          router.push("/user");
+        } catch (error) {
+          console.error("유저정보 로드 실패:", error);
+          localStorage.removeItem("accessToken");
+          router.push("/login");
+        }
       } else {
-        router.push("/login")
+        router.push("/login");
       }
-    }, []);
+    };
+
+    fetchUserInfo();
+  }, []);
 
   return <LoadingScreen />;
 }
