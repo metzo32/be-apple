@@ -162,4 +162,9 @@ select:hover {
 
     md:text-base md:leading-tight;
   }
+
+  .submit-btn {
+    @apply
+    bg-mid text-custombg p-2 hover:bg-textHover
+  }
 }

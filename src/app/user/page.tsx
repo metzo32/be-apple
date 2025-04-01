@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
 import SelectComp from "./SelectComp";
 import LoadingScreen from "@/components/LoadingScreen";
-import WishCard from "@/components/Wish/WishCard";
+import WishCard from "@/components/UserWishList/WishCard";
+import WishDetails from "@/components/UserWishList/WishDetails";
 import AddButton from "@/components/AddButton";
 import { macbookData } from "../../../public/fakeData/macbookData";
 import SignOut from "@/components/SignOut";
 import { useUserStore } from "@/stores/useUserStore";
-import WishDetails from "@/components/Wish/WishDetails";
 
 export default function UserPage() {
   const { user } = useUserStore();
@@ -28,14 +28,15 @@ export default function UserPage() {
     }
   }, [user]);
 
-  if (checking || isSigningOut) return <LoadingScreen />;;
+  if (checking || isSigningOut) return <LoadingScreen />;
 
   return (
     <div className="relative">
-      <WishDetails />
+      {/* 위시리스트의 제품 정보 */}
+      <WishDetails /> 
       <section className="userSection flex flex-col items-center gap-10">
         <h1 className="text-4xl font-bold">안녕하세요, {user?.name} 님.</h1>
-        <SignOut setIsSigningOut={setIsSigningOut}/>
+        <SignOut setIsSigningOut={setIsSigningOut} />
       </section>
 
       <section className="userSection">

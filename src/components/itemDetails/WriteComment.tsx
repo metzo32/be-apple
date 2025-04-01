@@ -59,7 +59,7 @@ export default function WriteComment({ isOpen, setIsOpen }: WriteCommentProps) {
         <button
           type="button"
           onClick={handleSubmit}
-          className="bg-mid text-custombg p-2 hover:bg-textHover"
+          className="submit-btn"
         >
           등록
         </button>

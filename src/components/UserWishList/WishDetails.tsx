@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 export default function WishDetails() {
-  const [isScreenOpen, setIsScreenOpen] = useState<boolean>(false);
+  const [isScreenOpen, setIsScreenOpen] = useState<boolean>(true);
 
   const handleCloseScreen = () => {
     setIsScreenOpen(false);

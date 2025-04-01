@@ -12,6 +12,7 @@ export default function Page({
 }) {
   const { keyword: category } = use(params);
   const [products, setProducts] = useState<any[]>([]);
+  const [wishList, setWishList] = useState<number[]>([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -31,7 +32,13 @@ export default function Page({
     <div>
       <div className="grid place-items-center gap-5 grid-cols-2 lg:grid-cols-4">
         {products.map((item, index) => (
-          <SearchCard key={index} id={item.id} category={category}>
+          <SearchCard
+            key={index}
+            id={item.id}
+            category={category}
+            wishList={wishList}
+            setWishList={setWishList}
+          >
             <SearchCardServer {...item} />
           </SearchCard>
         ))}
