@@ -16,8 +16,8 @@ export default function SelectComp() {
   return (
     <>
       {isClicked ? (
-        <div className="w-screen h-screen p-64 bg-[rgba(0,0,0,0.5)] fixed top-0 left-0 z-10">
-          <div className="bg-custombg p-4 rounded">
+        <div className="overlay flex justify-center items-center">
+          <div className="w-[500px] bg-custombg p-4 rounded">
             <form onSubmit={handleSubmit}>
               {basicDeviceData.map((item) => (
                 <label

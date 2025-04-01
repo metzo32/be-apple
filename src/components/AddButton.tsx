@@ -14,7 +14,7 @@ export default function AddButton() {
     <div className="relative">
       <button
         onClick={handleClick}
-        className="w-12 h-12 rounded-full text-3xl text-white flex-shrink-0 bg-light flex items-center justify-center"
+        className="w-12 h-12 rounded-full text-3xl text-white flex-shrink-0 bg-light flex items-center justify-center hover:brightness-110"
       >
         <GoPlus />
       </button>

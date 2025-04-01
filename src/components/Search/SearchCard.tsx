@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
+import WishButton from "../Wish/WishButton";
 
 interface SearchCardProps {
   id: number;
@@ -22,9 +23,11 @@ export default function SearchCard({
   return (
     <div
       onClick={handleRoute}
-      className="shrink-0 flex flex-col items-center gap-3 cursor-pointer"
+      className="shrink-0 flex flex-col items-center gap-3 cursor-pointer relative"
     >
       {children}
+
+      <WishButton id={id}/>
     </div>
   );
 }

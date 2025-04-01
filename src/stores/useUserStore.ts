@@ -40,7 +40,7 @@ export const useUserStore = create<UserStore>()(
       },
       resetUser: () => {
         localStorage.removeItem("accessToken");
-        set({ user: null });
+        set({ user: null, isLoading: true });
       },
     }),
     // 두번째 인자로 저장할 키값과 저장할 필드 설정

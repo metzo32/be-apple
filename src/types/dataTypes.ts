@@ -1,7 +1,9 @@
 export interface ItemProps {
     id?: number;
-    title: string;
+    name: string;
     image: string;
+    displaySize?: string;
     details?: string;
     month?: number;
+    price?: number;
   }

@@ -21,7 +21,6 @@ export async function fetchSignIn(userData: {
       };
     }
     return null;
-
   } catch (error: any) {
     console.error("로그인 실패:", error.response?.data || error.message);
     return null;

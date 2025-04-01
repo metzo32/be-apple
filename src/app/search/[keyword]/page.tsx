@@ -29,15 +29,10 @@ export default function Page({
 
   return (
     <div>
-      {/* <h1>{category}</h1> */}
-      <div className="grid gap-5 grid-cols-4">
+      <div className="grid place-items-center gap-5 grid-cols-2 lg:grid-cols-4">
         {products.map((item, index) => (
           <SearchCard key={index} id={item.id} category={category}>
-            <SearchCardServer
-              title={item.name}
-              image={item.photos || ""}
-              details={item.details || ""}
-            />
+            <SearchCardServer {...item} />
           </SearchCard>
         ))}
       </div>

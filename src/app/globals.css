@@ -23,9 +23,12 @@
 
 @theme {
   --color-custombg: #ececec;
+  --color-bglight: #dadada;
   --color-text: #000000;
   --color-textHover: #444444;
+  --color-mid: #757575;
   --color-light: #939393;
+  --color-overlay: rgba(0, 0, 0, 0.5);
   --font-apple: "AppleFont", sans-serif;
   --shadow-light: 3px 3px 15px rgba(0, 0, 0, 0.1);
   --shadow-strong: 5px 5px 15px rgba(0, 0, 0, 0.2);
@@ -79,7 +82,7 @@ select:hover {
 }
 
 .userSection {
-  @apply py-36;
+  @apply py-24;
 }
 
 @tailwind utilities;
@@ -117,6 +120,15 @@ select:hover {
 }
 
 @layer components {
+  .overlay {
+    @apply fixed
+      inset-0
+      w-screen
+      h-screen
+      z-10
+      bg-overlay;
+  }
+
   .global-px {
     @apply px-10 lg:px-40 2xl:px-80;
   }
@@ -142,5 +154,12 @@ select:hover {
     @apply flex items-center gap-5
 
     lg:gap-10;
+  }
+
+  .light-p {
+    @apply text-xs text-light
+    leading-snug
+
+    md:text-base md:leading-tight;
   }
 }
