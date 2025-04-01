@@ -26,6 +26,7 @@ export default function WishButton({
 }: WishButtonProps) {
   const handleAddWish = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
+
     setIsAdded(!isAdded);
 
     if (!isAdded) {

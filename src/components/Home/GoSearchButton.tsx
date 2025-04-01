@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation";
-import ButtonStrong from "./designs/ButtonStrong";
+import ButtonStrong from "../designs/ButtonStrong";
 
 export default function GoSearchButton() {
   const router = useRouter();

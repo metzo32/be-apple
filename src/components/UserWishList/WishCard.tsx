@@ -17,6 +17,7 @@ export default function WishCard() {
       <h3>Macbook Air 15</h3>
       <p className="light-p">M4칩, 256GB</p>
       <ButtonStrong text="제품 보기" />
+      
       <button
         onClick={handleDelete}
         className="absolute top-0 right-0 -translate-x-7 -translate-y-3 hover:brightness-110"

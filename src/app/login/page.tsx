@@ -13,8 +13,8 @@ import { useUserStore } from "@/stores/useUserStore";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [remember, setRemember] = useState(false);
-  const [checkingToken, setCheckingToken] = useState(true);
+  const [remember, setRemember] = useState<boolean>(false);
+  const [checkingToken, setCheckingToken] = useState<boolean>(true);
   const { setUserInfo } = useUserStore();
   const router = useRouter();
 

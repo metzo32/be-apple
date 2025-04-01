@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Comment from "@/components/itemDetails/Comment";
-import WriteComment from "@/components/itemDetails/WriteComment";
+import Comment from "@/components/ItemDetails/Comment";
+import WriteComment from "@/components/ItemDetails/WriteComment";
 import { commentArr } from "../../../../../public/fakeData/comment";
 
 export default function DetailPage() {

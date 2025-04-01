@@ -1,8 +1,8 @@
 import Image from "next/image";
-import ButtonStrong from "./designs/ButtonStrong";
+import ButtonStrong from "../designs/ButtonStrong";
 import type { ItemProps } from "@/types/dataTypes";
 
-export default function ProductCard({
+export default function UserEquipCard({
   name,
   image,
   details,
