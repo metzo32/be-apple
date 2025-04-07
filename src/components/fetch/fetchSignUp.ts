@@ -20,7 +20,6 @@ export async function fetchSignUp(userData: {
       }
   
       const data = await response.json();
-      console.log("회원가입 성공:", data);
       return data;
     } catch (error) {
       console.error("회원가입 실패:", error);

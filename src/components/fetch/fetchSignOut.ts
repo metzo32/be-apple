@@ -3,7 +3,6 @@ import { post } from "@/api/api";
 export async function fetchSignOut() {
     try {
       await post("/auth/logout", {}); 
-      console.log("로그아웃 성공");
       localStorage.removeItem("accessToken"); 
   
       return true;

@@ -121,11 +121,10 @@ select:hover {
 
 @layer components {
   .overlay {
-    @apply fixed
-      inset-0
-      w-screen
-      h-screen
-      z-10
+    @apply 
+      min-w-[320px]
+      w-screen h-full
+      fixed inset-0 z-10
       bg-overlay;
   }
 
@@ -164,7 +163,6 @@ select:hover {
   }
 
   .submit-btn {
-    @apply
-    bg-mid text-custombg p-2 hover:bg-textHover
+    @apply bg-mid text-custombg p-2 hover:bg-textHover;
   }
 }

@@ -6,8 +6,6 @@ export async function fetchSignIn(userData: {
 }) {
   try {
     const response = await post("/auth/signin", userData);
-    console.log("로그인 성공:", response.data);
-
     const token = response.data?.accessToken; //해당 유저 토큰 추출
     if (token) {
       localStorage.setItem("accessToken", token); //로컬 스토리지에 저장

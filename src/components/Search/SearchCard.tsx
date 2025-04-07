@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import WishButton from "../AddWish/WishButton";
 
 interface SearchCardProps {
@@ -19,12 +19,11 @@ export default function SearchCard({
   wishList,
   setWishList,
 }: SearchCardProps) {
+  
   const router = useRouter();
   const handleRoute = () => {
     router.push(`/search/${category}/${id}`);
   };
-  const [isAdded, setIsAdded] = useState<boolean>(false);
-  const [isMemoOpen, setIsMemoOpen] = useState<boolean>(false);
 
   return (
     <div
@@ -39,10 +38,6 @@ export default function SearchCard({
         id={id}
         wishList={wishList}
         setWishList={setWishList}
-        isAdded={isAdded}
-        setIsAdded={setIsAdded}
-        isMemoOpen={isMemoOpen}
-        setIsMemoOpen={setIsMemoOpen}
       />
     </div>
   );

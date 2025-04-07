@@ -1,10 +1,24 @@
 import Image from "next/image";
-import ButtonStrong from "../designs/ButtonStrong";
+import { fetchRemoveWish } from "../fetch/fetchWishList";
+import RouteButton from "./RouteButton";
+import { ProductDetailMac } from "@/types/product";
 
-export default function WishCard() {
-  const handleDelete = (e: React.MouseEvent) => {
+interface WishCardProps {
+  id: number;
+  wishList: ProductDetailMac[];
+  setWishList: (list: ProductDetailMac[]) => void;
+}
+
+export default function WishCard({ id, wishList, setWishList }: WishCardProps) {
+  const handleDelete = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    const success = await fetchRemoveWish(id);
+    if (success) {
+      const updatedList = wishList.filter(item => item.id !== id);
+      setWishList(updatedList);
+    }
   };
+  
 
   return (
     <div className="flex flex-col items-center gap-2 shrink-0 cursor-pointer relative">
@@ -16,8 +30,9 @@ export default function WishCard() {
       />
       <h3>Macbook Air 15</h3>
       <p className="light-p">M4칩, 256GB</p>
-      <ButtonStrong text="제품 보기" />
+      <RouteButton id={id} />
       
+      {/* 삭제버튼 */}
       <button
         onClick={handleDelete}
         className="absolute top-0 right-0 -translate-x-7 -translate-y-3 hover:brightness-110"
@@ -29,6 +44,13 @@ export default function WishCard() {
           height={35}
         />
       </button>
+
+      {/* <div className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-textHover p-5">
+        <p className="light-p">
+          이 메모를 왜 남기냐면 이러쿵 저러쿵 하여 이러한 이유로 담아둔 나의
+          위시리스트
+        </p>
+      </div> */}
     </div>
   );
 }

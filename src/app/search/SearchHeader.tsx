@@ -7,26 +7,24 @@ import { useRouter } from "next/navigation";
 export default function SearchHeader() {
   const router = useRouter();
 
-  const pathArr = ["Mac", "iPhone", "iPad",];
-
-// Watch, AirPods
-
   return (
-    <div className="pb-12 border-b-2 border-light flex items-end justify-center gap-2 lg:gap-20">
-      {basicDeviceData.map((item, index) => (
+    <div className="pb-12 flex items-end justify-between">
+      {basicDeviceData.map((item) => (
         <button
           key={item.id}
-          className="flex flex-col justify-center items-center gap-5"
-          onClick={() => router.push(`/search/${pathArr[index]}`)}
+          className="group relative w-[150px] h-[150px] md:w-[300px] md:h-[300px] rounded-xl bg-custombg hover:bg-bglight shadow-strong flex flex-col justify-center items-center gap-5"
+          onClick={() => router.push(`/search/${item.category}`)}
         >
+          <h2 className="font-bold text-lg md:text-5xl text-textHover transform -rotate-90 transition-transform duration-300 ease-in-out translate-x-0 group-hover:-translate-x-20">
+            {item.alt}
+          </h2>
+
           <Image
             src={item.image}
             alt={item.alt}
-            width={200}
-            height={50}
-            style={{ objectFit: "contain" }}
+            fill
+            className="object-cover saturate-0 group-hover:saturate-100"
           />
-          <h3>{item.title}</h3>
         </button>
       ))}
     </div>

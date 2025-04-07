@@ -15,15 +15,11 @@ export default function SignOut({ setIsSigningOut }: SignOutProps) {
 
   const handleSignOut = async () => {
     setIsSigningOut(true);
-    
+
     await fetchSignOut();
     resetUser(); // zustand 상태 초기화
 
-    setTimeout(() => {
-      router.push("/");
-    }, 3000);
-
-
+    router.push("/");
   };
 
   return <ButtonStrong text="로그아웃" onClick={handleSignOut} />;

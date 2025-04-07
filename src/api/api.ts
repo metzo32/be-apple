@@ -38,3 +38,9 @@ export function post<T = any>(
   const headers = { ...baseHeaders, ...extraHeaders }; //헤더 합치기
   return axios.post(url, data, { ...options, headers });
 }
+
+
+export const deleteCall = (url: string, data?: any) => {
+  const options = _getHeader();
+  return axios.delete(url, { ...options, data });
+};
