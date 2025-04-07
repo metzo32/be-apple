@@ -1,6 +1,6 @@
 import { post, get, deleteCall } from "@/api/api";
 
-// 유저 페이지에서 위시리스트 로드하기
+// 유저의 위시리스트 로드하기
 export async function fetchWishList() {
   try {
     const response = await get("/wish/me");
@@ -35,6 +35,7 @@ export async function fetchAddWish(wishData: {
 export async function fetchRemoveWish(id: number) {
   try {
     const response = await deleteCall(`/wish/${id}`);
+    console.log("삭제 요청 성공:", response);
     return true;
   } catch (error: any) {
     console.error(

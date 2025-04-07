@@ -2,20 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "@/stores/useUserStore";
 import type {
   CreateUserProductReqDto,
   GetUserProductResponse,
 } from "@/types/userProduct";
+import { fetchUserProduct } from "@/components/fetch/fetchUserProduct";
 import UserProductCard from "@/components/UserProduct/UserProductCard";
 import SelectComp from "@/components/UserProduct/SelectComp";
 import LoadingScreen from "@/components/LoadingScreen";
-import WishList from "@/components/UserWishList/WishList";
+import UserWishList from "@/components/UserWishList/UserWishList";
 import AddButton from "@/components/UserProduct/AddButton";
 import SignOut from "@/components/SignOut";
-import { useUserStore } from "@/stores/useUserStore";
-import { fetchUserProduct } from "@/components/fetch/fetchUserProduct";
+import DeletePopup from "@/components/DeletePopup/DeletePopup";
 import { differenceInMonths, startOfToday } from "date-fns";
-import Modal from "@/components/Modal/Modal";
 
 export default function UserPage() {
   const { user } = useUserStore();
@@ -61,7 +61,6 @@ export default function UserPage() {
 
   return (
     <div className="relative">
-      {/* <Modal/> */}
       {/* 위시리스트의 제품 정보 */}
       {/* <WishDetails />  */}
       <section className="userSection flex flex-col items-center gap-10">
@@ -71,7 +70,7 @@ export default function UserPage() {
 
       <section className="userSection">
         <h1 className="text-4xl font-bold mb-10">내 제품 목록</h1>
-        {/* <AddButton /> */}
+        <AddButton />
         {userProductList.length > 0 ? (
           <div className="w-full h-[400px] pr-5 flex items-center gap-5 lg:gap-20 overflow-x-scroll">
             {userProductList.map((userProduct) => (
@@ -85,7 +84,7 @@ export default function UserPage() {
 
       <section className="userSection">
         <h1 className="text-4xl font-bold mb-10">내 위시리스트</h1>
-        <WishList />
+        <UserWishList />
       </section>
 
       <SelectComp />

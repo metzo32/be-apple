@@ -82,7 +82,7 @@ select:hover {
 }
 
 .userSection {
-  @apply py-24;
+  @apply h-[700px] py-24;
 }
 
 @tailwind utilities;
@@ -136,11 +136,13 @@ select:hover {
     @apply h-10
     px-5 py-1
     flex justify-center items-center
+    text-sm
 
     rounded-full bg-custombg shadow-light
     
     hover:text-textHover
     hover:shadow-strong
+    md:text-lg
     lg:px-8 lg:py-3;
   }
 

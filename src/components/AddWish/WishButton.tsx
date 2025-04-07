@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { PiHeartBold, PiHeartFill } from "react-icons/pi";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { fetchAddWish, fetchRemoveWish } from "../fetch/fetchWishList";
+import type { ProductDetail } from "@/types/productDetail";
 
 interface WishButtonProps {
   id: number;
@@ -34,16 +35,16 @@ export default function WishButton({
 
   const handleRemoveWish = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-
-    const result = await fetchRemoveWish(id);
-    if (result) {
-      //삭제 성공 시
+  
+    const success = await fetchRemoveWish(id);
+    if (success) {
+      const updatedList = wishList.filter(item => item !== id);
+      setWishList(updatedList);
       setIsAdded(false);
-      setWishList((prev) => prev.filter((item) => item !== id));
       setIsMemoOpen(false);
     }
   };
-
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -72,14 +73,14 @@ export default function WishButton({
       {!isAdded ? (
         <button
           onClick={handleAddWish}
-          className="absolute bottom-5 right-3 text-3xl z-10"
+          className="text-xl sm:text-3xl z-10"
         >
           <PiHeartBold className="hover:opacity-50" />
         </button>
       ) : (
         <button
           onClick={handleRemoveWish}
-          className="absolute bottom-5 right-3 text-3xl z-10"
+          className="text-xl sm:text-3xl z-10"
         >
           <PiHeartFill className="hover:opacity-50" />
         </button>

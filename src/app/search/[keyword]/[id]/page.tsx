@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import type { ProductDetailMac, ReviewType } from "@/types/product";
+import type { ProductDetailMac } from "@/types/productDetail";
+import type { Review } from "@/types/Review";
 import { fetchProductDetail } from "@/components/fetch/fetchProduct";
 import Image from "next/image";
-import Review from "@/components/ItemDetails/Review";
+import ReviewCard from "@/components/ItemDetails/ReviewCard";
 import WriteReview from "@/components/ItemDetails/WriteReview";
 import LoadingScreen from "@/components/LoadingScreen";
 import ButtonBasic from "@/components/designs/ButtonMild";
-
 // 상품 상세 페이지
 export default function DetailPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -17,7 +17,7 @@ export default function DetailPage() {
   const [productDetail, setProductDetail] = useState<ProductDetailMac | null>(
     null
   );
-  const [reviews, setReviews] = useState<ReviewType[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const router = useRouter();
   const params = useParams();
 
@@ -104,7 +104,7 @@ export default function DetailPage() {
         {/* 리뷰 카드 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-20">
           {reviews &&
-            reviews.map((review) => <Review key={review.id} review={review} />)}
+            reviews.map((review) => <ReviewCard key={review.id} review={review} />)}
         </div>
       </section>
     </>

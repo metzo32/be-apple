@@ -5,7 +5,7 @@ import type {
   ProductDetailIpad,
   ProductDetailIphone,
   ProductDetailMac,
-} from "@/types/product";
+} from "@/types/productDetail";
 import { ProductCategoryEnum } from "@/types/productCategory";
 import MonthDiff from "./MonthDiff";
 

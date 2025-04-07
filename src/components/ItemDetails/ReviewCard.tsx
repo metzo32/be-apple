@@ -1,9 +1,9 @@
 import Image from "next/image";
-import type { ReviewType } from "@/types/product";
+import type { Review } from "@/types/Review";
 import { FaStar } from "react-icons/fa6";
 import { formatDate } from "@/module/formatDate";
 
-export default function Review({ review }: { review: ReviewType }) {
+export default function ReviewCard({ review }: { review: Review }) {
   const createdTime = formatDate(review.createdAt, "yyyy년 M월 d일 E요일");
 
   return (

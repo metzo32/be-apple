@@ -1,4 +1,4 @@
-import type { ProductDetail } from "./product";
+import type { ProductDetail } from "./productDetail";
 import type { Review } from "./Review";
 
 // 유저 프로덕트 생성 요청 타입
