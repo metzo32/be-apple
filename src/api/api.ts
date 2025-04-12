@@ -7,7 +7,7 @@ export const axios = Axios.create({ baseURL }); //baseURL을 항상 가지고 �
 //기본 config에 Authorization헤더가 있다면 자동 추가하기
 const _getHeader = (config?: AxiosRequestConfig) => {
     
-  const token = localStorage.getItem("accessToken");
+  const token = typeof window === 'undefined' ? null : window.localStorage.getItem("accessToken");
   const headers = token ? { Authorization: "Bearer " + token } : {};
 
   return {

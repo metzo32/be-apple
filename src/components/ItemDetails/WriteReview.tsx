@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import type { CreateNewReviewReq } from "@/types/Review";
 import { fetchNewReview } from "../fetch/fetchReview";
 import { fetchUploadPhoto } from "../fetch/fetchUploadPhoto";
-import { fetchUserProduct } from "../fetch/fetchUserProduct";
+import { LuPlus } from "react-icons/lu";
+import IconPresets from "./IconPresets";
 
 interface WriteReviewProps {
   productId: number;
@@ -21,8 +22,14 @@ export default function WriteReview({
   const [review, setReview] = useState<string>("");
   const [rate, setRate] = useState<number>(1);
   const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([]);
+  const [selectedScore, setSelectedScore] = useState<number | null>(null);
 
   const maxLength = 200;
+
+  const handleClickScore = (index: number) => {
+    setSelectedScore(index + 1); 
+    console.log(selectedScore)
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,28 +105,47 @@ export default function WriteReview({
           {review.length} / {maxLength}자
         </p>
 
+        <h3 className="font-bold">평점</h3>
+        <div className="px-10 flex justify-between">
+          {[...Array(5)].map((_, i) => (
+            <IconPresets
+              key={i}
+              index={i}
+              isSelected={selectedScore === i + 1}
+              onClick={handleClickScore}
+            />
+          ))}
+        </div>
+
         <h3 className="font-bold">포토</h3>
         <div className="flex gap-5 w-full">
-          {[1, 2].map((_, index) => (
-            <div
-              key={index}
-              className="cursor-pointer w-[200px] aspect-square bg-bglight"
-            >
+          {[0, 1].map((index) => (
+            <div key={index} className="w-[200px] aspect-square relative">
               <input
                 type="file"
                 accept="image/*"
-                onChange={handleAddPhoto}
-                className="cursor-pointer bg-amber-800 w-[200px] aspect-square"
+                id={`file-input-${index}`}
+                onChange={(e) => handleAddPhoto(e)}
+                className="hidden"
               />
 
-              {uploadedPhotos && (
-                <Image
-                  src={uploadedPhotos[0]}
-                  alt="추가"
-                  width={50}
-                  height={50}
-                />
-              )}
+              <label
+                htmlFor={`file-input-${index}`}
+                className="cursor-pointer w-full h-full bg-bglight flex items-center justify-center"
+              >
+                {uploadedPhotos && uploadedPhotos[index] ? (
+                  <Image
+                    src={uploadedPhotos[index]}
+                    alt="업로드된 이미지"
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <span className="text-gray-400 text-4xl">
+                    <LuPlus />
+                  </span>
+                )}
+              </label>
             </div>
           ))}
         </div>

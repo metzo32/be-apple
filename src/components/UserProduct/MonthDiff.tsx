@@ -23,7 +23,7 @@ export default function MonthDiff({
     </>
   ) : (
     <>
-      <p className="text-lg">입력되지 않았습니다.</p>
+      <p className="text-lg">날짜가 입력되지 않았습니다.</p>
     </>
   );
 }

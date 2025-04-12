@@ -16,23 +16,25 @@ export async function fetchWishList() {
 }
 
 // 제품 카드에서 하트 눌러서 추가하기
-export async function fetchAddWish(wishData: {
+export async function addWish(wishData: {
   memo: string;
   productId: number;
 }) {
-  try {
+  // 내려주는 데이터가 특별히 없기 때문에 return값을 boolean으로 처리하면 성공/실패여부를 알 수 있다.
+  // 만일 따로 내려오는 데이터가 있다면 return response.data / return null
+  try { 
     const response = await post("/wish", wishData);
-    return response.data;
+    return true; 
   } catch (error: any) {
     console.error(
       "위시리스트 추가 실패:",
       error.response?.data || error.message
     );
-    return null;
+    return false;
   }
 }
 
-export async function fetchRemoveWish(id: number) {
+export async function deleteWish(id: number) {
   try {
     const response = await deleteCall(`/wish/${id}`);
     console.log("삭제 요청 성공:", response);

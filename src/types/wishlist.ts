@@ -14,7 +14,7 @@ export interface GetWishResponse {
   // WIsh 생성일
   createdAt: Date;
 
-  // 사용자 메모s
+  // 사용자 메모
   memo: string;
 
   // 상품ID

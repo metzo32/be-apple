@@ -8,13 +8,14 @@ export default function ReviewCard({ review }: { review: Review }) {
 
   return (
     <div className="max-w-[600px] flex flex-col gap-5 pb-15 border-b-3 border-bglight">
-      <div className="w-full p-3 flex flex-col gap-5 bg-bglight">
+      <div className="w-full p-5 rounded-xl flex flex-col gap-5 bg-bglight">
         <div className="flex justify-between">
           <h2 className="text-sm md:text-lg">{review.userName}의 리뷰</h2>
           <p className="light-p">{createdTime}</p>
         </div>
-        <p className="light-p">
-          Macbook Air 13inch 10코어 CPU 10코어 GPU 16GB 통합 메모리 512GB SSD
+        {/* TODO 내용 바꾸기*/}
+        <p className="light-p"> 
+          Macbook Air 13inch 10코어 CPU 10코어 GPU 16GB 통합 메모리 512GB SSD 
         </p>
         <div className="flex">
           {Array.from({ length: review.rating }).map((_, index) => (
@@ -39,7 +40,4 @@ export default function ReviewCard({ review }: { review: Review }) {
       <p className="light-p">{review.content}</p>
     </div>
   );
-}
-function formatTime(createdAt: Date, arg1: string): any {
-  throw new Error("Function not implemented.");
 }

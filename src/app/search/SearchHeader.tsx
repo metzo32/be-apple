@@ -8,7 +8,7 @@ export default function SearchHeader() {
   const router = useRouter();
 
   return (
-    <div className="pb-12 flex items-end justify-between">
+    <nav className="pb-12 flex items-end justify-between">
       {basicDeviceData.map((item) => (
         <button
           key={item.id}
@@ -27,6 +27,6 @@ export default function SearchHeader() {
           />
         </button>
       ))}
-    </div>
+    </nav>
   );
 }

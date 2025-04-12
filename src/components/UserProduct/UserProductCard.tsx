@@ -74,7 +74,7 @@ export default function UserProductCard({
     return (
       <div className="shrink-0 w-[250px] h-[280px] flex flex-col items-center gap-2 cursor-pointer">
         <Image
-          // src={userProduct.product.photos[0] || "/assets/images/fallback.png"}
+          // TODO src={userProduct.product.photos[0] || "/assets/images/fallback.png"}
           src={"/assets/images/fallback.png"}
           alt={userProduct.product.name}
           width={250}

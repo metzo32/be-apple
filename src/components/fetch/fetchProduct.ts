@@ -1,4 +1,6 @@
 import { get } from "@/api/api";
+import type { GetProductResponse } from "@/types/product";
+import type { ProductDetail } from "@/types/productDetail";
 import { isAxiosError } from "axios";
 
 interface ProductCategory {
@@ -6,11 +8,10 @@ interface ProductCategory {
 }
 export async function fetchProduct({ category }: ProductCategory) {
   try {
-    const response = await get(`/product?category=${category}`);
-
-    const productInfo = response.data;
-
-    return productInfo;
+    const { data } = await get<GetProductResponse[]>(
+      `/product?category=${category}`
+    );
+    return data;
   } catch (error) {
     console.error("불러오기 실패:", error);
     return null;
@@ -19,11 +20,8 @@ export async function fetchProduct({ category }: ProductCategory) {
 
 export async function fetchProductDetail(productId: number) {
   try {
-    const response = await get(`/product/${productId}`);
-
-    const productInfo = response.data;
-
-    return productInfo;
+    const { data } = await get<ProductDetail>(`/product/${productId}`);
+    return data;
   } catch (error) {
     if (isAxiosError(error)) {
       console.log(error.response?.data.message);

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
 import type {
-  CreateUserProductReqDto,
   GetUserProductResponse,
 } from "@/types/userProduct";
 import { fetchUserProduct } from "@/components/fetch/fetchUserProduct";
@@ -14,8 +13,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 import UserWishList from "@/components/UserWishList/UserWishList";
 import AddButton from "@/components/UserProduct/AddButton";
 import SignOut from "@/components/SignOut";
-import DeletePopup from "@/components/DeletePopup/DeletePopup";
-import { differenceInMonths, startOfToday } from "date-fns";
+
 
 export default function UserPage() {
   const { user } = useUserStore();
@@ -51,19 +49,13 @@ export default function UserPage() {
     }
   }, [user]);
 
-  const calculateMonths = (start: string) => {
-    const today = startOfToday();
-    const monthsDiff = differenceInMonths(new Date(today), new Date(start));
-    return monthsDiff;
-  };
-
   if (checking || isSigningOut) return <LoadingScreen />;
 
   return (
     <div className="relative">
       {/* 위시리스트의 제품 정보 */}
       {/* <WishDetails />  */}
-      <section className="userSection flex flex-col items-center gap-10">
+      <section className="py-24 flex flex-col items-center gap-10">
         <h1 className="text-4xl font-bold">안녕하세요, {user?.name} 님.</h1>
         <SignOut setIsSigningOut={setIsSigningOut} />
       </section>
@@ -71,7 +63,7 @@ export default function UserPage() {
       <section className="userSection">
         <h1 className="text-4xl font-bold mb-10">내 제품 목록</h1>
         <AddButton />
-        {userProductList.length > 0 ? (
+        {userProductList && userProductList.length > 0 ? (
           <div className="w-full h-[400px] pr-5 flex items-center gap-5 lg:gap-20 overflow-x-scroll">
             {userProductList.map((userProduct) => (
               <UserProductCard key={userProduct.id} userProduct={userProduct} />
@@ -82,7 +74,8 @@ export default function UserPage() {
         )}
       </section>
 
-      <section className="userSection">
+      {/* <section className="userSection"> */}
+      <section>
         <h1 className="text-4xl font-bold mb-10">내 위시리스트</h1>
         <UserWishList />
       </section>

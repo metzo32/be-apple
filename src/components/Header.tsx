@@ -22,7 +22,6 @@ export default function Header() {
       setText("내 페이지");
       setNextPath("/user");
     }
-    console.log("헤더데이터", user);
   }, [user]);
 
   const handleClick = () => {
