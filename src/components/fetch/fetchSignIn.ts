@@ -12,6 +12,7 @@ export async function fetchSignIn(userData: {
 
       const userResponse = await get("/user/me"); //
       const userInfo = userResponse.data;
+      console.log("유저 id:", userInfo.userId )
 
       return {
         accessToken: token,

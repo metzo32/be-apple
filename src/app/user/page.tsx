@@ -19,9 +19,7 @@ export default function UserPage() {
   const { user } = useUserStore();
   const [checking, setChecking] = useState(true);
   const [isSigningOut, setIsSigningOut] = useState(false);
-  const [userProductList, setUserProductList] = useState<
-    GetUserProductResponse[]
-  >([]);
+  const [userProductList, setUserProductList] = useState<GetUserProductResponse[]>([]);
   const router = useRouter();
 
   // 유저 보유 목록 불러오기
@@ -37,7 +35,7 @@ export default function UserPage() {
     };
     getUserProduct();
   }, []);
-
+  
   // 유저 인증
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -62,7 +60,7 @@ export default function UserPage() {
 
       <section className="userSection">
         <h1 className="text-4xl font-bold mb-10">내 제품 목록</h1>
-        <AddButton />
+        <AddButton/>
         {userProductList && userProductList.length > 0 ? (
           <div className="w-full h-[400px] pr-5 flex items-center gap-5 lg:gap-20 overflow-x-scroll">
             {userProductList.map((userProduct) => (

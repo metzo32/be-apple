@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { ProductDetail } from "@/types/productDetail";
 import { fetchProductDetail } from "@/components/fetch/fetchProduct";
 import ReviewClient from "@/components/ItemDetails/ReviewClient";
+import { PiHeartBold, PiHeartFill } from "react-icons/pi";
 
 interface DetailPageProps {
   params: { id: string };
@@ -18,6 +19,15 @@ export default async function DetailPage({ params }: DetailPageProps) {
 
   return (
     <>
+      {!product.isInWish ? (
+        <button className="text-xl sm:text-2xl p-3 bg-custombg rounded-full shadow-light hover:shadow-strong hover:text-light">
+          <PiHeartBold />
+        </button>
+      ) : (
+        <button className="text-xl sm:text-2xl p-3 bg-custombg rounded-full shadow-light hover:shadow-strong hover:text-light">
+          <PiHeartFill />
+        </button>
+      )}
       <button className="w-[50px] text-custombg">
         <Image
           src={"/assets/icons/arrow_left.svg"}
@@ -27,7 +37,7 @@ export default async function DetailPage({ params }: DetailPageProps) {
         />
       </button>
 
-      <section className="flex justify-between items-center gap-10 mb-20">
+      <section className="flex justify-between items-center gap-10 mb-48">
         <h2>{product.name}</h2>
         <span className="w-[500px] h-[500px] relative">
           <Image
@@ -39,14 +49,33 @@ export default async function DetailPage({ params }: DetailPageProps) {
         </span>
       </section>
 
-      <section className="w-full flex flex-col gap-10 mb-20">
+      <section className="w-full flex flex-col gap-10 mb-48">
         <div className="w-full flex justify-between items-center">
           <h1>제품 {productId}</h1>
         </div>
-        <p>{product.generation}</p>
+        <div className="flex flex-col gap-3">
+          <p>세대: {product.generation}</p>
+          <p>출시일: {product.releasedDate}</p>
+          <p>무게: {product.weight}</p>
+          <div className="flex gap-5">
+            <p>색상 옵션:</p>
+            {product.colors.map((color) => (
+              <p key={color.name}>
+                {color.name} {color.code}
+              </p>
+            ))}
+          </div>
+          <p>디스플레이 가로: {product.displaySize}</p>
+          <p>상품 스펙:</p>
+          {product.specs.map((spec, index) => (
+            <p key={index}>
+              타입:{spec.type} 밸류:{spec.value}
+            </p>
+          ))}
+        </div>
       </section>
 
-      <ReviewClient productId={productId} reviews={product.reviews} />
+      <ReviewClient product={product} productId={productId} />
     </>
   );
 }

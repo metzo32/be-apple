@@ -24,7 +24,7 @@ export default function WriteReview({
   const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([]);
   const [selectedScore, setSelectedScore] = useState<number | null>(null);
 
-  const maxLength = 200;
+  const MAX_LENGTH = 200;
 
   const handleClickScore = (index: number) => {
     setSelectedScore(index + 1); 
@@ -97,12 +97,12 @@ export default function WriteReview({
           id="review"
           value={review}
           onChange={handleChange}
-          maxLength={maxLength}
+          maxLength={MAX_LENGTH}
           placeholder="리뷰 남기기"
           className="w-full h-[250px] p-5 border-3 border-bglight text-base resize-none"
         />
         <p className="text-sm text-gray-500 text-right mt-1">
-          {review.length} / {maxLength}자
+          {review.length} / {MAX_LENGTH}자
         </p>
 
         <h3 className="font-bold">평점</h3>

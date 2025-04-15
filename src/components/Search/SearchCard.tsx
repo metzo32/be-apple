@@ -2,9 +2,9 @@ import Image from "next/image";
 import type { GetProductResponse } from "@/types/product";
 import WishButton from "../AddWish/WishButton";
 import Link from "next/link";
-import { FaCheck } from "react-icons/fa6";
+import PurchasedIcon from "./PurchasedIcon";
 
-type SearchCardProps = {
+interface SearchCardProps  {
   product: GetProductResponse;
 };
 
@@ -19,7 +19,7 @@ export default function SearchCard({ product }: SearchCardProps) {
           자세히 보기
         </Link>
 
-        <FaCheck />
+        <PurchasedIcon product={product}/>
       </div>
 
       <Link
