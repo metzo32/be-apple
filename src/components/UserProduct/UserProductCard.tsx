@@ -8,6 +8,7 @@ import type {
 } from "@/types/productDetail";
 import { ProductCategoryEnum } from "@/types/productCategory";
 import MonthDiff from "./MonthDiff";
+import { deleteUserProduct } from "../fetch/fetchUserProduct";
 
 const isMacProduct = (product: ProductDetail): product is ProductDetailMac => {
   return product.category === ProductCategoryEnum.MAC;
@@ -30,21 +31,39 @@ export default function UserProductCard({
 }: {
   userProduct: GetUserProductResponse;
 }) {
+
+  const handleRemoveProduct = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+
+    if (userProduct.product.userProductId) {
+      const success = await deleteUserProduct(userProduct.id);
+      if (success) {
+        console.log("삭제 성공");
+      } else {
+        console.log("삭제 실패");
+    
+      }
+    }
+  };
+
   if (isMacProduct(userProduct.product)) {
     const { myOption, displaySize } = userProduct.product;
 
     return (
-      <div className="shrink-0 w-[250px] h-[280px] flex flex-col items-center gap-2 cursor-pointer">
-        <Image
-          // src={userProduct.product.photos[0] || "/assets/images/fallback.png"}
-          src={"/assets/images/fallback.png"}
-          alt={userProduct.product.name}
-          width={250}
-          height={200}
-        />
+      <div className="user-product-card">
+        <span className="relative w-[200px] h-[100px]">
+          <Image
+            // src={userProduct.product.photos[0] || "/assets/images/fallback.png"}
+            src={"/assets/images/fallback.png"}
+            alt={userProduct.product.name}
+            fill
+            className="object-cover"
+          />
+        </span>
         <h3>{userProduct.product.name}</h3>
         <p className="text-lg text-light">{displaySize}</p>
         <p className="text-lg text-light">{myOption?.processor}</p>
+        <button onClick={handleRemoveProduct} className="bg-red-600">삭제하기</button>
         <MonthDiff purchasedAt={userProduct.purchasedAt} />
       </div>
     );
@@ -53,17 +72,21 @@ export default function UserProductCard({
     const { displaySize } = userProduct.product;
 
     return (
-      <div className="shrink-0 w-[250px] h-[280px] flex flex-col items-center gap-2 cursor-pointer">
-        <Image
-          // src={userProduct.product.photos[0] || "/assets/images/fallback.png"}
-          src={"/assets/images/fallback.png"}
-          alt={userProduct.product.name}
-          width={250}
-          height={200}
-        />
+      <div className="user-product-card">
+        <span className="relative w-[200px] h-[100px]">
+          <Image
+            // src={userProduct.product.photos[0] || "/assets/images/fallback.png"}
+            src={"/assets/images/fallback.png"}
+            alt={userProduct.product.name}
+            fill
+            className="object-cover"
+          />
+        </span>
+
         <h3>{userProduct.product.name}</h3>
         <p className="text-lg text-light">{displaySize}</p>
         <p className="text-lg text-light">{userProduct.product.processor}</p>
+        <button>삭제하기</button>
         <MonthDiff purchasedAt={userProduct.purchasedAt} />
       </div>
     );
@@ -72,17 +95,20 @@ export default function UserProductCard({
     const { displaySize } = userProduct.product;
 
     return (
-      <div className="shrink-0 w-[250px] h-[280px] flex flex-col items-center gap-2 cursor-pointer">
-        <Image
-          // TODO src={userProduct.product.photos[0] || "/assets/images/fallback.png"}
-          src={"/assets/images/fallback.png"}
-          alt={userProduct.product.name}
-          width={250}
-          height={200}
-        />
+      <div className="user-product-card">
+        <span className="relative w-[200px] h-[100px]">
+          <Image
+            // src={userProduct.product.photos[0] || "/assets/images/fallback.png"}
+            src={"/assets/images/fallback.png"}
+            alt={userProduct.product.name}
+            fill
+            className="object-cover"
+          />
+        </span>
         <h3>{userProduct.product.name}</h3>
         <p className="text-lg text-light">{displaySize}</p>
         <p className="text-lg text-light">{userProduct.product.processor}</p>
+        <button>삭제하기</button>
         <MonthDiff purchasedAt={userProduct.purchasedAt} />
       </div>
     );
@@ -94,7 +120,7 @@ export default function UserProductCard({
 //   const product = userProduct.product as ProductDetailMac;
 //   const option = userProduct.product.myOption as MacOption;
 //   return (
-//     <div className="shrink-0 w-[250px] h-[280px] flex flex-col items-center gap-2 cursor-pointer">
+//     <div className="user-product-card">
 //       <Image
 //         src={userProduct.product.photos[0] || "/assets/images/fallback.png"}
 //         alt={userProduct.product.name}

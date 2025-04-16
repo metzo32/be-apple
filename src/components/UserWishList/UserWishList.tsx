@@ -63,7 +63,8 @@ export default function UserWishList() {
   return (
     <>
       {wishList.length > 0 ? (
-        <div className="w-full grid grid-cols-2 gap-5 lg:gap-20">
+        // <div className="w-full grid grid-cols-2 gap-5 lg:gap-20">
+        <div>
           {wishList.map((wish) => {
             const isPendingDelete = pendingDeleteIds.includes(wish.id);
             return (

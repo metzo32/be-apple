@@ -6,8 +6,10 @@ export const axios = Axios.create({ baseURL }); //baseURL을 항상 가지고 �
 
 //기본 config에 Authorization헤더가 있다면 자동 추가하기
 const _getHeader = (config?: AxiosRequestConfig) => {
-    
-  const token = typeof window === 'undefined' ? null : window.localStorage.getItem("accessToken");
+  const token =
+    typeof window === "undefined"
+      ? null
+      : window.localStorage.getItem("accessToken");
   const headers = token ? { Authorization: "Bearer " + token } : {};
 
   return {
@@ -39,6 +41,13 @@ export function post<T = any>(
   return axios.post(url, data, { ...options, headers });
 }
 
+export function patch<T = any>(
+  url: string,
+  data: any
+): Promise<AxiosResponse<T>> {
+  const options = _getHeader();
+  return axios.patch(url, data, options);
+}
 
 export const deleteCall = (url: string, data?: any) => {
   const options = _getHeader();

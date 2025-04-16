@@ -2,7 +2,6 @@ import Image from "next/image";
 import type { ProductDetail } from "@/types/productDetail";
 import { fetchProductDetail } from "@/components/fetch/fetchProduct";
 import ReviewClient from "@/components/ItemDetails/ReviewClient";
-import { PiHeartBold, PiHeartFill } from "react-icons/pi";
 
 interface DetailPageProps {
   params: { id: string };
@@ -19,15 +18,7 @@ export default async function DetailPage({ params }: DetailPageProps) {
 
   return (
     <>
-      {!product.isInWish ? (
-        <button className="text-xl sm:text-2xl p-3 bg-custombg rounded-full shadow-light hover:shadow-strong hover:text-light">
-          <PiHeartBold />
-        </button>
-      ) : (
-        <button className="text-xl sm:text-2xl p-3 bg-custombg rounded-full shadow-light hover:shadow-strong hover:text-light">
-          <PiHeartFill />
-        </button>
-      )}
+     
       <button className="w-[50px] text-custombg">
         <Image
           src={"/assets/icons/arrow_left.svg"}

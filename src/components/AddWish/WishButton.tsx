@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { addWish, deleteWish } from "../fetch/fetchWishList";
+import { useEffect, useState } from "react";
+import { addWish, deleteWish, fetchWishList } from "../fetch/fetchWishList";
 import { PiHeartBold, PiHeartFill } from "react-icons/pi";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { useUserStore } from "@/stores/useUserStore";
 import useModal from "@/hooks/useModal";
 import Modal from "../Modal/Modal";
 import { useRouter } from "next/navigation";
+import { GetWishResponse } from "@/types/wishlist";
 
 // 자식 컴포넌트에 무엇이 필요한지 알고, 그 의도에 맞게 props를 정하자. 그냥 때려넣지 마세요
 interface WishButtonProps {
@@ -29,14 +30,33 @@ export default function WishButton({
   const { isModalOpen, openModal, closeModal } = useModal();
   const router = useRouter();
 
+  // const [wishArr, setWishArr] = useState<GetWishResponse[]>([]);
+
+  // useEffect(() => {
+  //   const getWishList = async () => {
+  //     const res = await fetchWishList();
+
+  //     if (!res) {
+  //       console.log("위시리스트 로드 실패");
+  //     }
+  //     setWishArr(res);
+  //   };
+  //   getWishList();
+  // }, []);
+
+  // useEffect(()=>{
+  //   console.log(wishArr)
+  // },[wishArr])
+
   const handleAddWish = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
     if (!user) {
       openModal();
+      console.log("로그인 하세요");
       return;
     }
-
+    console.log("추가 성공");
     setIsMemoOpen(true);
   };
 
@@ -44,6 +64,11 @@ export default function WishButton({
     e.stopPropagation();
 
     if (!user) {
+      console.log("로그인 하세요");
+      return;
+    }
+    if (!wishId) {
+      console.log("삭제 실패: wishId 없음");
       return;
     }
 
@@ -52,6 +77,7 @@ export default function WishButton({
       if (success) {
         setIsAdded(false);
         setIsMemoOpen(false);
+        console.log("삭제 성공");
       }
     }
   };
@@ -94,21 +120,21 @@ export default function WishButton({
           confirmBtnText={"로그인하러 가기"}
         />
       )}
-      
+
       {/* 하트 버튼 */}
       {!isAdded ? (
         <button
           onClick={handleAddWish}
           className="text-xl sm:text-2xl p-3 bg-custombg rounded-full shadow-light hover:shadow-strong hover:text-light"
         >
-          <PiHeartBold/>
+          <PiHeartBold />
         </button>
       ) : (
         <button
           onClick={handleRemoveWish}
           className="text-xl sm:text-2xl p-3 bg-custombg rounded-full shadow-light hover:shadow-strong hover:text-light"
         >
-          <PiHeartFill/>
+          <PiHeartFill />
         </button>
       )}
 

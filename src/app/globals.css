@@ -26,7 +26,7 @@
   --color-bglight: #dadada;
   --color-text: #000000;
   --color-textHover: #444444;
-  --color-cardBd: #D8DADE;
+  --color-cardBd: #d8dade;
   --color-mid: #757575;
   --color-light: #939393;
   --color-overlay: rgba(0, 0, 0, 0.5);
@@ -83,7 +83,7 @@ select:hover {
 }
 
 .userSection {
-  @apply h-[700px] py-24;
+  @apply min-h-[700px] py-36;
 }
 
 @tailwind utilities;
@@ -122,15 +122,16 @@ select:hover {
 
 @layer components {
   .overlay {
-    @apply 
-      min-w-[320px]
+    @apply min-w-[320px]
       w-screen h-full
       fixed inset-0 z-10
       bg-overlay;
   }
 
   .global-px {
-    @apply px-10 lg:px-40 2xl:px-80;
+    @apply 
+    min-w-[320px]
+    px-10 lg:px-40 2xl:px-80;
   }
 
   .btn-strong {
@@ -167,5 +168,12 @@ select:hover {
 
   .submit-btn {
     @apply bg-mid text-custombg p-2 hover:bg-textHover;
+  }
+
+  .user-product-card {
+    @apply shrink-0 w-[250px] h-[280px] 
+    flex flex-col items-center gap-2 
+    cursor-pointer
+    relative
   }
 }

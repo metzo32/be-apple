@@ -12,7 +12,7 @@ interface WishCardProps {
 
 export default function UserWishCard({ wishList, onDelete }: WishCardProps) {
   return (
-    <div className="w-[500px] h-[250px] flex flex-col gap-5">
+    <div className="w-[200px] sm:w-[500px] h-[250px] flex flex-col gap-5">
       <div className="flex items-center gap-3 relative">
         <Image
           src="/assets/images/fallback.png" // TODO: 실제 이미지로 교체
