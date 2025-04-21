@@ -31,39 +31,53 @@ export enum UserProductStatus {
   /**
    * 사용 중
    */
-  ACTIVE = 'ACTIVE',
+  ACTIVE = "ACTIVE",
   /**
    * 미사용 중
    */
-  INACTIVE = 'INACTIVE',
+  INACTIVE = "INACTIVE",
   /**
    * 판매(처분)
    */
-  SOLD = 'SOLD',
+  SOLD = "SOLD",
 }
+
+export const UserProductStatusLabels = {
+  [UserProductStatus.ACTIVE]: "현재 사용 중이예요.",
+  [UserProductStatus.INACTIVE]: "가지고 있지만 사용하지 않고 있어요.",
+  [UserProductStatus.SOLD]: "처분하거나 양도했어요.",
+};
 
 export enum UserProductCondition {
   /**
    * 새것
    */
-  NEW = 'NEW',
+  NEW = "NEW",
   /**
    * 좋음
    */
-  GOOD = 'GOOD',
+  GOOD = "GOOD",
   /**
    * 보통
    */
-  FAIR = 'FAIR',
+  FAIR = "FAIR",
   /**
    * 미흡
    */
-  POOR = 'POOR',
+  POOR = "POOR",
   /**
    * 손상
    */
-  DAMAGED = 'DAMAGED',
+  DAMAGED = "DAMAGED",
 }
+
+export const UserProductConditionLables = {
+  [UserProductCondition.NEW]: "새것과 같아요",
+  [UserProductCondition.GOOD]: "괜찮아요",
+  [UserProductCondition.FAIR]: "보통이예요",
+  [UserProductCondition.POOR]: "조금 낡았어요",
+  [UserProductCondition.DAMAGED]: "고장났어요",
+};
 
 // 유저 프로덕트 조회 응답 타입
 export interface GetUserProductResponse {
@@ -87,4 +101,3 @@ export interface GetUserProductResponse {
 
   reviews: Review[];
 }
- 

@@ -28,7 +28,6 @@ export default function UserWishCard({ wishList, onDelete }: WishCardProps) {
           </div>
           <Link
             href={`/search/${wishList.product.category}/${wishList.product.id}`}
-            className="btn-strong"
           >
             제품 보기
           </Link>

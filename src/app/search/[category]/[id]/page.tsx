@@ -15,6 +15,7 @@ export default async function DetailPage({ params }: DetailPageProps) {
   if (!product) {
     return <p>제품 상세페이지를 불러오지 못했습니다.</p>;
   }
+  console.log(product)
 
   return (
     <>

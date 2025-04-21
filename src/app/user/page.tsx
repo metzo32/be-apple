@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
-import SelectComp from "@/components/UserProduct/SelectComp";
 import LoadingScreen from "@/components/LoadingScreen";
 import UserWishList from "@/components/UserWishList/UserWishList";
 import SignOut from "@/components/SignOut";
@@ -31,8 +30,6 @@ export default function UserPage() {
 
   return (
     <div className="relative">
-      {/* 위시리스트의 제품 정보 */}
-      {/* <WishDetails />  */}
       <section className="py-24 flex flex-col items-center gap-10">
         <h1 className="text-4xl font-bold">안녕하세요, {user?.name} 님.</h1>
         <SignOut setIsSigningOut={setIsSigningOut} />
@@ -47,8 +44,6 @@ export default function UserPage() {
         <h1 className="text-4xl font-bold mb-10">내 위시리스트</h1>
         <UserWishList />
       </section>
-
-      <SelectComp />
     </div>
   );
 }

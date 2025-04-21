@@ -69,6 +69,11 @@ select {
   box-shadow: none;
 }
 
+label {
+  cursor: pointer;
+  user-select: none;
+}
+
 select:focus,
 select:hover {
   outline: none;
@@ -104,6 +109,7 @@ select:hover {
   label {
     @apply w-20 text-end font-bold
     break-keep
+    whitespace-nowrap
     text-sm
 
     lg:w-30 lg:text-xl;
@@ -129,23 +135,8 @@ select:hover {
   }
 
   .global-px {
-    @apply 
-    min-w-[320px]
+    @apply min-w-[320px]
     px-10 lg:px-40 2xl:px-80;
-  }
-
-  .btn-strong {
-    @apply h-10
-    px-5 py-1
-    flex justify-center items-center
-    text-sm
-
-    rounded-full bg-custombg shadow-light
-    
-    hover:text-textHover
-    hover:shadow-strong
-    md:text-lg
-    lg:px-8 lg:py-3;
   }
 
   .register-label {
@@ -174,6 +165,22 @@ select:hover {
     @apply shrink-0 w-[250px] h-[280px] 
     flex flex-col items-center gap-2 
     cursor-pointer
-    relative
+    relative;
+  }
+
+  .input-base {
+    @apply
+    w-[200px] bg-gray-300 border border-black;
+  }
+
+  .add-label {
+    @apply w-auto
+    border border-amber-500
+    flex items-center gap-2 cursor-pointer mb-2;
+  }
+
+  .user-product-h3 {
+    @apply
+    text-2xl
   }
 }

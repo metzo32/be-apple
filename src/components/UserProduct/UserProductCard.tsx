@@ -9,6 +9,10 @@ import type {
 import { ProductCategoryEnum } from "@/types/productCategory";
 import MonthDiff from "./MonthDiff";
 import { deleteUserProduct } from "../fetch/fetchUserProduct";
+import { useEffect, useState } from "react";
+import { fetchReview } from "../fetch/fetchReview";
+import useModal from "@/hooks/useModal";
+import Modal from "../Modal/Modal";
 
 const isMacProduct = (product: ProductDetail): product is ProductDetailMac => {
   return product.category === ProductCategoryEnum.MAC;
@@ -31,17 +35,35 @@ export default function UserProductCard({
 }: {
   userProduct: GetUserProductResponse;
 }) {
+  useEffect(() => {
+    console.log("이 아이템의 id", userProduct.id);
+  }, []);
 
-  const handleRemoveProduct = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const { isModalOpen, openModal, closeModal } = useModal();
+
+  const getConfirmation = () =>
+    new Promise<boolean>((resolve) => {
+      setPendingDeleteId(() => {
+        openModal();
+        return userProduct.id; // idToDelete는 이 함수 안에서 받아야 함
+      });
+    });
+
+  const handleRemoveProduct = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
     e.stopPropagation();
 
-    if (userProduct.product.userProductId) {
-      const success = await deleteUserProduct(userProduct.id);
-      if (success) {
+    if (userProduct.id) {
+      const deleteCall = await deleteUserProduct(
+        userProduct.id,
+        getConfirmation
+      );
+      if (deleteCall) {
         console.log("삭제 성공");
       } else {
         console.log("삭제 실패");
-    
       }
     }
   };
@@ -63,7 +85,20 @@ export default function UserProductCard({
         <h3>{userProduct.product.name}</h3>
         <p className="text-lg text-light">{displaySize}</p>
         <p className="text-lg text-light">{myOption?.processor}</p>
-        <button onClick={handleRemoveProduct} className="bg-red-600">삭제하기</button>
+        {/* TODO 400 에러 반환 시 confirm 후 body force: true 전달하기 */}
+        <button onClick={handleRemoveProduct} className="bg-red-600">
+          삭제하기
+        </button>
+
+        <Modal
+          isModalOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={getConfirmation}
+          onCancel={()=> closeModal()}
+          title="정말 삭제할까요?"
+          content="이 제품에는 리뷰가 작성되어 있어요. 그래도 삭제하시겠어요?"
+          confirmBtnText="삭제하기"
+        />
         <MonthDiff purchasedAt={userProduct.purchasedAt} />
       </div>
     );
