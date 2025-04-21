@@ -96,35 +96,35 @@ select:hover {
 @layer base {
   body {
     @apply min-w-[320px]
-    bg-custombg text-text
-    text-base
-
-    lg:text-xl;
+      bg-custombg text-text
+      text-lg
+      lg:text-xl;
   }
 
   h1 {
-    @apply text-4xl font-bold;
+    @apply font-bold
+      text-3xl
+      lg:text-4xl;
+  }
+
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-sm
+      lg:text-base;
   }
 
   label {
     @apply w-20 text-end font-bold
-    break-keep
-    whitespace-nowrap
-    text-sm
-
-    lg:w-30 lg:text-xl;
-  }
-
-  @media (max-width: 1023.98px) {
-    body {
-      @apply text-lg;
-    }
-
-    h1 {
-      @apply text-3xl;
-    }
+      break-keep
+      whitespace-nowrap
+      text-sm
+      lg:w-30 lg:text-xl;
   }
 }
+
 
 @layer components {
   .overlay {
@@ -169,8 +169,7 @@ select:hover {
   }
 
   .input-base {
-    @apply
-    w-[200px] bg-gray-300 border border-black;
+    @apply w-[200px] bg-gray-300 border border-black;
   }
 
   .add-label {
@@ -180,7 +179,6 @@ select:hover {
   }
 
   .user-product-h3 {
-    @apply
-    text-2xl
+    @apply text-2xl;
   }
 }

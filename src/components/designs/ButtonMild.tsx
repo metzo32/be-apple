@@ -1,5 +1,15 @@
 import type { ButtonProps } from "@/types/button";
+import { Button } from "@mui/material";
 
 export default function ButtonBasic({ text, onClick, type }: ButtonProps) {
-  return <button type={type} onClick={onClick} className="hover:text-textHover">{text}</button>;
+  return (
+    <Button
+      type={type}
+      variant="outlined"
+      onClick={onClick}
+      className="hover:text-textHover"
+    >
+      {text}
+    </Button>
+  );
 }

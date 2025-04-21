@@ -3,9 +3,9 @@
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
 import { fetchSignOut } from "./fetch/fetchSignOut";
-import ButtonStrong from "./designs/ButtonStrong";
 import useModal from "@/hooks/useModal";
 import Modal from "./Modal/Modal";
+import ButtonMild from "./designs/ButtonMild";
 
 interface SignOutProps {
   setIsSigningOut: (value: boolean) => void;
@@ -42,7 +42,7 @@ export default function SignOut({ setIsSigningOut }: SignOutProps) {
           confirmBtnText={"확인"}
         />
       )}
-      <ButtonStrong text="로그아웃" onClick={openModal} />
+      <ButtonMild text="로그아웃" onClick={openModal} />
     </>
   );
 }

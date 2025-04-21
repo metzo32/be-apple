@@ -1,9 +1,11 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import Image from "next/image";
 import useOpenSelect from "@/stores/useOpenSelect";
-import { ProductCategoryEnum } from "@/types/productCategory";
+import {
+  ProductCategoryEnum,
+  ProductCategoryLabels,
+} from "@/types/productCategory";
 import {
   UserProductCondition,
   UserProductStatus,
@@ -40,23 +42,47 @@ export default function SelectComp() {
     memo: "",
   });
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(0);
-  const [checkedStatusIndex, setIsCheckedStatusIndex] = useState<number>(0);
-  const [checkedConditionIndex, setCheckedConditionIndex] = useState<number>(0);
-  const [openPurchasedDate, setOpenPurchasedDate] = useState(false); // 구매일 달력 열기
+  const [price, setPrice] = useState<number>(0); // 데이터 상 전달되는 가격
+  const [displayedPrice, setDisplayedPrice] = useState<string>(""); // UI상 보여지는 가격
   const [purchasedDate, setPurchasedDate] = useState<Date | null>(null); // 구매 날짜
+  const [isSoldSelected, setIsSoldSelected] = useState(false); // 처분 및 양도 여부
   const [soldDate, setSoldDate] = useState<Date | null>(null); // 판매 날짜
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [isMultiplePurchased, setIsMultiplePurchased] = useState(false);
-
-  const [isSoldSelected, setIsSoldSelected] = useState(false); // 처분 및 양도 선택 시 판매날짜 선택
+  const [isMultiplePurchased, setIsMultiplePurchased] = useState(false); // 재구매 여부
+  const [multiplePurchaseCount, setMultiplePurchaseCount] = useState<
+    number | string
+  >(""); // 재구매 횟수
+  const [tempMemo, setTempMemo] = useState<string>(""); // ui상 메모
 
   const categories = Object.values(ProductCategoryEnum); // 카테고리 배열
-  const currentStatus = Object.values(UserProductStatus); // 제품 손상도 배열
+  const currentStatus = Object.values(UserProductStatus); // 제품 활성화 배열
   const conditions = Object.values(UserProductCondition); // 제품 손상도 배열
+
+  // 전체 페이지
+  const MAX_PAGE = 6;
+  const MAX_MEMO_LENGTH = 200;
 
   const handleClose = () => {
     setIsClicked(false);
   };
+
+  // 이전 페이지
+  const handlePrevPage = () => {
+    if (currentPageNumber === 0) {
+      return;
+    }
+    setCurrentPageNumber(currentPageNumber - 1);
+  };
+
+  // 다음 페이지
+  const handleNextPage = () => {
+    if (currentPageNumber > MAX_PAGE) {
+      return;
+    }
+    setCurrentPageNumber(currentPageNumber + 1);
+  };
+
+  //TODO 카테고리 별 제품 배열을 불러오고, 해당 아이템을 선택하면 productId와 productOptionId를 form 객체에 추가
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -70,20 +96,37 @@ export default function SelectComp() {
     }
   };
 
-  // 보유상태 관련
+  // 카테고리 선택
+  const handleCategorySelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("카테고리", e.target.value);
+  };
+
+  const handlePriceChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const input = e.target.value;
+    if (input.length > 9) {
+      return;
+    }
+    const numberPrice = Number(input.replace(/[^0-9]/g, ""));
+    setPrice(numberPrice);
+    setDisplayedPrice(numberPrice.toLocaleString() + "원");
+
+    setFormData({
+      ...formData,
+      purchasePrice: numberPrice,
+    });
+  };
+
+  // 보유상태 선택
   const handleStatusSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
       ...prev,
       status: e.target.value as UserProductStatus,
     }));
-    console.log(e.target.value);
   };
 
-  const handleStatusClick = (index: number) => {
-    setIsCheckedStatusIndex(index === checkedStatusIndex ? 0 : index);
-  };
-
-  // 제품 상태 관련
+  // 제품 상태 선택
   const handleConditionSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
       ...prev,
@@ -91,14 +134,7 @@ export default function SelectComp() {
     }));
   };
 
-  const handleConditionClick = (index: number) => {
-    setCheckedConditionIndex(index === checkedConditionIndex ? 0 : index);
-  };
-
-  const handleOpenPurchasedDate = () => {
-    setOpenPurchasedDate(!openPurchasedDate);
-  };
-
+  // 구매일 선택
   const handlePurchasedDateChange = (purchasedDate: Date) => {
     setSelectedDate(purchasedDate);
 
@@ -108,6 +144,8 @@ export default function SelectComp() {
     });
   };
 
+  // 판매일 선택
+  // TODO 구매일보다 이전일 수 없다
   const handleSoldDateChange = (date: Date) => {
     setSelectedDate(date);
 
@@ -117,42 +155,38 @@ export default function SelectComp() {
     });
   };
 
-  const MAX_PAGE = 5;
-  const MAX_MEMO_LENGTH = 200;
-
+  // TODO 문자 하나하나 칠 때마다 호출되지 않도록 개선
   const handleMemoChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { value } = e.target;
+    setTempMemo(e.target.value);
+  };
+
+  const handleMemoBlur = () => {
     setFormData((prev) => ({
       ...prev,
-      memo: value,
+      memo: tempMemo,
     }));
   };
-
-  //함수 시그니처....
+  // 함수 시그니처....
   const handleMultiplePurchased = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsMultiplePurchased(e.target.checked);
+    const purchaseCount = Number(e.target.value.replace(/[^0-9]/g, ""));
+
+    setMultiplePurchaseCount(Number(purchaseCount));
   };
 
-  const handlePrevPage = () => {
-    if (currentPageNumber === 0) {
-      return;
+  const handleMultiplePurchasedBlur = () => {
+    if (Number(multiplePurchaseCount) < 1) {
+      alert("1 이상의 숫자를 써주세요");
+      setMultiplePurchaseCount(2);
+    } else if (Number(multiplePurchaseCount) > 99) {
+      alert("100 미만의 숫자를 써주세요");
+      setMultiplePurchaseCount(2);
     }
-    setCurrentPageNumber(currentPageNumber - 1);
-  };
 
-  const handleNextPage = () => {
-    if (currentPageNumber > MAX_PAGE) {
-      return;
-    }
-    setCurrentPageNumber(currentPageNumber + 1);
-    console.log(
-      "필수 항목 입력여부 검증하는 로직을 추가하자. n번 인덱스 (마지막 제출페이지 번호) 에서는 제출 버튼으로 대체해야함"
-    ); // TODO
+    setFormData((prev) => ({
+      ...prev,
+      repurchasedCount: Number(multiplePurchaseCount) - 1, // 총 구매횟수 - 1 = 재구매 횟수
+    }));
   };
-
-  useEffect(() => {
-    console.log("현재 패이지 인덱스", currentPageNumber);
-  }, [currentPageNumber]);
 
   useEffect(() => {
     console.log("폼데이터", formData);
@@ -161,14 +195,14 @@ export default function SelectComp() {
   return (
     // TODO 모든 라디오 버튼 MUI 적용 이후 currentPage 바뀌면 ui상 리셋되는 현상
     <>
-      {!isClicked ? (
+      {isClicked ? (
         <div className="overlay flex justify-center items-center">
           <div className="w-[1200px] h-[800px] p-16 bg-custombg rounded-3xl relative">
             {/* 닫기 버튼 */}
             <button
               type="button"
               onClick={handleClose}
-              className="w-8 h-8 text-4xl flex items-center justify-center absolute top-0 right-0 bg-bglight text-custombg hover:bg-light"
+              className="w-12 h-12 text-4xl flex items-center justify-center absolute top-0 right-0 bg-bglight text-custombg hover:bg-light"
             >
               <IoCloseOutline />
             </button>
@@ -207,31 +241,40 @@ export default function SelectComp() {
               <div>
                 {currentPageNumber === 0 && ( // 카테고리 선택바 및 검색바
                   <div>
-                    <div className="w-full flex justify-between">
-                      {categories.map((category, index) => (
-                        <label key={index} className="add-label">
-                          <button className="group relative w-[150px] h-[150px] md:w-[200px] md:h-[200px] rounded-xl bg-bglight hover:bg-custombg shadow-strong flex flex-col justify-center items-center gap-5">
-                            <Image
-                              src="/assets/images/searchbar_macbook.png"
-                              alt="이미지"
-                              fill
-                              className="object-cover saturate-0 group-hover:saturate-100"
-                            />
-                          </button>
-                          <input
-                            type="radio"
-                            name="category"
-                            // checked={selectedCategory === category}
-                            // onChange={() => setSelectedCategory(category)}
-                            className="accent-blue-600 w-4 h-4"
-                            required
-                            hidden
+                    <div className="w-full flex flex-col justify-between">
+                      <RadioGroup
+                        aria-labelledby="category-radio-buttons-group-label"
+                        // value={category}
+                        name="radio-buttons-group"
+                        onChange={handleCategorySelect}
+                        sx={{
+                          width: "1000px",
+                          display: "grid",
+                          gridTemplateColumns: "repeat(1, 3fr)",
+                          gridColumnGap: "100px",
+                        }}
+                      >
+                        {categories.map((category) => (
+                          <FormControlLabel
+                            key={category}
+                            value={category}
+                            control={<Radio />}
+                            label={ProductCategoryLabels[category]}
+                            sx={{
+                              width: "300px",
+                            }}
                           />
-                          <span className="text-gray-800">{category}</span>
-                        </label>
-                      ))}
+                        ))}
+                      </RadioGroup>
                     </div>
-                    <div className="border border-3-black">검색바</div>
+
+                    {/* TODO 이 부분 invalid 한 경우, "다음"버튼 실행 금지 */}
+                    <TextField
+                      id="outlined-basic"
+                      label="제품명 검색"
+                      variant="outlined"
+                      required
+                    />
                   </div>
                 )}
 
@@ -241,7 +284,9 @@ export default function SelectComp() {
                     <TextField
                       label="가격"
                       variant="outlined"
-                      sx={{ width: "500px" }}
+                      sx={{ width: "330px" }}
+                      value={displayedPrice}
+                      onChange={handlePriceChange}
                     />
                   </label>
                 )}
@@ -250,11 +295,7 @@ export default function SelectComp() {
                   <div className="relative">
                     <div className="flex gap-3 items-center">
                       <h3 className="user-product-h3">구매 시기</h3>
-                      <button
-                        type="button"
-                        className="hover:text-textHover"
-                        onClick={handleOpenPurchasedDate}
-                      >
+                      <button type="button" className="hover:text-textHover">
                         <FaRegCalendarCheck />
                       </button>
                     </div>
@@ -262,24 +303,26 @@ export default function SelectComp() {
                     <PickDate
                       pickedDate={purchasedDate}
                       changeDate={handlePurchasedDateChange}
+                      minDate={new Date("April 11, 1976")}
                     />
                   </div>
                 )}
 
                 {currentPageNumber === 3 && ( // 제품 활성화 상태
-                  <div className="flex flex-col gap-5 items-center">
-                    <div className="flex flex-col gap-5">
+                  <div className="relative">
+                    <div className="w-full h-[150px] flex flex-col gap-5 justify-center">
                       <h3 className="user-product-h3">이 제품을...</h3>
                       <RadioGroup
                         aria-labelledby="status-radio-buttons-group-label"
-                        defaultValue="ACTIVE"
+                        value={formData.status}
                         name="radio-buttons-group"
                         onChange={handleStatusSelect}
                         sx={{
-                          width: "1000px",
-                          display: "grid",
-                          gridTemplateColumns: "repeat(3, 1fr)",
-                          gridColumnGap: "100px",
+                          width: "940px",
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          alignItems: "center",
                         }}
                       >
                         {currentStatus.map((status) => (
@@ -289,11 +332,10 @@ export default function SelectComp() {
                             control={<Radio />}
                             label={UserProductStatusLabels[status]}
                             onChange={() =>
-                              status === "SOLD" && setIsSoldSelected(true)
+                              status === "SOLD"
+                                ? setIsSoldSelected(true)
+                                : setIsSoldSelected(false)
                             }
-                            sx={{
-                              width: "300px",
-                            }}
                           />
                         ))}
                       </RadioGroup>
@@ -301,10 +343,14 @@ export default function SelectComp() {
 
                     <div className="w-full flex justify-end">
                       {isSoldSelected && (
-                        <PickDate
-                          pickedDate={soldDate}
-                          changeDate={handleSoldDateChange}
-                        />
+                        <div className="absolute bottom-0 right-0 transform translate-y-full">
+                          <h4>판매 시기</h4>
+                          <PickDate
+                            pickedDate={soldDate}
+                            changeDate={handleSoldDateChange}
+                            minDate={purchasedDate ? purchasedDate : new Date()}
+                          />
+                        </div>
                       )}
                     </div>
                   </div>
@@ -315,87 +361,110 @@ export default function SelectComp() {
                 {currentPageNumber === 4 && ( // 제품 손상도
                   <div className="flex flex-col gap-5">
                     <h3 className="user-product-h3">제품 상태</h3>
-                    <div className="grid grid-rows-1 grid-cols-5 gap-36">
-                      <RadioGroup
-                        aria-labelledby="status-radio-buttons-group-label"
-                        defaultValue="ACTIVE"
-                        name="radio-buttons-group"
-                        onChange={handleStatusSelect}
-                        sx={{
-                          width: "1000px",
-                          display: "grid",
-                          gridTemplateColumns: "repeat(5, 1fr)",
-                          gridColumnGap: "180px",
-                        }}
-                      >
-                        {conditions.map((condition) => (
-                          <FormControlLabel
-                            key={condition}
-                            value={condition}
-                            control={<Radio />}
-                            label={UserProductConditionLables[condition]}
-                            sx={{
-                              width: "50px",
-                            }}
-                          />
-                        ))}
-                      </RadioGroup>
-                    </div>
+                    <RadioGroup
+                      aria-labelledby="status-radio-buttons-group-label"
+                      value={formData.condition}
+                      name="radio-buttons-group"
+                      onChange={handleConditionSelect}
+                      sx={{
+                        width: "1000px",
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      {conditions.map((condition) => (
+                        <FormControlLabel
+                          key={condition}
+                          value={condition}
+                          control={<Radio />}
+                          label={UserProductConditionLables[condition]}
+                          sx={{
+                            width: "50px",
+                          }}
+                        />
+                      ))}
+                    </RadioGroup>
                   </div>
                 )}
 
                 {currentPageNumber === 5 && ( // 재구매 여부
-                  <div className="w-[300px] flex flex-col gap-5">
+                  <div className="w-[360px] flex flex-col gap-5 relative">
                     <h3 className="user-product-h3">
                       이 제품을 재구매한 적 있나요?
                     </h3>
 
                     {/* TODO 택1 로직 고치기 */}
-                    <label className="add-label">
-                      아니요
-                      <input
-                        type="radio"
-                        id="multiplePurchase"
-                        name="multiplePurchase"
-                        value="multiplePurchase"
+                    <RadioGroup
+                      aria-labelledby="status-radio-buttons-group-label"
+                      value={isMultiplePurchased ? "true" : "false"}
+                      name="radio-buttons-group"
+                      onChange={handleConditionSelect}
+                      sx={{
+                        width: "500px",
+                        display: "grid",
+                        gridTemplateColumns: "repeat(5, 1fr)",
+                        gridColumnGap: "180px",
+                      }}
+                    >
+                      <FormControlLabel
+                        value="false"
+                        control={<Radio />}
+                        label={"아니요"}
+                        onClick={() => setIsMultiplePurchased(false)}
+                        sx={{
+                          width: "50px",
+                        }}
                       />
-                    </label>
+                      <FormControlLabel
+                        value="true"
+                        control={<Radio />}
+                        label={"재구매했어요"}
+                        onClick={() => setIsMultiplePurchased(true)}
+                        sx={{
+                          width: "50px",
+                        }}
+                      />
+                    </RadioGroup>
 
-                    <label className="add-label">
-                      재구매했어요
-                      <input
-                        type="radio"
-                        id="multiplePurchase"
-                        name="multiplePurchase"
-                        value="multiplePurchase"
-                        checked={isMultiplePurchased}
-                        onChange={handleMultiplePurchased}
-                      />
-                    </label>
                     {isMultiplePurchased && (
-                      <div className="flex items-center gap-3">
-                        <input type="number" min={1} max={10} />
-                        <p>회</p>
+                      <div className="flex items-center gap-3 absolute bottom-0 right-0 transform translate-y-[120%]">
+                        <h4>총</h4>
+                        <TextField
+                          value={multiplePurchaseCount}
+                          variant="outlined"
+                          onChange={handleMultiplePurchased}
+                          onBlur={handleMultiplePurchasedBlur}
+                          sx={{
+                            width: "100px",
+                          }}
+                        />
+                        <h4>회</h4>
                       </div>
                     )}
                   </div>
                 )}
 
                 {currentPageNumber === 6 && (
-                  <div>
-                    <h3 className="user-product-h3">
-                      이 제품에 대한 메모를 남겨주세요. (나에게만 보여요)
-                    </h3>
+                  <div className="flex flex-col gap-3">
+                    <div className="flex gap-3 items-cente">
+                      <h3 className="user-product-h3">
+                        이 제품에 대한 메모를 남겨주세요.
+                      </h3>
+                      <p className="text-mid">(나에게만 보여요)</p>
+                    </div>
                     <textarea
                       id="memo"
-                      value={formData.memo}
+                      value={tempMemo}
                       onChange={handleMemoChange}
+                      onBlur={handleMemoBlur}
                       maxLength={MAX_MEMO_LENGTH}
                       placeholder="메모 남기기"
-                      className="w-full h-[150px] p-5 border-3 border-bglight text-base resize-none"
+                      className="w-full h-[150px] p-5 border-2 border-bglight text-base rounded-lg resize-none"
                     />
                     <p className="text-sm text-gray-500 text-right mt-1">
-                      {formData.memo.length} / {MAX_MEMO_LENGTH}자
+                      {tempMemo.length} / {MAX_MEMO_LENGTH}자
                     </p>
                   </div>
                 )}
@@ -411,8 +480,6 @@ export default function SelectComp() {
                   </>
                 )}
               </span>
-
-              {/* <ButtonStrong text="등록하기" type="submit" /> */}
             </Box>
           </div>
         </div>

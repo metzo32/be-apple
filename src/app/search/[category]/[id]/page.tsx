@@ -2,9 +2,10 @@ import Image from "next/image";
 import type { ProductDetail } from "@/types/productDetail";
 import { fetchProductDetail } from "@/components/fetch/fetchProduct";
 import ReviewClient from "@/components/ItemDetails/ReviewClient";
+import Link from "next/link";
 
 interface DetailPageProps {
-  params: { id: string };
+  params: { id: string; category: string };
 }
 
 export default async function DetailPage({ params }: DetailPageProps) {
@@ -15,19 +16,21 @@ export default async function DetailPage({ params }: DetailPageProps) {
   if (!product) {
     return <p>제품 상세페이지를 불러오지 못했습니다.</p>;
   }
-  console.log(product)
 
   return (
     <>
-     
-      <button className="w-[50px] text-custombg">
+      <Link
+        href={`/search/${params.category}`}
+        className="w-[50px] text-custombg"
+      >
         <Image
           src={"/assets/icons/arrow_left.svg"}
           alt="뒤로"
           width={50}
           height={50}
+          // onClick={handlePrevPage}
         />
-      </button>
+      </Link>
 
       <section className="flex justify-between items-center gap-10 mb-48">
         <h2>{product.name}</h2>
