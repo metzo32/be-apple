@@ -52,8 +52,8 @@ export default function UserWishList() {
     if (recentlyDeleted) {
       if (deleteTimer) clearTimeout(deleteTimer); // 타이머 중도 취소하기
 
-      setPendingDeleteIds((prev) =>
-        prev.filter((id) => id !== recentlyDeleted.id) // 취소한 id를 뺀 나머지 배열 요소만 남기기
+      setPendingDeleteIds(
+        (prev) => prev.filter((id) => id !== recentlyDeleted.id) // 취소한 id를 뺀 나머지 배열 요소만 남기기
       );
       setIsPopupOpen(false);
       setRecentlyDeleted(null);
@@ -62,29 +62,33 @@ export default function UserWishList() {
 
   return (
     <>
-      {wishList.length > 0 ? (
-        // <div className="w-full grid grid-cols-2 gap-5 lg:gap-20">
-        <div>
-          {wishList.map((wish) => {
-            const isPendingDelete = pendingDeleteIds.includes(wish.id);
-            return (
-              <div
-                key={wish.id}
-                className={
-                  isPendingDelete ? "saturate-0 opacity-30 pointer-events-none" : ""
-                }
-              >
-                <UserWishCard
-                  wishList={wish}
-                  onDelete={() => handleDelete(wish.id)}
-                />
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <p>위시리스트가 비어있습니다.</p>
-      )}
+      <div className="bg-white p-24 rounded-t-3xl shadow-light">
+        <h2 className="font-bold mb-10">내 위시리스트</h2>
+        {wishList.length > 0 ? (
+          <div className="flex flex-col gap-20">
+            {wishList.map((wish) => {
+              const isPendingDelete = pendingDeleteIds.includes(wish.id);
+              return (
+                <div
+                  key={wish.id}
+                  className={
+                    isPendingDelete
+                      ? "saturate-0 opacity-30 pointer-events-none"
+                      : ""
+                  }
+                >
+                  <UserWishCard
+                    wishList={wish}
+                    onDelete={() => handleDelete(wish.id)}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <p>위시리스트가 비어있습니다.</p>
+        )}
+      </div>
 
       <DeletePopup isOpen={isPopupOpen} onUndo={handleUndo} />
     </>

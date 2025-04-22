@@ -36,12 +36,10 @@ export default function UserPage() {
       </section>
 
       <section className="userSection">
-        <h1 className="text-4xl font-bold mb-10">내 제품 목록</h1>
         <UserProduct />
       </section>
 
-      <section className="userSection">
-        <h1 className="text-4xl font-bold mb-10">내 위시리스트</h1>
+      <section className="userSection pb-0">
         <UserWishList />
       </section>
     </div>

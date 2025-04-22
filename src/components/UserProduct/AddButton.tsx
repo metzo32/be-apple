@@ -6,6 +6,8 @@ import { CreateUserProductReqDto } from "@/types/userProduct";
 import { useState } from "react";
 import { GoPlus } from "react-icons/go"; // + 아이콘
 import SelectComp from "./SelectComp";
+import { Button } from "@mui/material";
+import ButtonStrong from "../designs/ButtonStrong";
 
 export default function AddButton() {
   const { isClicked, setIsClicked } = useOpenSelect();
@@ -28,15 +30,10 @@ export default function AddButton() {
   return (
     <>
       <div className="relative">
-        <button
-          onClick={handleClick}
-          className="w-12 h-12 rounded-full text-3xl text-white flex-shrink-0 bg-light flex items-center justify-center hover:brightness-110"
-        >
-          <GoPlus />
-        </button>
+        <ButtonStrong text="장비 추가하고 티어 올리기" onClick={handleClick} />
       </div>
 
-      <SelectComp/>
+      <SelectComp />
     </>
   );
 }

@@ -26,9 +26,13 @@ import {
   TextField,
 } from "@mui/material";
 import { formatDate } from "@/module/formatDate";
+import useModal from "@/hooks/useModal";
+import Modal from "../Modal/Modal";
+import isEqual from "lodash/isEqual";
 
 export default function SelectComp() {
   const { isClicked, setIsClicked } = useOpenSelect();
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   const [formData, setFormData] = useState<CreateUserProductReqDto>({
     productId: 0,
@@ -47,23 +51,38 @@ export default function SelectComp() {
   const [purchasedDate, setPurchasedDate] = useState<Date | null>(null); // 구매 날짜
   const [isSoldSelected, setIsSoldSelected] = useState(false); // 처분 및 양도 여부
   const [soldDate, setSoldDate] = useState<Date | null>(null); // 판매 날짜
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [isMultiplePurchased, setIsMultiplePurchased] = useState(false); // 재구매 여부
-  const [multiplePurchaseCount, setMultiplePurchaseCount] = useState<
-    number | string
-  >(""); // 재구매 횟수
+  const [multiplePurchaseCount, setMultiplePurchaseCount] = useState<number | string>(""); // 재구매 횟수
   const [tempMemo, setTempMemo] = useState<string>(""); // ui상 메모
 
   const categories = Object.values(ProductCategoryEnum); // 카테고리 배열
   const currentStatus = Object.values(UserProductStatus); // 제품 활성화 배열
   const conditions = Object.values(UserProductCondition); // 제품 손상도 배열
 
+  const initialForm = {
+    productId: 0,
+    productOptionId: 0,
+    purchasedAt: "",
+    purchasePrice: 0,
+    soldAt: "",
+    status: UserProductStatus.ACTIVE,
+    repurchasedCount: 0,
+    condition: UserProductCondition.NEW,
+    memo: "",
+  };
+
   // 전체 페이지
   const MAX_PAGE = 6;
   const MAX_MEMO_LENGTH = 200;
 
   const handleClose = () => {
+    if (isEqual(initialForm, formData)) {
+      setIsClicked(false);
+    } else {
+      alert("작성한 내용이 사라집니다.");
+    }
     setIsClicked(false);
+    setCurrentPageNumber(0);
   };
 
   // 이전 페이지
@@ -135,8 +154,8 @@ export default function SelectComp() {
   };
 
   // 구매일 선택
-  const handlePurchasedDateChange = (purchasedDate: Date) => {
-    setSelectedDate(purchasedDate);
+  const handlePurchasedDateChange = (date: Date) => {
+    setPurchasedDate(date);
 
     setFormData({
       ...formData,
@@ -145,9 +164,8 @@ export default function SelectComp() {
   };
 
   // 판매일 선택
-  // TODO 구매일보다 이전일 수 없다
   const handleSoldDateChange = (date: Date) => {
-    setSelectedDate(date);
+    setSoldDate(date);
 
     setFormData({
       ...formData,
@@ -155,7 +173,6 @@ export default function SelectComp() {
     });
   };
 
-  // TODO 문자 하나하나 칠 때마다 호출되지 않도록 개선
   const handleMemoChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTempMemo(e.target.value);
   };
@@ -193,12 +210,12 @@ export default function SelectComp() {
   }, [formData]);
 
   return (
-    // TODO 모든 라디오 버튼 MUI 적용 이후 currentPage 바뀌면 ui상 리셋되는 현상
     <>
       {isClicked ? (
         <div className="overlay flex justify-center items-center">
           <div className="w-[1200px] h-[800px] p-16 bg-custombg rounded-3xl relative">
             {/* 닫기 버튼 */}
+            {/* TODO 양식에 무언가 작성되어 있을 때, 정말 리셋할것인지 확인 + 리셋  */}
             <button
               type="button"
               onClick={handleClose}
@@ -356,8 +373,6 @@ export default function SelectComp() {
                   </div>
                 )}
 
-                {/* TODO 제품 활성화 상태가 ACTIVE 인 경우 분기처리 */}
-
                 {currentPageNumber === 4 && ( // 제품 손상도
                   <div className="flex flex-col gap-5">
                     <h3 className="user-product-h3">제품 상태</h3>
@@ -395,7 +410,6 @@ export default function SelectComp() {
                       이 제품을 재구매한 적 있나요?
                     </h3>
 
-                    {/* TODO 택1 로직 고치기 */}
                     <RadioGroup
                       aria-labelledby="status-radio-buttons-group-label"
                       value={isMultiplePurchased ? "true" : "false"}

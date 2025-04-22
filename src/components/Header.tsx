@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import ButtonStrong from "./designs/ButtonStrong";
 import { useUserStore } from "@/stores/useUserStore";
 import Image from "next/image";
+import { Button, TextField } from "@mui/material";
 
 type HeaderText = " " | "로그인" | "내 페이지";
 
@@ -39,6 +40,20 @@ export default function Header() {
           onClick={() => router.push("/")}
         />
       </button>
+
+      <form className="flex gap-5">
+        <TextField
+          // value={"입력값"}
+          placeholder="검색어를 입력하세요..."
+          variant="outlined"
+          // onChange={handleMultiplePurchased}
+          size="small"
+          sx={{
+            width: "600px",
+          }}
+        />
+        <Button variant="outlined">검색</Button>
+      </form>
 
       <ButtonStrong text={text} onClick={handleClick} />
     </header>
