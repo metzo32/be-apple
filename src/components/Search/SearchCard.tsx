@@ -11,8 +11,8 @@ interface SearchCardProps {
 
 export default function SearchCard({ product }: SearchCardProps) {
   return (
-    <div className="bg-cardBd p-5 rounded-2xl shrink-0 w-[300px] h-[500px] flex flex-col justify-between items-start gap-3 relative shadow-strong">
-      <div className="w-full flex justify-between items-center">
+    <div className="w-[280px] bg-white shrink-0 flex flex-col justify-between items-start relative shadow-strong">
+      {/* <div className="w-full flex justify-between items-center">
         <Button variant="outlined">
           <Link
             href={`/search/${product.category}/${product.id}`}
@@ -23,24 +23,26 @@ export default function SearchCard({ product }: SearchCardProps) {
         </Button>
 
         <PurchasedIcon product={product} />
-      </div>
+      </div> */}
 
       <Link
         href={`/search/${product.category}/${product.id}`}
-        className="w-[260px] h-[500px] flex flex-col gap-0 md:gap-2 relative"
+        className="w-[280px] h-[200px] bg-gray-400"
       >
-        <Image
+        <span className="w-[280px] h-[280px] bg-gray-400" />
+        {/* <Image
           src={"/assets/images/macbook01.png"} // TODO photos[0] 안받아짐
           alt={product.name}
           fill
           className="object-cover"
-        />
+        /> */}
       </Link>
-      <div className="w-full flex justify-between items-end gap-5">
+
+      <div className="w-full flex justify-between items-end gap-5 p-5">
         <div className="w-full flex flex-col gap-2">
           <h5 className="font-bold">{product.name}</h5>
           <p className="light-p">{product.generation}</p>
-          <p className="light-p">{product.price}</p>
+          <p className="light-p">{product.price.toLocaleString()}원</p>
         </div>
 
         <WishButton

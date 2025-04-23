@@ -62,7 +62,7 @@ export default function UserWishList() {
 
   return (
     <>
-      <div className="bg-white p-24 rounded-t-3xl shadow-light">
+      <div className="bg-white min-h-[500px] p-24 rounded-t-3xl shadow-light">
         <h2 className="font-bold mb-10">내 위시리스트</h2>
         {wishList.length > 0 ? (
           <div className="flex flex-col gap-20">
@@ -86,7 +86,7 @@ export default function UserWishList() {
             })}
           </div>
         ) : (
-          <p>위시리스트가 비어있습니다.</p>
+          <p className="light-p">위시리스트가 비어있습니다.</p>
         )}
       </div>
 

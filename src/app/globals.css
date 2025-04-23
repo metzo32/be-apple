@@ -108,10 +108,8 @@ select:hover {
   }
 
   h2 {
-    @apply
-    text-2xl
+    @apply text-2xl;
   }
-
 
   h3,
   h4,
@@ -128,8 +126,12 @@ select:hover {
       text-sm
       lg:w-30 lg:text-xl;
   }
-}
 
+  p {
+    @apply text-base text-textHover
+    leading-snug;
+  }
+}
 
 @layer components {
   .overlay {
@@ -141,7 +143,10 @@ select:hover {
 
   .global-px {
     @apply min-w-[320px]
-    px-10 lg:px-40 2xl:px-80;
+    px-10 
+    md:px-30 
+    xl:px-50 
+    2xl:px-80;
   }
 
   .register-label {
@@ -160,10 +165,6 @@ select:hover {
     leading-snug
 
     md:text-base md:leading-tight;
-  }
-
-  .submit-btn {
-    @apply bg-mid text-custombg p-2 hover:bg-textHover;
   }
 
   .user-product-card {

@@ -39,9 +39,9 @@ export default function UserPage() {
         <UserProduct />
       </section>
 
-      <section className="userSection pb-0">
+      {/* <section className="userSection pb-0"> */}
         <UserWishList />
-      </section>
+      {/* </section> */}
     </div>
   );
 }

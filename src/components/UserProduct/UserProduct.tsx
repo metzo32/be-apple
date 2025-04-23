@@ -31,6 +31,7 @@ export default function UserProduct() {
       <div className="grid grid-cols-2 gap-10">
         <div className="h-[300px] bg-white rounded-2xl p-12 shadow-light flex flex-col justify-between items-center">
           <h3>당신의 티어는 모시깽입니다.</h3>
+          <h1>총 0.0점</h1>
           <AddButton />
         </div>
 
@@ -45,7 +46,9 @@ export default function UserProduct() {
               ))}
             </div>
           ) : (
-            <p>등록된 장비가 없습니다.</p>
+            <div>
+              <p className="light-p">등록된 장비가 없습니다.</p>
+            </div>
           )}
         </div>
       </div>

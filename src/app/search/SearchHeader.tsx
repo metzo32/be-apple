@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { basicDeviceData } from "../../../public/fakeData/basicDeviceData";
 import { useRouter } from "next/navigation";
+import { Button } from "@mui/material";
 
 export default function SearchHeader() {
   const router = useRouter();
@@ -10,6 +10,16 @@ export default function SearchHeader() {
   return (
     <nav className="pb-12 flex items-end justify-between">
       {basicDeviceData.map((item) => (
+        <Button
+          key={item.id}
+          variant="text"
+          size="large"
+          onClick={() => router.push(`/search/${item.category}`)}
+        >
+          {item.alt}
+        </Button>
+      ))}
+      {/* {basicDeviceData.map((item) => (
         <button
           key={item.id}
           className="group relative w-[150px] h-[150px] md:w-[300px] md:h-[300px] rounded-xl bg-custombg hover:bg-bglight shadow-strong flex flex-col justify-center items-center gap-5"
@@ -26,7 +36,7 @@ export default function SearchHeader() {
             className="object-cover saturate-0 group-hover:saturate-100"
           />
         </button>
-      ))}
+      ))} */}
     </nav>
   );
 }

@@ -9,6 +9,7 @@ import useModal from "@/hooks/useModal";
 import Modal from "../Modal/Modal";
 import { useRouter } from "next/navigation";
 import { GetWishResponse } from "@/types/wishlist";
+import { Button } from "@mui/material";
 
 // 자식 컴포넌트에 무엇이 필요한지 알고, 그 의도에 맞게 props를 정하자. 그냥 때려넣지 마세요
 interface WishButtonProps {
@@ -125,14 +126,14 @@ export default function WishButton({
       {!isAdded ? (
         <button
           onClick={handleAddWish}
-          className="text-xl sm:text-2xl p-3 bg-custombg rounded-full shadow-light hover:shadow-strong hover:text-light"
+          className="text-xl md:text-2xl p-3 bg-custombg rounded-full shadow-light hover:shadow-strong hover:text-light"
         >
           <PiHeartBold />
         </button>
       ) : (
         <button
           onClick={handleRemoveWish}
-          className="text-xl sm:text-2xl p-3 bg-custombg rounded-full shadow-light hover:shadow-strong hover:text-light"
+          className="text-xl md:text-2xl p-3 bg-custombg rounded-full shadow-light hover:shadow-strong hover:text-light"
         >
           <PiHeartFill />
         </button>
@@ -146,7 +147,7 @@ export default function WishButton({
         >
           <form
             onSubmit={handleSubmit}
-            className="w-[300px] md:w-[460px] p-5 flex flex-col gap-3 md:gap-5 bg-custombg shadow-2xl"
+            className="w-[300px] md:w-[460px] px-10 py-8 flex flex-col gap-3 md:gap-5 rounded-xl bg-custombg shadow-2xl"
           >
             <h3 className="font-bold">위시리스트에 추가되었습니다.</h3>
             <button
@@ -154,7 +155,7 @@ export default function WishButton({
               onClick={handleDrop}
               className="w-[100px] flex gap-3 items-center"
             >
-              <label className="light-p cursor-pointer">메모 남기기</label>
+              <label className="light-p cursor-pointer font-medium">메모 남기기</label>
               {isDropped ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
             </button>
 
@@ -166,7 +167,7 @@ export default function WishButton({
                   onChange={handleChange}
                   maxLength={150}
                   placeholder="나만의 메모를 남겨보세요"
-                  className="w-full h-[150px] p-3 border-3 border-bglight text-base"
+                  className="w-full h-[150px] p-3 border-3 border-bglight text-base resize-none"
                 />
                 <p className="text-sm text-gray-500 text-right mt-1">
                   {memo.length} / 150자
@@ -174,9 +175,9 @@ export default function WishButton({
               </div>
             )}
 
-            <button type="submit" className="submit-btn">
+            <Button variant="contained" type="submit">
               확인
-            </button>
+            </Button>
           </form>
         </div>
       )}
