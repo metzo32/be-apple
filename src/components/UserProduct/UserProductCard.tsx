@@ -10,10 +10,11 @@ import { ProductCategoryEnum } from "@/types/productCategory";
 import MonthDiff from "./MonthDiff";
 import { deleteUserProduct } from "../fetch/fetchUserProduct";
 import { useEffect, useState } from "react";
-import { fetchReview } from "../fetch/fetchReview";
 import useModal from "@/hooks/useModal";
 import Modal from "../Modal/Modal";
 
+
+// 타입가드
 const isMacProduct = (product: ProductDetail): product is ProductDetailMac => {
   return product.category === ProductCategoryEnum.MAC;
 };

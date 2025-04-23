@@ -1,32 +1,40 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
 import {
   ProductCategoryEnum,
   ProductCategoryLabels,
 } from "@/types/productCategory";
+import RenderProducts from "./RenderProducts";
 
-interface SelectCategoryProps {
-  onCategorySelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+export default function SelectCategory() {
+  const [selectedCategory, setSelectedCategory] = useState<ProductCategoryEnum>(
+    ProductCategoryEnum.MAC
+  );
 
-export default function SelectCategory({
-  onCategorySelect,
-}: SelectCategoryProps) {
-    
   const categories = Object.values(ProductCategoryEnum);
+
+  const handleCategorySelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedCategory(e.target.value as ProductCategoryEnum);
+  };
+
+  useEffect(() => {
+    console.log("현재 선택한 카테고리", selectedCategory);
+  }, [selectedCategory]);
 
   return (
     <div>
-      <div className="w-full flex flex-col justify-between">
+      <div className="w-full flex flex-row justify-between">
         <RadioGroup
           aria-labelledby="category-radio-buttons-group-label"
           name="radio-buttons-group"
-          onChange={onCategorySelect}
+          value={selectedCategory}
+          onChange={handleCategorySelect}
           sx={{
             width: "1000px",
             display: "grid",
-            gridTemplateColumns: "repeat(1, 3fr)",
+            gridTemplateColumns: "repeat(3, 1fr)",
             gridColumnGap: "100px",
           }}
         >
@@ -42,13 +50,17 @@ export default function SelectCategory({
         </RadioGroup>
       </div>
 
+      <div className="bg-blue-300">
+        <RenderProducts selectedCategory={selectedCategory} />
+      </div>
+
       {/* TODO 이 부분 invalid 한 경우, "다음"버튼 실행 금지 */}
-      <TextField
+      {/* <TextField
         id="outlined-basic"
         label="제품명 검색"
         variant="outlined"
         required
-      />
+      /> */}
     </div>
   );
 }

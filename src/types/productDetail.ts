@@ -181,7 +181,7 @@ export interface ProductDetailIpad {
   myOption: IpadOption | null;
 }
 
-interface IpadOption {
+export interface IpadOption {
   // 상품옵션ID (ProductOptionId)
   id: number;
   // 추가금액
@@ -275,7 +275,7 @@ export interface ProductDetailIphone {
   myOption: IphoneOption | null;
 }
 
-interface IphoneOption {
+export interface IphoneOption {
   // 상품옵션ID (ProductOptionId)
   id: number;
   // 추가금액

@@ -68,6 +68,7 @@ export default function ReviewClient({
           <button className="w-[200px] bg-light text-bglight p-2">
             보유하지 않은 상품
           </button>
+          {/* TODO 이 상품 등록하러 가기 --- 해당 상품 id 바로 입력되는 로직 추가해보자.ㄴ */}
           <button className="text-lg text-light hover:text-mid">
             상품 등록하러 가기
           </button>
@@ -84,7 +85,9 @@ export default function ReviewClient({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-20">
         {product.reviews.length === 0 ? (
-          <p>등록된 리뷰가 없습니다.</p>
+          <div className="h-[300px]">
+            <p>등록된 리뷰가 없습니다.</p>
+          </div>
         ) : (
           product.reviews.map((review) => (
             <ReviewCard key={review.id} review={review} />

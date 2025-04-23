@@ -18,9 +18,9 @@ import SelectPurchasedDate from "./SelectOptions/SelectPurchasedDate";
 import SelectStatus from "./SelectOptions/SelectStatus";
 import SelectCondition from "./SelectOptions/SelectCondition";
 import SelectMultiplePurchased from "./SelectOptions/SelectMultiplePurchased";
+import SelectMemo from "./SelectOptions/SelectMemo";
 import { Box, Button } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
-import SelectMemo from "./SelectOptions/SelectMemo";
 
 export default function SelectComp() {
   const { isClicked, setIsClicked } = useOpenSelect();
@@ -75,9 +75,9 @@ export default function SelectComp() {
     }
   };
 
-  useEffect(()=>{
-    console.log("팝업창 오픈 여부", )
-  },[isClicked])
+  useEffect(() => {
+    console.log("팝업창 오픈 여부");
+  }, [isClicked]);
 
   // 보유 제품 작성 중 이탈 시, 모달 확인 로직
   const handleResetForm = () => {
@@ -124,11 +124,6 @@ export default function SelectComp() {
     } else {
       console.log("유저 보유 목록 생성 실패");
     }
-  };
-
-  // 카테고리 선택
-  const handleCategorySelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("카테고리", e.target.value);
   };
 
   const handlePriceChange = (
@@ -217,12 +212,12 @@ export default function SelectComp() {
   };
 
   useEffect(() => {
-    console.log("폼데이터", formData);
+    console.log("유저목록 추가 폼데이터", formData);
   }, [formData]);
 
   return (
     <>
-      {isModalOpen && (
+      {isModalOpen && ( // 작성 중 닫기 시도 모달
         <Modal
           isModalOpen={isModalOpen}
           onClose={closeModal}
@@ -233,6 +228,7 @@ export default function SelectComp() {
           confirmBtnText={"확인"}
         />
       )}
+
       {isClicked ? (
         <div className="overlay flex justify-center items-center">
           <div className="w-[1200px] h-[800px] p-16 bg-custombg rounded-3xl relative">
@@ -276,7 +272,7 @@ export default function SelectComp() {
               </div>
 
               {currentPageNumber === 0 && ( // 카테고리 선택바 및 검색바
-                <SelectCategory onCategorySelect={handleCategorySelect} />
+                <SelectCategory />
               )}
 
               {currentPageNumber === 1 && ( // 구매가

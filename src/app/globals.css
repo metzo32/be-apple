@@ -69,11 +69,6 @@ select {
   box-shadow: none;
 }
 
-label {
-  cursor: pointer;
-  user-select: none;
-}
-
 select:focus,
 select:hover {
   outline: none;
@@ -121,6 +116,8 @@ select:hover {
 
   label {
     @apply w-20 text-end font-bold
+    cursor-pointer
+    select-none
       break-keep
       whitespace-nowrap
       text-sm
