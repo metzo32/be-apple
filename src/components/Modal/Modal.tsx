@@ -1,4 +1,5 @@
-import { Button } from "@mui/material";
+import ButtonStrong from "../designs/ButtonStrong";
+import ButtonBasic from "../designs/ButtonBasic";
 
 interface ModalProps {
   isModalOpen: boolean;
@@ -37,12 +38,8 @@ export default function Modal({
         <h3 className="text-3xl">{title}</h3>
         <p>{content}</p>
         <div className="flex gap-10">
-          <Button variant="outlined" onClick={handleCancel}>
-            취소
-          </Button>
-          <Button variant="contained" onClick={handleConfirm}>
-            {confirmBtnText}
-          </Button>
+          <ButtonBasic text="취소" onClick={handleCancel} />
+          <ButtonStrong text={confirmBtnText} onClick={handleConfirm} />
         </div>
       </div>
     </div>

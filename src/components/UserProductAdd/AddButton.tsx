@@ -4,9 +4,7 @@ import { addUserProduct } from "../fetch/fetchUserProduct";
 import useOpenSelect from "@/stores/useOpenSelect";
 import { CreateUserProductReqDto } from "@/types/userProduct";
 import { useState } from "react";
-import { GoPlus } from "react-icons/go"; // + 아이콘
 import SelectComp from "./SelectComp";
-import { Button } from "@mui/material";
 import ButtonStrong from "../designs/ButtonStrong";
 
 export default function AddButton() {

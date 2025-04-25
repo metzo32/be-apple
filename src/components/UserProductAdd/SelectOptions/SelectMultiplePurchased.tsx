@@ -38,7 +38,7 @@ export default function SelectMultiplePurchased({
           value="false"
           control={<Radio />}
           label={"아니요"}
-          onClick={() => setIsMultiplePurchased(false)}
+          onClick={() => setIsMultiplePurchased(false)} // TODO formData의 repurchaseCount를 0으로 업데이트
           sx={{
             width: "50px",
           }}

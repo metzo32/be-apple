@@ -7,41 +7,43 @@ import {
 } from "@/components/fetch/fetchProduct";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import {
-  IpadOption,
-  IphoneOption,
-  MacOption,
   ProductDetail,
   ProductDetailIpad,
   ProductDetailIphone,
   ProductDetailMac,
 } from "@/types/productDetail";
+import type { ProductSelectInfoProps } from "@/types/addUserProducts";
 
 interface RenderProductsProps {
   selectedCategory: ProductCategoryEnum;
+  productSelectInfo: ProductSelectInfoProps;
+  setproductSelectInfo: ({
+    productId,
+    productOptionId,
+  }: ProductSelectInfoProps) => void;
 }
 
 // 타입가드
 const isMacProduct = (product: ProductDetail): product is ProductDetailMac => {
-  console.log("맥", product);
   return product.category === ProductCategoryEnum.MAC;
 };
 
 const isIpadProduct = (
   product: ProductDetail
 ): product is ProductDetailIpad => {
-  console.log("아이패드", product);
   return product.category === ProductCategoryEnum.IPAD;
 };
 
 const isIphoneProduct = (
   product: ProductDetail
 ): product is ProductDetailIphone => {
-  console.log("아이폰", product);
   return product.category === ProductCategoryEnum.IPHONE;
 };
 
 export default function RenderProducts({
   selectedCategory,
+  productSelectInfo,
+  setproductSelectInfo,
 }: RenderProductsProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [productList, setProductList] = useState<GetProductResponse[]>([]); // 제품 전체 fetch 정보
@@ -49,31 +51,38 @@ export default function RenderProducts({
     null
   ); // 디테일 fetch 정보
 
-  const [selectedItem, setSelectedItem] = useState<number | null>(null);
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-
   // TODO productId와 productOptionId 필수 선택 검증
 
   // 각 아이템의 detail 불러오기
-  const handleItemClick = async (id: number) => {
-    // fetchedDetail의 결과가 할당되기 전에 타입가드가 발동해서 undefined 나오는 것 같다
-    setSelectedItem(id);
+  const handleItemClick = async (productId: number) => {
+    setproductSelectInfo({
+      ...productSelectInfo,
+      productId: productId,
+    });
 
-    const fetchedDetail = await fetchProductDetail(id);
+    const fetchedDetail = await fetchProductDetail(productId);
     setIsLoading(true);
 
     if (!fetchedDetail) {
       console.error("문제가 발생했습니다. 다시 시도해주세요.");
     } else {
       setProductDetail(fetchedDetail);
+      // 다른 아이템을 클릭하면 옵션 선택 초기화
+      setproductSelectInfo({
+        ...productSelectInfo,
+        productOptionId: 0,
+      });
 
       setIsLoading(false);
     }
   };
 
-  const handleOptionItemClick = (id: number) => {
-    console.log("선택한 최종 옵션", id);
-    setSelectedOption(id);
+  const handleOptionItemClick = (productOptionId: number) => {
+    setproductSelectInfo({
+      ...productSelectInfo,
+      productOptionId: productOptionId,
+    });
+    console.log("선택한 최종 옵션", productSelectInfo);
   };
 
   // 카테고리별 목록 조회
@@ -91,21 +100,17 @@ export default function RenderProducts({
     };
 
     getProduct();
-    setSelectedItem(null);
+    setproductSelectInfo({ productId: 0, productOptionId: 0 });
   }, [selectedCategory]);
-
-  useEffect(() => {
-    console.log("선택된 아이템", selectedItem);
-  }, [selectedItem]);
 
   return isLoading ? (
     <p>제품 목록 불러오는 중...</p>
   ) : (
-    <div>
+    <div className="bg-[#FE0000]"> 
       <RadioGroup
         aria-labelledby="products-radio-buttons-group-label"
         name="radio-buttons-group"
-        value={selectedItem}
+        value={productSelectInfo.productId}
         sx={{
           display: "grid",
           gridTemplateColumns: "repeat(5, 1fr)",
@@ -124,11 +129,11 @@ export default function RenderProducts({
         ))}
       </RadioGroup>
 
-      {selectedItem && (
+      {productSelectInfo.productId && (
         <RadioGroup
           aria-labelledby="product-option-radio-buttons-group-label"
           name="radio-buttons-group"
-          value={selectedOption}
+          value={productSelectInfo.productOptionId}
           sx={{
             display: "grid",
             gridTemplateColumns: "repeat(5, 1fr)",

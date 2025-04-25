@@ -22,14 +22,20 @@
 }
 
 @theme {
-  --color-custombg: #ececec;
-  --color-bglight: #dadada;
+  --color-primary: #476CF6;
+  --color-secondary: #C466F3;
+  --color-secondaryLight: #EAD4F5;
+  --color-strong: #1A0E6E;
+  --color-custombg: #D4D4E7;
+  --color-bglight: #F1F1FE;
+  --color-bglightHover: #F8F0FD;
+  
   --color-text: #000000;
   --color-textHover: #444444;
-  --color-cardBd: #d8dade;
   --color-mid: #757575;
-  --color-light: #939393;
+  --color-light: #797979;
   --color-overlay: rgba(0, 0, 0, 0.5);
+  --color-customGrad: linear-gradient(to right, #476CF6, #C467F3);
   --font-apple: "AppleFont", sans-serif;
   --shadow-light: 3px 3px 15px rgba(0, 0, 0, 0.1);
   --shadow-strong: 5px 5px 15px rgba(0, 0, 0, 0.2);
@@ -78,7 +84,7 @@ select:hover {
 }
 
 ::selection {
-  background: #000000;
+  background: #3152D5;
   color: #ececec;
 }
 
@@ -183,5 +189,11 @@ select:hover {
 
   .user-product-h3 {
     @apply text-2xl;
+  }
+
+  .custom-round-s {
+    @apply
+    bg-transparent
+    
   }
 }

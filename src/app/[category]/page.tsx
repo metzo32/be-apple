@@ -24,6 +24,7 @@ export default function SearchPage({
         console.error("문제가 발생했습니다. 다시 시도해주세요.");
       } else {
         setProductsList(response);
+        console.log(response)
         setIsLoading(false);
       }
     };
@@ -37,7 +38,7 @@ export default function SearchPage({
     <div>
       <div className="grid place-items-center gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {productsList.map((product) => (
-          <SearchCard key={product.id} product={product} />
+          <SearchCard key={product.id} product={product}/>
         ))}
       </div>
     </div>

@@ -6,6 +6,7 @@ import { useUserStore } from "@/stores/useUserStore";
 import LoadingScreen from "@/components/LoadingScreen";
 import UserWishList from "@/components/UserWishList/UserWishList";
 import SignOut from "@/components/SignOut";
+import UserInfo from "@/components/UserProductAdd/UserInfo";
 import UserProduct from "@/components/UserProduct/UserProduct";
 
 export default function UserPage() {
@@ -36,11 +37,15 @@ export default function UserPage() {
       </section>
 
       <section className="userSection">
+        <UserInfo />
+      </section>
+
+      <section className="userSection">
         <UserProduct />
       </section>
 
       {/* <section className="userSection pb-0"> */}
-        <UserWishList />
+      <UserWishList />
       {/* </section> */}
     </div>
   );

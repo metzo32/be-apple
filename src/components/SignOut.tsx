@@ -5,7 +5,7 @@ import { useUserStore } from "@/stores/useUserStore";
 import { fetchSignOut } from "./fetch/fetchSignOut";
 import useModal from "@/hooks/useModal";
 import Modal from "./Modal/Modal";
-import ButtonMild from "./designs/ButtonMild";
+import ButtonBasic from "./designs/ButtonBasic";
 
 interface SignOutProps {
   setIsSigningOut: (value: boolean) => void;
@@ -42,7 +42,7 @@ export default function SignOut({ setIsSigningOut }: SignOutProps) {
           confirmBtnText={"확인"}
         />
       )}
-      <ButtonMild text="로그아웃" onClick={openModal} />
+      <ButtonBasic text="로그아웃" onClick={openModal} />
     </>
   );
 }

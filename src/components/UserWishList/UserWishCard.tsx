@@ -1,10 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import type { GetWishResponse } from "@/types/wishlist";
 import Link from "next/link";
 import { IoTrashOutline } from "react-icons/io5";
-import { Button } from "@mui/material";
+import { ButtonMedium } from "../designs/ButtonStrong";
 
 interface WishCardProps {
   wishList: GetWishResponse;
@@ -13,8 +12,8 @@ interface WishCardProps {
 
 export default function UserWishCard({ wishList, onDelete }: WishCardProps) {
   return (
-    <div className="w-full h-[200px] flex items-center gap-5">
-      <span className="w-[200px] aspect-square rounded-2xl bg-gray-300" />
+    <div className="w-full p-5 rounded-3xl border-2 border-bglight flex items-center gap-5 bg-bglight hover:bg-bglightHover hover:border-secondaryLight">
+      <span className="w-[160px] aspect-square rounded-2xl bg-gray-300" />
 
       {/* TODO: 실제 이미지로 교체
         <Image
@@ -24,7 +23,7 @@ export default function UserWishCard({ wishList, onDelete }: WishCardProps) {
           height={200}
         /> */}
 
-      <div className="h-[200px] flex flex-col justify-between flex-1/2 border-b-2 border-cardBd">
+      <div className="h-[160px] flex flex-col justify-between flex-1/2">
         <div className="h-full flex flex-col gap-2">
           <div className="flex justify-between items-center">
             <h3 className="font-bold text-lg">{wishList.product.name}</h3>
@@ -42,14 +41,13 @@ export default function UserWishCard({ wishList, onDelete }: WishCardProps) {
           <p className="light-p">{wishList.product.price.toLocaleString()}원</p>
         </div>
 
-        <span className="mb-5">
-          <Button variant="outlined">
+        <span>
+        
             <Link
-              href={`/search/${wishList.product.category}/${wishList.product.id}`}
+              href={`/${wishList.product.category}/${wishList.product.id}`}
             >
-              제품 보기
+              <ButtonMedium text="제품 보기"/>
             </Link>
-          </Button>
         </span>
       </div>
     </div>

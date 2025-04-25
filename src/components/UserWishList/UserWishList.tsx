@@ -37,13 +37,13 @@ export default function UserWishList() {
     setRecentlyDeleted(target);
     setIsPopupOpen(true);
 
-    // 1.5초 뒤 데이터 상에서도 삭제
+    // 2초 뒤 데이터 상에서도 삭제
     const timer = setTimeout(async () => {
       await deleteWish(id);
       setWishList((prev) => prev.filter((item) => item.id !== id));
       setIsPopupOpen(false);
       setRecentlyDeleted(null);
-    }, 1500);
+    }, 2000);
 
     setDeleteTimer(timer);
   };
@@ -65,7 +65,7 @@ export default function UserWishList() {
       <div className="bg-white min-h-[500px] p-24 rounded-t-3xl shadow-light">
         <h2 className="font-bold mb-10">내 위시리스트</h2>
         {wishList.length > 0 ? (
-          <div className="flex flex-col gap-20">
+          <div className="flex flex-col gap-5">
             {wishList.map((wish) => {
               const isPendingDelete = pendingDeleteIds.includes(wish.id);
               return (

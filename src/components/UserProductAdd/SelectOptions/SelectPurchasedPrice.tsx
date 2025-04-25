@@ -2,9 +2,7 @@ import { TextField } from "@mui/material";
 
 interface SelectPurchasedPriceProps {
   displayedPrice: string;
-  onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
+  onChange: (value: string) => void;
 }
 
 export default function SelectPurchasedPrice({
@@ -19,7 +17,7 @@ export default function SelectPurchasedPrice({
         variant="outlined"
         sx={{ width: "330px" }}
         value={displayedPrice}
-        onChange={onChange}
+        onChange={(event) => onChange(event.target.value)}
       />
     </label>
   );

@@ -1,15 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { addWish, deleteWish, fetchWishList } from "../fetch/fetchWishList";
+import { useState } from "react";
+import { addWish, deleteWish } from "../fetch/fetchWishList";
 import { PiHeartBold, PiHeartFill } from "react-icons/pi";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { useUserStore } from "@/stores/useUserStore";
 import useModal from "@/hooks/useModal";
 import Modal from "../Modal/Modal";
 import { useRouter } from "next/navigation";
-import { GetWishResponse } from "@/types/wishlist";
-import { Button } from "@mui/material";
+import ButtonStrong from "../designs/ButtonStrong";
+import WishButtonActive from "./WishButtonIcons";
 
 // 자식 컴포넌트에 무엇이 필요한지 알고, 그 의도에 맞게 props를 정하자. 그냥 때려넣지 마세요
 interface WishButtonProps {
@@ -31,33 +31,13 @@ export default function WishButton({
   const { isModalOpen, openModal, closeModal } = useModal();
   const router = useRouter();
 
-  // const [wishArr, setWishArr] = useState<GetWishResponse[]>([]);
-
-  // useEffect(() => {
-  //   const getWishList = async () => {
-  //     const res = await fetchWishList();
-
-  //     if (!res) {
-  //       console.log("위시리스트 로드 실패");
-  //     }
-  //     setWishArr(res);
-  //   };
-  //   getWishList();
-  // }, []);
-
-  // useEffect(()=>{
-  //   console.log(wishArr)
-  // },[wishArr])
-
   const handleAddWish = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
     if (!user) {
       openModal();
-      console.log("로그인 하세요");
       return;
     }
-    console.log("추가 성공");
     setIsMemoOpen(true);
   };
 
@@ -78,7 +58,6 @@ export default function WishButton({
       if (success) {
         setIsAdded(false);
         setIsMemoOpen(false);
-        console.log("삭제 성공");
       }
     }
   };
@@ -126,16 +105,16 @@ export default function WishButton({
       {!isAdded ? (
         <button
           onClick={handleAddWish}
-          className="text-xl md:text-2xl p-3 bg-custombg rounded-full shadow-light hover:shadow-strong hover:text-light"
+          className="text-4xl hover:opacity-70"
         >
-          <PiHeartBold />
+          <PiHeartBold className="text-primary" />
         </button>
       ) : (
         <button
           onClick={handleRemoveWish}
-          className="text-xl md:text-2xl p-3 bg-custombg rounded-full shadow-light hover:shadow-strong hover:text-light"
+          className="text-4xl hover:opacity-70"
         >
-          <PiHeartFill />
+          <PiHeartFill className="text-primary" />
         </button>
       )}
 
@@ -147,7 +126,7 @@ export default function WishButton({
         >
           <form
             onSubmit={handleSubmit}
-            className="w-[300px] md:w-[460px] px-10 py-8 flex flex-col gap-3 md:gap-5 rounded-xl bg-custombg shadow-2xl"
+            className="w-[300px] md:w-[460px] p-8 flex flex-col gap-3 md:gap-5 rounded-xl bg-white shadow-2xl"
           >
             <h3 className="font-bold">위시리스트에 추가되었습니다.</h3>
             <button
@@ -155,7 +134,9 @@ export default function WishButton({
               onClick={handleDrop}
               className="w-[100px] flex gap-3 items-center"
             >
-              <label className="light-p cursor-pointer font-medium">메모 남기기</label>
+              <label className="light-p cursor-pointer font-medium">
+                메모 남기기
+              </label>
               {isDropped ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
             </button>
 
@@ -175,9 +156,7 @@ export default function WishButton({
               </div>
             )}
 
-            <Button variant="contained" type="submit">
-              확인
-            </Button>
+            <ButtonStrong text={"확인"} type="submit" />
           </form>
         </div>
       )}

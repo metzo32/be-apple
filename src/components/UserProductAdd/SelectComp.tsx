@@ -7,6 +7,7 @@ import {
   UserProductStatus,
   CreateUserProductReqDto,
 } from "@/types/userProduct";
+import type { UserProductFormData } from "@/types/addUserProducts";
 import useModal from "@/hooks/useModal";
 import { addUserProduct } from "../fetch/fetchUserProduct";
 import { formatDate } from "@/module/formatDate";
@@ -26,9 +27,9 @@ export default function SelectComp() {
   const { isClicked, setIsClicked } = useOpenSelect();
   const { isModalOpen, openModal, closeModal } = useModal();
 
-  const [formData, setFormData] = useState<CreateUserProductReqDto>({
-    productId: 0,
-    productOptionId: 0,
+  const [formData, setFormData] = useState<UserProductFormData>({
+    productId: null,
+    productOptionId: null,
     purchasedAt: "",
     purchasePrice: 0,
     soldAt: "",
@@ -37,17 +38,13 @@ export default function SelectComp() {
     condition: UserProductCondition.NEW,
     memo: "",
   });
+  //TODO 상태 줄일 방법 생각하기 ✅✅✅
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(0);
-  const [price, setPrice] = useState<number>(0); // 데이터 상 전달되는 가격
   const [displayedPrice, setDisplayedPrice] = useState<string>(""); // UI상 보여지는 가격
-  const [purchasedDate, setPurchasedDate] = useState<Date | null>(null); // 구매 날짜
   const [isSoldSelected, setIsSoldSelected] = useState(false); // 처분 및 양도 여부
-  const [soldDate, setSoldDate] = useState<Date | null>(null); // 판매 날짜
   const [isMultiplePurchased, setIsMultiplePurchased] = useState(false); // 재구매 여부
-  const [multiplePurchaseCount, setMultiplePurchaseCount] = useState<
-    number | string
-  >(""); // 재구매 횟수
   const [tempMemo, setTempMemo] = useState<string>(""); // ui상 메모
+  const [displayRepurchase, setDisplayRepurchase] = useState(1);
 
   const initialForm = {
     productId: 0,
@@ -75,23 +72,19 @@ export default function SelectComp() {
     }
   };
 
-  useEffect(() => {
-    console.log("팝업창 오픈 여부");
-  }, [isClicked]);
-
   // 보유 제품 작성 중 이탈 시, 모달 확인 로직
   const handleResetForm = () => {
-    setIsClicked(false);
-    setCurrentPageNumber(0);
-    setPrice(0);
-    setDisplayedPrice("");
-    setPurchasedDate(null);
-    setIsSoldSelected(false);
-    setSoldDate(null);
-    setIsMultiplePurchased(false);
-    setMultiplePurchaseCount("");
-    setTempMemo("");
-    setCurrentPageNumber(0);
+    setFormData({
+      productId: null,
+      productOptionId: null,
+      purchasedAt: "",
+      purchasePrice: 0,
+      soldAt: "",
+      status: UserProductStatus.ACTIVE,
+      repurchasedCount: 0,
+      condition: UserProductCondition.NEW,
+      memo: "",
+    });
 
     closeModal();
   };
@@ -109,32 +102,48 @@ export default function SelectComp() {
     if (currentPageNumber > MAX_PAGE) {
       return;
     }
+    if (
+      currentPageNumber === 0 &&
+      (formData.productId === 0 ||
+        formData.productId === null ||
+        formData.productOptionId === 0 ||
+        formData.productOptionId === null)
+    ) {
+      alert("등록할 제품과 옵션을 선택해주세요.");
+      return;
+    }
+
     setCurrentPageNumber(currentPageNumber + 1);
   };
 
-  //TODO 카테고리 별 제품 배열을 불러오고, 해당 아이템을 선택하면 productId와 productOptionId를 form 객체에 추가
+  const isValidDto = (
+    // 타입 검증
+    formData: UserProductFormData
+  ): formData is CreateUserProductReqDto => {
+    return !!formData.productId && !!formData.productOptionId;
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const success = await addUserProduct(formData);
-
-    if (success) {
-      setIsClicked(false);
-      console.log("유저 보유 목록 추가 성공");
+    if (!isValidDto(formData)) {
+      alert("제품과 제품 옵션을 선택해주세요.");
     } else {
-      console.log("유저 보유 목록 생성 실패");
+      const success = await addUserProduct(formData); //TODO 타입가드로 UserProductFormData를 CreateUserProductReqDto로 검증
+      if (success) {
+        setIsClicked(false);
+        console.log("유저 보유 목록 추가 성공");
+      } else {
+        console.log("유저 보유 목록 생성 실패");
+      }
     }
   };
 
-  const handlePriceChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const input = e.target.value;
-    if (input.length > 9) {
+  const handlePriceChange = (value: string) => {
+    if (value.length > 9) {
       return;
     }
-    const numberPrice = Number(input.replace(/[^0-9]/g, ""));
-    setPrice(numberPrice);
+    const numberPrice = Number(value.replace(/[^0-9]/g, ""));
+    setFormData((prev) => ({ ...prev, purchasePrice: numberPrice }));
     setDisplayedPrice(numberPrice.toLocaleString() + "원");
 
     setFormData({
@@ -161,18 +170,14 @@ export default function SelectComp() {
 
   // 구매일 선택
   const handlePurchasedDateChange = (date: Date) => {
-    setPurchasedDate(date);
-
     setFormData({
       ...formData,
-      purchasedAt: formatDate(String(purchasedDate)),
+      purchasedAt: formatDate(String(date)),
     });
   };
 
   // 판매일 선택
   const handleSoldDateChange = (date: Date) => {
-    setSoldDate(date);
-
     setFormData({
       ...formData,
       soldAt: formatDate(String(date)),
@@ -193,22 +198,30 @@ export default function SelectComp() {
   const handleMultiplePurchased = (e: React.ChangeEvent<HTMLInputElement>) => {
     const purchaseCount = Number(e.target.value.replace(/[^0-9]/g, ""));
 
-    setMultiplePurchaseCount(Number(purchaseCount));
+    setDisplayRepurchase(purchaseCount)
   };
 
   const handleMultiplePurchasedBlur = () => {
-    if (Number(multiplePurchaseCount) < 1) {
+    if (Number(displayRepurchase) < 1) {
       alert("1 이상의 숫자를 써주세요");
-      setMultiplePurchaseCount(1);
-    } else if (Number(multiplePurchaseCount) > 99) {
+      setDisplayRepurchase(1);
+      setFormData((prev) => ({
+        ...prev,
+        repurchasedCount: 1,
+      }));
+    } else if ((displayRepurchase) > 99) {
       alert("100 미만의 숫자를 써주세요");
-      setMultiplePurchaseCount(99);
+      setDisplayRepurchase(99);
+      setFormData((prev) => ({
+        ...prev,
+        repurchasedCount: 99,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        repurchasedCount: Number(formData.repurchasedCount) - 1, // 총 구매횟수 - 1 = 재구매 횟수
+      }));
     }
-
-    setFormData((prev) => ({
-      ...prev,
-      repurchasedCount: Number(multiplePurchaseCount) - 1, // 총 구매횟수 - 1 = 재구매 횟수
-    }));
   };
 
   useEffect(() => {
@@ -272,7 +285,19 @@ export default function SelectComp() {
               </div>
 
               {currentPageNumber === 0 && ( // 카테고리 선택바 및 검색바
-                <SelectCategory />
+                <SelectCategory
+                  productSelectInfo={{
+                    productId: formData.productId!,
+                    productOptionId: formData.productOptionId!,
+                  }}
+                  setproductSelectInfo={({ productId, productOptionId }) => {
+                    setFormData((prev) => ({
+                      ...prev,
+                      productId,
+                      productOptionId,
+                    }));
+                  }}
+                />
               )}
 
               {currentPageNumber === 1 && ( // 구매가
@@ -284,7 +309,7 @@ export default function SelectComp() {
 
               {currentPageNumber === 2 && ( // 구매 시기
                 <SelectPurchasedDate
-                  pickedDate={purchasedDate}
+                  pickedDate={new Date(formData.purchasedAt)}
                   onChange={handlePurchasedDateChange}
                 />
               )}
@@ -295,9 +320,9 @@ export default function SelectComp() {
                   onStatusChange={handleStatusSelect}
                   isSoldSelected={isSoldSelected}
                   setIsSoldSelected={setIsSoldSelected}
-                  soldDate={soldDate}
+                  soldDate={new Date(formData.soldAt)}
                   onSoldDateChange={handleSoldDateChange}
-                  purchasedDate={purchasedDate}
+                  purchasedDate={new Date(formData.purchasedAt)}
                 />
               )}
 
@@ -313,7 +338,7 @@ export default function SelectComp() {
                   isMultiplePurchased={isMultiplePurchased}
                   setIsMultiplePurchased={setIsMultiplePurchased}
                   handleConditionSelect={handleConditionSelect}
-                  value={multiplePurchaseCount}
+                  value={displayRepurchase}
                   handleMultiplePurchased={handleMultiplePurchased}
                   handleMultiplePurchasedBlur={handleMultiplePurchasedBlur}
                 />

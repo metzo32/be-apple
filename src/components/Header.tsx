@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import ButtonStrong from "./designs/ButtonStrong";
 import { useUserStore } from "@/stores/useUserStore";
 import Image from "next/image";
 import { Button, TextField } from "@mui/material";
+import ButtonStrong from "./designs/ButtonStrong";
+import ButtonBasic from "./designs/ButtonBasic";
+import { basicDeviceData } from "../../public/fakeData/basicDeviceData";
 
 type HeaderText = " " | "로그인" | "내 페이지";
 
@@ -30,7 +32,7 @@ export default function Header() {
   };
 
   return (
-    <header className="global-px py-6 flex justify-between items-center">
+    <header className="global-px py-3 flex justify-between items-center bg-white">
       <button className="relative w-[40px] h-[40px] xl:w-[50px] xl:h-[50px]">
         <Image
           src="/assets/images/apple.png"
@@ -40,10 +42,21 @@ export default function Header() {
           onClick={() => router.push("/")}
         />
       </button>
+      <nav className="w-1/2 flex items-end justify-between">
+        {basicDeviceData.map((device) => (
+          <ButtonBasic
+            key={device.alt}
+            text={device.alt}
+            onClick={() => router.push(`/${device.category}`)}
+          />
+        ))}
+      </nav>
 
-      <form className="flex gap-5">
+      {/* 
+      <form className="flex gap-1">
         <TextField
           // value={"입력값"}
+          color="secondary"
           placeholder="검색어를 입력하세요..."
           variant="outlined"
           // onChange={handleMultiplePurchased}
@@ -52,10 +65,31 @@ export default function Header() {
             width: "600px",
           }}
         />
-        <Button variant="outlined">검색</Button>
-      </form>
-
+        <ButtonBasic text="검색" />
+      </form> */}
       <ButtonStrong text={text} onClick={handleClick} />
     </header>
   );
 }
+
+// import { basicDeviceData } from "../../../public/fakeData/basicDeviceData";
+// import { useRouter } from "next/navigation";
+// import { Button } from "@mui/material";
+
+// export default function SearchHeader() {
+//   const router = useRouter();
+
+//   return (
+//     <nav className="py-12 flex items-end justify-between">
+//       {basicDeviceData.map((item) => (
+//         <button
+//           key={item.id}
+//           onClick={() => router.push(`/search/${item.category}`)}
+//           className="text-mid rounded-lg border-b-3 border-transparent px-5 py-2 hover:bg-[#C466F333] hover:text-white hover:border-secondary"
+//         >
+//           {item.alt}
+//         </button>
+//       ))}
+//     </nav>
+//   );
+// }

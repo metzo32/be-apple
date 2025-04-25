@@ -1,10 +1,8 @@
-"use client";
-
+import { GetUserProductResponse } from "@/types/userProduct";
 import { useEffect, useState } from "react";
-import type { GetUserProductResponse } from "@/types/userProduct";
 import { fetchUserProduct } from "../fetch/fetchUserProduct";
-import UserProductCard from "./UserProductCard";
-import AddButton from "./AddButton";
+import UserProductCard from "../UserProductAdd/UserProductCard";
+import SummaryCard from "./SummaryCard";
 
 export default function UserProduct() {
   const [userProducts, setUserProducts] = useState<GetUserProductResponse[]>(
@@ -25,32 +23,36 @@ export default function UserProduct() {
     getUserProduct();
   }, []);
 
+  const summaryArr = [
+    { ownNum: 0 },
+    { saturation: 20 },
+    { ownNum: 0 },
+    { totalPrice: 0 },
+    { reviewsNum: 0 },
+  ];
+
   return (
     <>
-      <h2 className="font-bold mb-5">내 정보</h2>
-      <div className="grid grid-cols-2 gap-10">
-        <div className="h-[300px] bg-white rounded-2xl p-12 shadow-light flex flex-col justify-between items-center">
-          <h3>당신의 티어는 모시깽입니다.</h3>
-          <h1>총 0.0점</h1>
-          <AddButton />
-        </div>
+      <div className="w-full flex justify-between">
+        <SummaryCard title="보유한 기기 수" content={0} />
+        <SummaryCard title="포화도" content={`${15}%`} />
+        <SummaryCard title="총액" content={(100000000).toLocaleString()} />
+        <SummaryCard title="작성한 리뷰 수" content={0} />
+      </div>
 
-        <div className="h-[300px] bg-white rounded-2xl p-12 shadow-light">
-          {userProducts && userProducts.length > 0 ? (
-            <div className="w-full h-[400px] pr-5 flex flex-col gap-5 lg:gap-20 bg-gray-100">
-              {userProducts.map((userProduct) => (
-                <UserProductCard
-                  key={userProduct.id}
-                  userProduct={userProduct}
-                />
-              ))}
-            </div>
-          ) : (
-            <div>
-              <p className="light-p">등록된 장비가 없습니다.</p>
-            </div>
-          )}
-        </div>
+      <div className="bg-white min-h-[500px] p-24 rounded-3xl shadow-light">
+        <h2 className="font-bold mb-10">내 제품 목록</h2>
+        {userProducts && userProducts.length > 0 ? (
+          <div className="w-full h-[400px] pr-5 flex gap-5 lg:gap-20">
+            {userProducts.map((userProduct) => (
+              <UserProductCard key={userProduct.id} userProduct={userProduct} />
+            ))}
+          </div>
+        ) : (
+          <div>
+            <p className="light-p">등록된 장비가 없습니다.</p>
+          </div>
+        )}
       </div>
     </>
   );

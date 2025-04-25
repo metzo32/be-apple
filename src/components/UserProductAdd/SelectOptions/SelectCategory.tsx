@@ -1,14 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
+import { useState } from "react";
+import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import {
   ProductCategoryEnum,
   ProductCategoryLabels,
 } from "@/types/productCategory";
 import RenderProducts from "./RenderProducts";
+import type { ProductSelectInfoProps } from "@/types/addUserProducts";
 
-export default function SelectCategory() {
+
+interface SelectCategoryProps {
+  productSelectInfo: ProductSelectInfoProps;
+  setproductSelectInfo: ({
+    productId,
+    productOptionId,
+  }: ProductSelectInfoProps) => void;
+}
+
+export default function SelectCategory({
+  productSelectInfo,
+  setproductSelectInfo,
+}: SelectCategoryProps) {
   const [selectedCategory, setSelectedCategory] = useState<ProductCategoryEnum>(
     ProductCategoryEnum.MAC
   );
@@ -17,11 +30,8 @@ export default function SelectCategory() {
 
   const handleCategorySelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedCategory(e.target.value as ProductCategoryEnum);
+    setproductSelectInfo({ productId: 0, productOptionId: 0 });
   };
-
-  useEffect(() => {
-    console.log("현재 선택한 카테고리", selectedCategory);
-  }, [selectedCategory]);
 
   return (
     <div>
@@ -51,7 +61,11 @@ export default function SelectCategory() {
       </div>
 
       <div className="bg-blue-300">
-        <RenderProducts selectedCategory={selectedCategory} />
+        <RenderProducts
+          selectedCategory={selectedCategory}
+          productSelectInfo={productSelectInfo}
+          setproductSelectInfo={setproductSelectInfo}
+        />
       </div>
 
       {/* TODO 이 부분 invalid 한 경우, "다음"버튼 실행 금지 */}

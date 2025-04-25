@@ -13,7 +13,11 @@ export default function MUIThemeProvider({
   const theme = createTheme({
     palette: {
       primary: {
-        main: "#2089cf",
+        main: "#476CF6",
+        contrastText: "#fff",
+      },
+      secondary: {
+        main: "#C466F3",
         contrastText: "#fff",
       },
     },

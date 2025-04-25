@@ -2,15 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "@/stores/useUserStore";
 import Image from "next/image";
 import { fetchSignIn } from "@/components/fetch/fetchSignIn";
-import ButtonBasic from "@/components/designs/ButtonMild";
+import ButtonBasic from "@/components/designs/ButtonBasic";
 import ButtonStrong from "@/components/designs/ButtonStrong";
 import LoadingScreen from "@/components/LoadingScreen";
-import GoogleButton from "@/components/GoogleButton";
-import KakaoButton from "@/components/KakaoButton";
-import { useUserStore } from "@/stores/useUserStore";
-import { Box, filledInputClasses, InputAdornment, inputBaseClasses, TextField } from "@mui/material";
+import { GoogleButton, KakaoButton } from "@/components/SocialLoginButton";
+import { Box, TextField } from "@mui/material";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -72,39 +71,32 @@ export default function LoginPage() {
     <LoadingScreen />
   ) : (
     <section className="py-32 flex flex-col items-center justify-center">
-      <h1>로그인</h1>
       <form
-        className="pt-24 flex flex-col gap-24 items-center justify-center"
+        className="w-[400px] h-[600px] pt-50 pb-12 px-16 shadow-strong flex flex-col gap-16 items-center justify-center bg-white rounded-2xl"
         onSubmit={handleSubmit}
       >
-        <div className="flex flex-col gap-10">
-          <div className="flex items-center gap-5 lg:gap-10">
-            <label htmlFor="email">아이디</label>
-            <input
-              id="email"
-              name="email"
-              type="text"
-              value={formData.email}
-              onChange={handleChange}
-              autoComplete="username"
-              required
-              className="w-40 lg:w-60 border-b-2 border-text"
-            />
-          </div>
-          <div className="flex items-center gap-5 lg:gap-10">
-            <label htmlFor="password">비밀번호</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              onChange={handleChange}
-              autoComplete="current-password"
-              required
-              className="w-40 lg:w-60 border-b-2 border-text"
-            />
-          </div>
+        <div className="w-full flex flex-col gap-5">
+          <TextField
+            required
+            id="email"
+            name="email"
+            label="이메일"
+            size="small"
+            value={formData.email}
+            onChange={handleChange}
+          />
+          <TextField
+            required
+            id="password"
+            name="password"
+            label="비밀번호"
+            type="password"
+            size="small"
+            value={formData.password}
+            onChange={handleChange}
+          />
 
-          <div className="flex gap-5 items-center justify-center">
+          <div className="flex items-center justify-center">
             <input
               type="checkbox"
               id="rememberMe"
@@ -120,25 +112,25 @@ export default function LoginPage() {
                     : "/assets/icons/check_passive.svg"
                 }
                 alt="체크"
-                width={20}
-                height={20}
+                width={15}
+                height={15}
               />
             </span>
             <label
               htmlFor="rememberMe"
-              className="cursor-pointer select-none w-35"
+              className="cursor-pointer select-none text-base text-mid"
             >
               내 정보 기억하기
             </label>
           </div>
         </div>
 
-        <div className="flex gap-10">
-          <GoogleButton />
-          <KakaoButton />
-        </div>
+        <div className="flex flex-col gap-7">
+          <div className="flex gap-10">
+            <GoogleButton />
+            <KakaoButton />
+          </div>
 
-        <div className="flex flex-col gap-10">
           <ButtonStrong type="submit" text="로그인" />
           <ButtonBasic
             type="button"
@@ -147,92 +139,6 @@ export default function LoginPage() {
           />
         </div>
       </form>
-      {/* <Box
-      component="form"
-      sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}
-      noValidate
-      autoComplete="off"
-    >
-      <TextField
-        id="outlined-suffix-shrink"
-        label="Outlined"
-        variant="outlined"
-        slotProps={{
-          input: {
-            endAdornment: (
-              <InputAdornment
-                position="end"
-                sx={{
-                  opacity: 0,
-                  pointerEvents: 'none',
-                  [`[data-shrink=true] ~ .${inputBaseClasses.root} > &`]: {
-                    opacity: 1,
-                  },
-                }}
-              >
-                lbs
-              </InputAdornment>
-            ),
-          },
-        }}
-      />
-      <TextField
-        id="filled-suffix-shrink"
-        label="Filled"
-        variant="filled"
-        slotProps={{
-          input: {
-            endAdornment: (
-              <InputAdornment
-                position="end"
-                sx={{
-                  alignSelf: 'flex-end',
-                  opacity: 0,
-                  pointerEvents: 'none',
-                  [`.${filledInputClasses.root} &`]: {
-                    marginBottom: '7.5px',
-                  },
-                  [`[data-shrink=true] ~ .${inputBaseClasses.root} > &`]: {
-                    opacity: 1,
-                  },
-                }}
-              >
-                days
-              </InputAdornment>
-            ),
-          },
-        }}
-      />
-      <TextField
-        id="standard-suffix-shrink"
-        label="Standard"
-        variant="standard"
-        slotProps={{
-          htmlInput: {
-            sx: { textAlign: 'right' },
-          },
-          input: {
-            endAdornment: (
-              <InputAdornment
-                position="end"
-                sx={{
-                  alignSelf: 'flex-end',
-                  margin: 0,
-                  marginBottom: '5px',
-                  opacity: 0,
-                  pointerEvents: 'none',
-                  [`[data-shrink=true] ~ .${inputBaseClasses.root} > &`]: {
-                    opacity: 1,
-                  },
-                }}
-              >
-                @gmail.com
-              </InputAdornment>
-            ),
-          },
-        }}
-      />
-    </Box> */}
     </section>
   );
 }
