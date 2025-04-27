@@ -22,20 +22,20 @@
 }
 
 @theme {
-  --color-primary: #476CF6;
-  --color-secondary: #C466F3;
-  --color-secondaryLight: #EAD4F5;
-  --color-strong: #1A0E6E;
-  --color-custombg: #D4D4E7;
-  --color-bglight: #F1F1FE;
-  --color-bglightHover: #F8F0FD;
-  
+  --color-primary: #476cf6;
+  --color-secondary: #c466f3;
+  --color-secondaryLight: #ead4f5;
+  --color-strong: #1a0e6e;
+  --color-custombg: #d4d4e7;
+  --color-bglight: #f1f1fe;
+  --color-bglightHover: #f8f0fd;
+
   --color-text: #000000;
   --color-textHover: #444444;
-  --color-mid: #757575;
-  --color-light: #797979;
+  --color-mid: #909090;
+  --color-light: #b9b9b9;
   --color-overlay: rgba(0, 0, 0, 0.5);
-  --color-customGrad: linear-gradient(to right, #476CF6, #C467F3);
+  --color-customGrad: linear-gradient(to right, #476cf6, #c467f3);
   --font-apple: "AppleFont", sans-serif;
   --shadow-light: 3px 3px 15px rgba(0, 0, 0, 0.1);
   --shadow-strong: 5px 5px 15px rgba(0, 0, 0, 0.2);
@@ -84,12 +84,12 @@ select:hover {
 }
 
 ::selection {
-  background: #3152D5;
+  background: #3152d5;
   color: #ececec;
 }
 
 .userSection {
-  @apply min-h-[500px] py-12;
+  @apply min-h-[350px] py-12;
 }
 
 @tailwind utilities;
@@ -121,7 +121,7 @@ select:hover {
   }
 
   label {
-    @apply w-20 text-end font-bold
+    @apply w-20 text-end
     cursor-pointer
     select-none
       break-keep
@@ -164,17 +164,23 @@ select:hover {
   }
 
   .light-p {
-    @apply text-xs text-light
+    @apply text-xs text-mid
     leading-snug
 
     md:text-base md:leading-tight;
   }
 
   .user-product-card {
-    @apply shrink-0 w-[250px] h-[280px] 
-    flex flex-col items-center gap-2 
+    @apply shrink-0 w-full h-[60px] 
+    bg-white rounded-xl
+    px-5
+    border-2 border-transparent
+    grid grid-cols-5 gap-2 justify-center items-center
     cursor-pointer
-    relative;
+    relative
+
+    hover:bg-bglightHover
+    hover:border-secondaryLight
   }
 
   .input-base {
@@ -192,8 +198,6 @@ select:hover {
   }
 
   .custom-round-s {
-    @apply
-    bg-transparent
-    
+    @apply bg-transparent;
   }
 }

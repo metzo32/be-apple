@@ -33,17 +33,17 @@ export default function UserWishList() {
     const target = wishList.find((item) => item.id === id);
     if (!target) return;
 
-    setPendingDeleteIds((prev) => [...prev, id]); // 기존 배열에 인수로 들어온 id 추가
+    setPendingDeleteIds((prev) => [...prev, id]); 
     setRecentlyDeleted(target);
     setIsPopupOpen(true);
 
-    // 2초 뒤 데이터 상에서도 삭제
+    // 3초 뒤 데이터 상에서도 삭제
     const timer = setTimeout(async () => {
       await deleteWish(id);
       setWishList((prev) => prev.filter((item) => item.id !== id));
       setIsPopupOpen(false);
       setRecentlyDeleted(null);
-    }, 2000);
+    }, 3000);
 
     setDeleteTimer(timer);
   };
@@ -61,8 +61,8 @@ export default function UserWishList() {
   };
 
   return (
-    <>
-      <div className="bg-white min-h-[500px] p-24 rounded-t-3xl shadow-light">
+    <section className="mt-12">
+      <div className="bg-white min-h-[500px] p-12 rounded-t-3xl shadow-light">
         <h2 className="font-bold mb-10">내 위시리스트</h2>
         {wishList.length > 0 ? (
           <div className="flex flex-col gap-5">
@@ -91,6 +91,6 @@ export default function UserWishList() {
       </div>
 
       <DeletePopup isOpen={isPopupOpen} onUndo={handleUndo} />
-    </>
+    </section>
   );
 }

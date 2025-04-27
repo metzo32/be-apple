@@ -1,6 +1,6 @@
 export interface ProductSelectInfoProps {
-  productId: number;
-  productOptionId: number;
+  productId: number | null;
+  productOptionId: number | null;
 }
 
 export interface UserProductFormData {

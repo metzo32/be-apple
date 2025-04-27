@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { GetProductResponse } from "@/types/product";
+import type { ProductSelectInfoProps } from "@/types/addUserProducts";
 import { ProductCategoryEnum } from "@/types/productCategory";
 import {
   fetchProduct,
   fetchProductDetail,
 } from "@/components/fetch/fetchProduct";
-import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import {
   ProductDetail,
   ProductDetailIpad,
   ProductDetailIphone,
   ProductDetailMac,
 } from "@/types/productDetail";
-import type { ProductSelectInfoProps } from "@/types/addUserProducts";
+import { GetProductResponse } from "@/types/product";
+import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 
 interface RenderProductsProps {
   selectedCategory: ProductCategoryEnum;
@@ -106,30 +106,37 @@ export default function RenderProducts({
   return isLoading ? (
     <p>제품 목록 불러오는 중...</p>
   ) : (
-    <div className="bg-[#FE0000]"> 
+    <div>
       <RadioGroup
         aria-labelledby="products-radio-buttons-group-label"
         name="radio-buttons-group"
         value={productSelectInfo.productId}
         sx={{
           display: "grid",
-          gridTemplateColumns: "repeat(5, 1fr)",
-          gridColumnGap: "15px",
+          gridTemplateColumns: "repeat(6, 1fr)",
+          gridColumnGap: "10px",
         }}
       >
         {productList.map((product) => (
           <FormControlLabel
+            labelPlacement={"bottom"}
             key={product.id}
             value={product.id}
             onClick={() => handleItemClick(product.id)}
             control={<Radio />}
-            label={product.id}
-            sx={{ width: "200px", height: "200px", backgroundColor: "#20676F" }}
+            label={
+              <div className="flex flex-col items-center">
+                <img src={product.photos[0]} alt={product.name}/>
+                <p className="text-sm">{product.name}</p>
+                <p className="text-sm">{product.generation}</p>
+              </div>
+            }
+            sx={{ width: "100px", height: "100px"}}
           />
         ))}
       </RadioGroup>
 
-      {productSelectInfo.productId && (
+      {productSelectInfo.productId ? (
         <RadioGroup
           aria-labelledby="product-option-radio-buttons-group-label"
           name="radio-buttons-group"
@@ -191,7 +198,7 @@ export default function RenderProducts({
               />
             ))}
         </RadioGroup>
-      )}
+      ) : null}
     </div>
   );
 }

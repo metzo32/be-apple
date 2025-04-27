@@ -18,7 +18,7 @@ export default function DeletePopup({ isOpen, onUndo }: DeletePopupProps) {
       )}
     >
       <div className="rounded-t-2xl w-[80%] h-[100px] flex flex-col gap-5 sm:flex-row justify-between items-center bg-white px-8 sm:px-16 py-5 shadow-light">
-        <h6 className="text-sm md:text-lg">위시리스트에서 제거했습니다.</h6>
+        <h6 className="text-sm md:text-lg">해당 상품을 제거했습니다.</h6>
         <ButtonStrong text="취소하기" onClick={onUndo} />
       </div>
     </div>

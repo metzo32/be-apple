@@ -60,21 +60,13 @@ export default function SelectCategory({
         </RadioGroup>
       </div>
 
-      <div className="bg-blue-300">
+      <div>
         <RenderProducts
           selectedCategory={selectedCategory}
           productSelectInfo={productSelectInfo}
           setproductSelectInfo={setproductSelectInfo}
         />
       </div>
-
-      {/* TODO 이 부분 invalid 한 경우, "다음"버튼 실행 금지 */}
-      {/* <TextField
-        id="outlined-basic"
-        label="제품명 검색"
-        variant="outlined"
-        required
-      /> */}
     </div>
   );
 }

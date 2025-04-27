@@ -2,7 +2,7 @@ import AddButton from "./AddButton";
 
 export default function UserInfo() {
   return (
-    <>
+    <section className="userSection">
       <h2 className="font-bold mb-5">내 정보</h2>
       <div className="grid grid-cols-2 gap-10">
         <div className="h-[300px] bg-white rounded-2xl p-12 shadow-light flex flex-col justify-between items-center">
@@ -15,6 +15,6 @@ export default function UserInfo() {
           테스트
         </div>
       </div>
-    </>
+    </section>
   );
 }

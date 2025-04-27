@@ -42,12 +42,9 @@ export default function UserWishCard({ wishList, onDelete }: WishCardProps) {
         </div>
 
         <span>
-        
-            <Link
-              href={`/${wishList.product.category}/${wishList.product.id}`}
-            >
-              <ButtonMedium text="제품 보기"/>
-            </Link>
+          <Link href={`/${wishList.product.category}/${wishList.product.id}`}>
+            <ButtonMedium text="제품 보기" />
+          </Link>
         </span>
       </div>
     </div>

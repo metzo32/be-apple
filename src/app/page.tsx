@@ -7,10 +7,10 @@ export default function HomePage() {
       <section className="py-64 flex flex-col-reverse items-center gap-10 xl:flex-row xl:justify-between xl:items-center">
         <div className="w-full xl:w-1/2 flex flex-col items-center xl:items-start gap-10">
           <div className="w-auto xl:w-[455px] flex flex-col items-center xl:items-start gap-1 sm:gap-5">
-            <h1 className="text-2xl sm:text-5xl xl:text-6xl font-bold text-light">
+            <h1 className="text-2xl sm:text-5xl xl:text-6xl font-bold text-mid">
               <span className="text-text">지금,</span> 나에게 가장
             </h1>
-            <h1 className=" tracking-widest text-2xl sm:text-5xl xl:text-6xl font-bold text-light">
+            <h1 className=" tracking-widest text-2xl sm:text-5xl xl:text-6xl font-bold text-mid">
               필요한 제품.
             </h1>
           </div>

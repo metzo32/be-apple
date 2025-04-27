@@ -8,6 +8,7 @@ import UserWishList from "@/components/UserWishList/UserWishList";
 import SignOut from "@/components/SignOut";
 import UserInfo from "@/components/UserProductAdd/UserInfo";
 import UserProduct from "@/components/UserProduct/UserProduct";
+import ChangePassword from "@/components/ChangePassword";
 
 export default function UserPage() {
   const { user } = useUserStore();
@@ -33,20 +34,17 @@ export default function UserPage() {
     <div className="relative">
       <section className="py-24 flex flex-col items-center gap-10">
         <h1 className="text-4xl font-bold">안녕하세요, {user?.name} 님.</h1>
-        <SignOut setIsSigningOut={setIsSigningOut} />
+        <div className="flex items-center gap-10">
+          <ChangePassword />
+          <SignOut setIsSigningOut={setIsSigningOut} />
+        </div>
       </section>
 
-      <section className="userSection">
-        <UserInfo />
-      </section>
+      <UserInfo />
 
-      <section className="userSection">
-        <UserProduct />
-      </section>
+      <UserProduct />
 
-      {/* <section className="userSection pb-0"> */}
       <UserWishList />
-      {/* </section> */}
     </div>
   );
 }

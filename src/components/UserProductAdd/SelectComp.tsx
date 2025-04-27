@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useOpenSelect from "@/stores/useOpenSelect";
 import {
   UserProductCondition,
@@ -20,8 +20,10 @@ import SelectStatus from "./SelectOptions/SelectStatus";
 import SelectCondition from "./SelectOptions/SelectCondition";
 import SelectMultiplePurchased from "./SelectOptions/SelectMultiplePurchased";
 import SelectMemo from "./SelectOptions/SelectMemo";
-import { Box, Button } from "@mui/material";
 import { IoCloseOutline } from "react-icons/io5";
+import ButtonStrong from "../designs/ButtonStrong";
+import ButtonBasic from "../designs/ButtonBasic";
+import { Button } from "@mui/material";
 
 export default function SelectComp() {
   const { isClicked, setIsClicked } = useOpenSelect();
@@ -38,7 +40,8 @@ export default function SelectComp() {
     condition: UserProductCondition.NEW,
     memo: "",
   });
-  //TODO 상태 줄일 방법 생각하기 ✅✅✅
+
+  const [isLoading, setIsLoading] = useState(false);
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(0);
   const [displayedPrice, setDisplayedPrice] = useState<string>(""); // UI상 보여지는 가격
   const [isSoldSelected, setIsSoldSelected] = useState(false); // 처분 및 양도 여부
@@ -67,7 +70,6 @@ export default function SelectComp() {
     if (isEqual(initialForm, formData)) {
       setIsClicked(false);
     } else {
-      // setIsClicked(true)
       openModal();
     }
   };
@@ -86,12 +88,18 @@ export default function SelectComp() {
       memo: "",
     });
 
+    setCurrentPageNumber(0);
+    setIsLoading(false);
     closeModal();
+    setIsClicked(false);
   };
 
   // 이전 페이지
   const handlePrevPage = () => {
     if (currentPageNumber === 0) {
+      return;
+    }
+    if (isLoading) {
       return;
     }
     setCurrentPageNumber(currentPageNumber - 1);
@@ -123,12 +131,13 @@ export default function SelectComp() {
     return !!formData.productId && !!formData.productOptionId;
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  //TODO 2초 시간차 두고 submit되도록.
+  const handleSubmit = async () => {
     if (!isValidDto(formData)) {
       alert("제품과 제품 옵션을 선택해주세요.");
     } else {
       const success = await addUserProduct(formData); //TODO 타입가드로 UserProductFormData를 CreateUserProductReqDto로 검증
+      
       if (success) {
         setIsClicked(false);
         console.log("유저 보유 목록 추가 성공");
@@ -136,6 +145,10 @@ export default function SelectComp() {
         console.log("유저 보유 목록 생성 실패");
       }
     }
+  };
+
+  const handleSubmitLoading = () => {
+    setIsLoading(!isLoading);
   };
 
   const handlePriceChange = (value: string) => {
@@ -198,7 +211,7 @@ export default function SelectComp() {
   const handleMultiplePurchased = (e: React.ChangeEvent<HTMLInputElement>) => {
     const purchaseCount = Number(e.target.value.replace(/[^0-9]/g, ""));
 
-    setDisplayRepurchase(purchaseCount)
+    setDisplayRepurchase(purchaseCount);
   };
 
   const handleMultiplePurchasedBlur = () => {
@@ -209,7 +222,7 @@ export default function SelectComp() {
         ...prev,
         repurchasedCount: 1,
       }));
-    } else if ((displayRepurchase) > 99) {
+    } else if (displayRepurchase > 99) {
       alert("100 미만의 숫자를 써주세요");
       setDisplayRepurchase(99);
       setFormData((prev) => ({
@@ -244,42 +257,37 @@ export default function SelectComp() {
 
       {isClicked ? (
         <div className="overlay flex justify-center items-center">
-          <div className="w-[1200px] h-[800px] p-16 bg-custombg rounded-3xl relative">
+          <div className="w-[1200px] h-[800px] p-16 bg-white rounded-3xl relative">
             <button // 창 닫기 버튼
               type="button"
               onClick={handleClose}
-              className="w-12 h-12 text-4xl flex items-center justify-center absolute top-0 right-0 bg-bglight text-custombg hover:bg-light"
+              className="w-12 h-12 text-4xl flex items-center justify-center absolute top-0 right-0 bg-light text-white hover:bg-mid"
             >
               <IoCloseOutline />
             </button>
 
-            <Box
-              component="form"
+            <form
               onSubmit={handleSubmit}
               className="w-full h-full flex flex-col justify-between"
             >
               <div className="w-full flex items-center justify-between">
                 <span className="w-[65px]">
                   {currentPageNumber !== 0 && (
-                    <Button
+                    <ButtonBasic
                       type="button"
-                      variant="outlined"
                       onClick={handlePrevPage}
-                    >
-                      이전
-                    </Button>
+                      text="이전"
+                    />
                   )}
                 </span>
 
                 <span className="w-[65px]">
                   {currentPageNumber !== MAX_PAGE && (
-                    <Button
+                    <ButtonStrong
                       type="button"
-                      variant="contained"
                       onClick={handleNextPage}
-                    >
-                      다음
-                    </Button>
+                      text="다음"
+                    />
                   )}
                 </span>
               </div>
@@ -354,16 +362,28 @@ export default function SelectComp() {
               )}
 
               <span className="w-full flex items-center justify-center">
-                {currentPageNumber === MAX_PAGE && (
-                  <>
-                    <Button type="submit" variant="contained">
-                      등록하기
+                {currentPageNumber === MAX_PAGE &&
+                  (isLoading ? (
+                    <Button
+                      size="medium"
+                      variant="outlined"
+                      loading={isLoading}
+                      onClick={handleSubmitLoading}
+                      sx={{
+                        width: "60px",
+                      }}
+                    >
+                      Disabled
                     </Button>
-                    <Button loading>등록하기</Button>
-                  </>
-                )}
+                  ) : (
+                    <ButtonStrong
+                      type="submit"
+                      text="등록하기"
+                      // onClick={handleSubmitLoading} 아걸 쓰면 왜인지 submit이 되지 않는다. submit 함수에 로딩로직도 때려넣자
+                    />
+                  ))}
               </span>
-            </Box>
+            </form>
           </div>
         </div>
       ) : null}
