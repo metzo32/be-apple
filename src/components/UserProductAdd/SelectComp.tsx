@@ -21,7 +21,7 @@ import SelectCondition from "./SelectOptions/SelectCondition";
 import SelectMultiplePurchased from "./SelectOptions/SelectMultiplePurchased";
 import SelectMemo from "./SelectOptions/SelectMemo";
 import { IoCloseOutline } from "react-icons/io5";
-import ButtonStrong from "../designs/ButtonStrong";
+import ButtonStrong, { ButtonMedium } from "../designs/ButtonStrong";
 import ButtonBasic from "../designs/ButtonBasic";
 import { Button } from "@mui/material";
 
@@ -137,7 +137,7 @@ export default function SelectComp() {
       alert("제품과 제품 옵션을 선택해주세요.");
     } else {
       const success = await addUserProduct(formData); //TODO 타입가드로 UserProductFormData를 CreateUserProductReqDto로 검증
-      
+
       if (success) {
         setIsClicked(false);
         console.log("유저 보유 목록 추가 성공");
@@ -280,6 +280,15 @@ export default function SelectComp() {
                     />
                   )}
                 </span>
+
+                {/* TODO 현재 카테고리 내에서 검색되도록 --- 클릭된 Radio 카테고리 꼬이지 않게 */}
+                {/* 검색바 */}
+                {currentPageNumber === 0 && (
+                  <div className="w-full flex items-center justify-center gap-5">
+                    <div className="w-[50%] h-[35px] border-2 border-secondary rounded-lg bg-bglightHover" />
+                    <ButtonMedium text="검색" type="button" />
+                  </div>
+                )}
 
                 <span className="w-[65px]">
                   {currentPageNumber !== MAX_PAGE && (

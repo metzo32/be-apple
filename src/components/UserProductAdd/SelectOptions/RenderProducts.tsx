@@ -106,15 +106,17 @@ export default function RenderProducts({
   return isLoading ? (
     <p>제품 목록 불러오는 중...</p>
   ) : (
-    <div>
+    <div className="h-[500px] overflow-y-scroll">
+      {/* 카테고리 별 상품 목록 */}
       <RadioGroup
         aria-labelledby="products-radio-buttons-group-label"
         name="radio-buttons-group"
         value={productSelectInfo.productId}
         sx={{
           display: "grid",
-          gridTemplateColumns: "repeat(6, 1fr)",
-          gridColumnGap: "10px",
+          gridTemplateColumns: "repeat(5, 1fr)",
+          columnGap: "20px", // 가로 간격
+          rowGap: "50px", 
         }}
       >
         {productList.map((product) => (
@@ -123,19 +125,21 @@ export default function RenderProducts({
             key={product.id}
             value={product.id}
             onClick={() => handleItemClick(product.id)}
-            control={<Radio />}
+            control={<Radio sx={{ display: "none" }} />}
             label={
-              <div className="flex flex-col items-center">
-                <img src={product.photos[0]} alt={product.name}/>
+              <div className="h-[200px] flex flex-col items-center">
+                <span className="w-[160px] h-[120px] bg-amber-900"/>
+                {/* <img src={product.photos[0]} alt={product.name} /> */}
                 <p className="text-sm">{product.name}</p>
                 <p className="text-sm">{product.generation}</p>
               </div>
             }
-            sx={{ width: "100px", height: "100px"}}
+            sx={{ width: "100px", height: "100px" }}
           />
         ))}
       </RadioGroup>
 
+      {/* 옵션 목록 */}
       {productSelectInfo.productId ? (
         <RadioGroup
           aria-labelledby="product-option-radio-buttons-group-label"
@@ -147,6 +151,7 @@ export default function RenderProducts({
             gridColumnGap: "15px",
           }}
         >
+          {/* 맥 케이스 */}
           {productDetail &&
             isMacProduct(productDetail) &&
             productDetail.options.map((macOption) => (
@@ -164,6 +169,7 @@ export default function RenderProducts({
               />
             ))}
 
+          {/* 아이패드 케이스 */}
           {productDetail &&
             isIpadProduct(productDetail) &&
             productDetail.options.map((ipadOption) => (
@@ -181,6 +187,7 @@ export default function RenderProducts({
               />
             ))}
 
+          {/* 아이폰 케이스 */}
           {productDetail &&
             isIphoneProduct(productDetail) &&
             productDetail.options.map((iphoneOption) => (

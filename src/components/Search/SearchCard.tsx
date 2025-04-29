@@ -11,34 +11,33 @@ interface SearchCardProps {
 export default function SearchCard({ product }: SearchCardProps) {
 
   return (
-    <div className="w-[280px] bg-white shrink-0 rounded-2xl overflow-hidden flex flex-col justify-between items-start relative shadow-strong">
+    <div className="w-[260px] h-[350px] py-5 bg-white shrink-0 rounded-2xl overflow-hidden flex flex-col justify-between items-start relative shadow-strong">
       <Link
-        href={`/${product.category}/${product.id}`}
-        className="w-[280px] h-[200px]"
+        href={`/${product.category}/${product.id}`} // product의 Id
+        className="w-full flex flex-col gap-5"
       >
-        <span className="w-[280px] h-[280px]" />
         <img
           src={product.photos[0]}
           alt={product.name}
+          className="w-[260px] h-[150px] object-cover"
           // fill
-          className="object-cover"
         />
+
+        <div className="px-5 flex flex-col gap-3">
+          <h5 className="font-bold whitespace-nowrap">{product.name}</h5>
+          <p className="light-p">{product.generation}</p>
+        </div>
       </Link>
 
-      <div className="w-full flex justify-between items-end gap-5 p-5">
-        <div className="w-full flex flex-col gap-2">
-          <div className="flex items-center gap-3">
-            <h5 className="font-bold">{product.name}</h5>
-            {product.userProductId && (
-              <span>
-                <FaCheck className="text-green-500" />
-              </span>
-            )}
-          </div>
-          <p className="light-p">{product.generation}</p>
+      <div className="w-full px-5 flex justify-between items-center gap-5">
+        <div className="flex items-center gap-3">
           <p className="light-p">{product.price.toLocaleString()}원</p>
+          {product.userProductId && (
+            <span>
+              <FaCheck className="text-green-500" />
+            </span>
+          )}
         </div>
-
         <WishButton
           wishId={product.wishId}
           isInWish={product.isInWish}

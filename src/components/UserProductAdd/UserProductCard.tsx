@@ -108,7 +108,7 @@ export default function UserProductCard({
 
     return (
       <div className="user-product-card">
-        <h3>{userProduct.product.name}</h3>
+        <h3 className="font-bold">{userProduct.product.name}</h3>
         <div className="flex gap-5 items-center">
           <p className="text-lg text-light">{userProduct.product.processor}</p>
           <p className="text-lg text-light">{displaySize}</p>

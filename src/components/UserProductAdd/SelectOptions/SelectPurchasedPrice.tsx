@@ -10,8 +10,8 @@ export default function SelectPurchasedPrice({
   onChange,
 }: SelectPurchasedPriceProps) {
   return (
-    <label className="flex flex-col gap-5 items-start text-2xl font-normal">
-      해당 제품의 구매가를 작성해주세요.
+    <div className="h-[500px] flex flex-col">
+      <h3 className="user-product-h3"> 해당 제품의 구매가를 작성해주세요.</h3>
       <TextField
         label="가격"
         variant="outlined"
@@ -19,6 +19,6 @@ export default function SelectPurchasedPrice({
         value={displayedPrice}
         onChange={(event) => onChange(event.target.value)}
       />
-    </label>
+    </div>
   );
 }

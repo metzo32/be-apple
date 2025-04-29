@@ -13,8 +13,8 @@ export default function IconPresets({
 }: IconPresetsProps) {
   return (
     <button
-      className={`w-[40px] h-[40px] relative rounded-full hover:bg-light ${
-        isSelected ? "bg-light" : "bg-custombg"
+      className={`w-[40px] h-[40px] relative rounded-full hover:bg-secondaryLight ${
+        isSelected ? "bg-secondary" : "bg-bglight"
       }`}
       onClick={() => onClick(index)}
     >

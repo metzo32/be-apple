@@ -3,54 +3,49 @@
 import { useState } from "react";
 import Image from "next/image";
 import type { CreateNewReviewReq } from "@/types/Review";
-import { fetchNewReview } from "../fetch/fetchReview";
+import { createNewReview } from "../fetch/fetchReview";
 import { fetchUploadPhoto } from "../fetch/fetchUploadPhoto";
 import { LuPlus } from "react-icons/lu";
-import IconPresets from "./IconPresets";
+import ButtonStrong from "../designs/ButtonStrong";
+import { Rating } from "@mui/material";
 
 interface WriteReviewProps {
-  productId: number;
+  myProduct: number | null;
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
 }
 
 export default function WriteReview({
-  productId,
+  myProduct,
   isOpen,
   setIsOpen,
 }: WriteReviewProps) {
   const [review, setReview] = useState<string>("");
-  const [rate, setRate] = useState<number>(1);
   const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([]);
-  const [selectedScore, setSelectedScore] = useState<number | null>(null);
+  const [value, setValue] = useState<number>(2);
 
   const MAX_LENGTH = 200;
-
-  const handleClickScore = (index: number) => {
-    setSelectedScore(index + 1); 
-    console.log(selectedScore)
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (review.length === 0) return;
+    if (review.length === 0) return; // 아무것도 입력하지 않은 경우
+
+    if (!myProduct) {
+      // 유저 프로덕트 id를 가져오지 못한 경우
+      console.error("리뷰를 등록할 수 없습니다.");
+      return;
+    }
 
     const reviewData: CreateNewReviewReq = {
-      userProductId: productId,
-      rating: rate,
+      userProductId: myProduct,
+      rating: value,
       content: review,
       photos: uploadedPhotos,
     };
 
-    const uploadReview = await fetchNewReview(productId, reviewData);
-
-    if (uploadReview) {
-      console.log("리뷰 등록 성공:", uploadReview);
-      setIsOpen(false);
-    } else {
-      console.error("리뷰 등록 실패");
-    }
+    const createReview = await createNewReview(myProduct, reviewData);
+    setIsOpen(false);
   };
 
   const handleAddPhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,7 +69,7 @@ export default function WriteReview({
     <div className="overlay flex justify-center items-center">
       <form
         onSubmit={handleSubmit}
-        className="w-[300px] md:w-[460px] p-5 flex flex-col gap-3 md:gap-5 bg-custombg shadow-2xl"
+        className="w-[300px] md:w-[480px] p-5 md:p-10 bg-white rounded-2xl shadow-2xl flex flex-col gap-3 md:gap-5"
       >
         <button
           type="button"
@@ -89,7 +84,7 @@ export default function WriteReview({
           />
         </button>
 
-        <h3 className="font-bold">
+        <h3 className="text-lg font-semibold">
           해당 제품을 사용해보셨다면 리뷰를 남겨주세요.
         </h3>
 
@@ -99,25 +94,41 @@ export default function WriteReview({
           onChange={handleChange}
           maxLength={MAX_LENGTH}
           placeholder="리뷰 남기기"
-          className="w-full h-[250px] p-5 border-3 border-bglight text-base resize-none"
+          className="w-full h-[250px] p-5 border-3 rounded-2xl bg-bglight border-bglight text-base resize-none focus:bg-bglightHover focus:border-secondaryLight"
         />
         <p className="text-sm text-gray-500 text-right mt-1">
           {review.length} / {MAX_LENGTH}자
         </p>
 
-        <h3 className="font-bold">평점</h3>
-        <div className="px-10 flex justify-between">
-          {[...Array(5)].map((_, i) => (
-            <IconPresets
-              key={i}
-              index={i}
-              isSelected={selectedScore === i + 1}
-              onClick={handleClickScore}
-            />
-          ))}
+        <h3 className="font-semibold">평점</h3>
+        <div className="bg-amber-200">
+          <Rating
+            // TODO review 점수값이 1로 넘어감
+            value={value}
+            max={5}
+            onChange={(event, newValue) => {
+              if (typeof newValue === "number") {
+                setValue(newValue);
+              }
+            }}
+            size="large"
+            sx={{
+              "& label": {
+                width: "20px",
+              },
+              "& label > span": {
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              },
+              "& label > span > svg": {
+                fontSize: "20px", // 별 자체 크기 조정
+              },
+            }}
+          />
         </div>
 
-        <h3 className="font-bold">포토</h3>
+        <h3 className="font-semibold">포토</h3>
         <div className="flex gap-5 w-full">
           {[0, 1].map((index) => (
             <div key={index} className="w-[200px] aspect-square relative">
@@ -131,7 +142,7 @@ export default function WriteReview({
 
               <label
                 htmlFor={`file-input-${index}`}
-                className="cursor-pointer w-full h-full bg-bglight flex items-center justify-center"
+                className="cursor-pointer w-full h-full bg-bglight rounded-2xl flex items-center justify-center hover:bg-bglightHover"
               >
                 {uploadedPhotos && uploadedPhotos[index] ? (
                   <Image
@@ -150,9 +161,7 @@ export default function WriteReview({
           ))}
         </div>
 
-        <button type="submit" className="submit-btn">
-          등록
-        </button>
+        <ButtonStrong text="등록" type="submit" />
       </form>
     </div>
   );

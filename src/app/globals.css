@@ -32,8 +32,8 @@
 
   --color-text: #000000;
   --color-textHover: #444444;
-  --color-mid: #909090;
-  --color-light: #b9b9b9;
+  --color-mid: #7D7D7D;
+  --color-light: #B4B4B4;
   --color-overlay: rgba(0, 0, 0, 0.5);
   --color-customGrad: linear-gradient(to right, #476cf6, #c467f3);
   --font-apple: "AppleFont", sans-serif;
@@ -194,10 +194,11 @@ select:hover {
   }
 
   .user-product-h3 {
-    @apply text-2xl;
+    @apply text-xl font-normal
   }
 
   .custom-round-s {
     @apply bg-transparent;
   }
+
 }

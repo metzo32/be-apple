@@ -6,6 +6,8 @@ import SummaryCard from "./SummaryCard";
 import useModal from "@/hooks/useModal";
 import Modal from "../Modal/Modal";
 import DeletePopup from "../DeletePopup/DeletePopup";
+import { basicDeviceData } from "../../../public/fakeData/basicDeviceData";
+import { ProductCategoryLabels } from "@/types/productCategory";
 
 export default function UserProduct() {
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -97,13 +99,26 @@ export default function UserProduct() {
     }
   };
 
+  const categorySaturation = 100 / Object.keys(ProductCategoryLabels).length;
+
+  const totalPrice = userProducts.reduce(
+    (sum, product) => sum + (product.purchasePrice ?? 0),
+    0
+  );
+
   return (
     <section className="userSection">
       <h2 className="font-bold mb-10">내 제품 목록</h2>
       <div className="w-full mb-10 grid gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
-        <SummaryCard title="현재 보유한 기기 수" content={0} />
-        <SummaryCard title="포화도" content={`${15}%`} />
-        <SummaryCard title="총액" content={(100000000).toLocaleString()} />
+        <SummaryCard
+          title="현재 보유한 기기 수"
+          content={userProducts.length}
+        />
+        <SummaryCard
+          title="포화도"
+          content={`${Math.round(categorySaturation)}%`}
+        />
+        <SummaryCard title="총액" content={(totalPrice).toLocaleString()} />
         <SummaryCard title="작성한 리뷰 수" content={0} />
       </div>
 

@@ -1,15 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import useModal from "@/hooks/useModal";
 import { addWish, deleteWish } from "../fetch/fetchWishList";
-import { PiHeartBold, PiHeartFill } from "react-icons/pi";
+import Modal from "../Modal/Modal";
+import ButtonStrong from "../designs/ButtonStrong";
+// import { PiHeartBold, PiHeartFill } from "react-icons/pi";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { useUserStore } from "@/stores/useUserStore";
-import useModal from "@/hooks/useModal";
-import Modal from "../Modal/Modal";
-import { useRouter } from "next/navigation";
-import ButtonStrong from "../designs/ButtonStrong";
-import WishButtonActive from "./WishButtonIcons";
+import { GoHeart, GoHeartFill } from "react-icons/go";
+
 
 // 자식 컴포넌트에 무엇이 필요한지 알고, 그 의도에 맞게 props를 정하자. 그냥 때려넣지 마세요
 interface WishButtonProps {
@@ -105,16 +106,16 @@ export default function WishButton({
       {!isAdded ? (
         <button
           onClick={handleAddWish}
-          className="text-4xl hover:opacity-70"
+          className="text-2xl hover:opacity-70"
         >
-          <PiHeartBold className="text-primary" />
+          <GoHeart className="text-primary" />
         </button>
       ) : (
         <button
           onClick={handleRemoveWish}
-          className="text-4xl hover:opacity-70"
+          className="text-2xl hover:opacity-70"
         >
-          <PiHeartFill className="text-primary" />
+          <GoHeartFill className="text-primary" />
         </button>
       )}
 
@@ -146,12 +147,12 @@ export default function WishButton({
                   id="memo"
                   value={memo}
                   onChange={handleChange}
-                  maxLength={150}
+                  maxLength={100}
                   placeholder="나만의 메모를 남겨보세요"
                   className="w-full h-[150px] p-3 border-3 border-bglight text-base resize-none"
                 />
                 <p className="text-sm text-gray-500 text-right mt-1">
-                  {memo.length} / 150자
+                  {memo.length} / 100자
                 </p>
               </div>
             )}

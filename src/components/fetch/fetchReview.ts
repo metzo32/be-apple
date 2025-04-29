@@ -2,7 +2,7 @@ import { get, post, deleteCall } from "@/api/api";
 import type { CreateNewReviewReq } from "@/types/Review";
 
 // 리뷰 생성하기
-export async function fetchNewReview(
+export async function createNewReview(
   productId: number,
   reviewData: CreateNewReviewReq
 ) {
@@ -15,10 +15,10 @@ export async function fetchNewReview(
       photos,
     });
 
-    return response.data;
+    return true;
   } catch (error) {
     console.error("리뷰 생성 실패:", error);
-    return null;
+    return false;
   }
 }
 
