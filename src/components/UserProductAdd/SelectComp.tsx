@@ -133,6 +133,7 @@ export default function SelectComp() {
 
   //TODO 2초 시간차 두고 submit되도록.
   const handleSubmit = async () => {
+    
     if (!isValidDto(formData)) {
       alert("제품과 제품 옵션을 선택해주세요.");
     } else {
@@ -388,7 +389,7 @@ export default function SelectComp() {
                     <ButtonStrong
                       type="submit"
                       text="등록하기"
-                      // onClick={handleSubmitLoading} 아걸 쓰면 왜인지 submit이 되지 않는다. submit 함수에 로딩로직도 때려넣자
+                      // TODO onClick={handleSubmitLoading} 아걸 쓰면 왜인지 submit이 되지 않는다. submit 함수에 로딩로직도 때려넣자
                     />
                   ))}
               </span>

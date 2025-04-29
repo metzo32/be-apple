@@ -23,7 +23,7 @@ interface fetchedDataProps {
 
 export default function ReviewClient({
   product,
-  productId,
+  productId, // 이 페이지의 프로덕트id
 }: ReviewClientProps) {
   const { user } = useUserStore();
   const [isOpen, setIsOpen] = useState(false);
@@ -34,8 +34,6 @@ export default function ReviewClient({
     userProductArr: [],
     productDetailData: null,
   });
-
-  console.log("이 페이지의 productId", productId)
 
   useEffect(() => {
     const getData = async () => {
@@ -66,23 +64,22 @@ export default function ReviewClient({
           productDetailData: productsDetail,
         }));
 
-        // 유저 프로덕트id 와 디테일id 중 일치하는지
+        // userProduct를 순회하여 어떤 요소의 product 객체의 id가 productsDetail.id 와 일치하는지 추적
         const productUserHave = userProducts.find(
-          (currentItem: ProductDetail) => currentItem.id === productsDetail.userProductId
+          //TODO
+          (userProduct: any) => userProduct.product.id === productsDetail.id
         );
 
-        console.log("보유 상품:", productUserHave.id);
         setMyProduct(productUserHave.id);
 
-        // 이미 리뷰를 썼는지
-        const hasWritten = product.reviews.find(
+        // 이미 리뷰를 썼는지 여부
+        const hasWrittenReview = product.reviews.find(
           (review) => review.userId.toString() === user?.id.toString()
         );
-        console.log("이미 작성한 리뷰 내용:", hasWritten); // 없으면 undefined
 
-        if (!hasWritten) {
+        if (!hasWrittenReview) {
           setIsWritten(false);
-        } else if (hasWritten && hasWritten.content === undefined) {
+        } else if (hasWrittenReview && hasWrittenReview.content === undefined) {
           setIsWritten(false);
         } else {
           setIsWritten(true);
@@ -102,7 +99,10 @@ export default function ReviewClient({
 
   return (
     <section className="w-full flex flex-col gap-10 mb-20 bg-white  shadow-strong rounded-2xl p-10 overflow-hidden">
-      <h1 className="text-2xl">구매자들의 리뷰</h1>
+      <div className="flex items-end gap-5">
+        <h1 className="text-2xl">구매자들의 리뷰</h1>
+        <h2 className="text-base text-light">총 {product.reviews.length}명의 후기</h2>
+      </div>
 
       {myProduct ? (
         <span className="w-[200px]">
@@ -143,7 +143,7 @@ export default function ReviewClient({
           </div>
         ) : (
           product.reviews.map((review) => (
-            <ReviewCard key={review.id} review={review} />
+            <ReviewCard key={review.id} review={review}/>
           ))
         )}
       </div>

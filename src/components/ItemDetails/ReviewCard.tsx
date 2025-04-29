@@ -1,12 +1,15 @@
 import Image from "next/image";
 import type { Review } from "@/types/Review";
-import { FaStar } from "react-icons/fa6";
+import useModal from "@/hooks/useModal";
 import { formatDate } from "@/module/formatDate";
 import { useUserStore } from "@/stores/useUserStore";
 import { deleteReview } from "../fetch/fetchReview";
+import Modal from "../Modal/Modal";
+import { FaStar } from "react-icons/fa6";
 
 export default function ReviewCard({ review }: { review: Review }) {
   const { user } = useUserStore(); // 현재 접속 중인 유저id
+  const { isModalOpen, openModal, closeModal } = useModal();
   const currentUserId = user?.id;
 
   const createdTime = formatDate(review.createdAt, "yyyy년 M월 d일 E요일");
@@ -29,9 +32,9 @@ export default function ReviewCard({ review }: { review: Review }) {
   const maskedName = review.userName
     .split("")
     .map((char, index) => {
-      if (index < 1) return char; 
+      if (index < 1) return char;
       if (index === review.userName.length - 1) return char;
-      return "*"; 
+      return "*";
     })
     .join("");
 
@@ -91,7 +94,7 @@ export default function ReviewCard({ review }: { review: Review }) {
               수정
             </button>
             <button
-              onClick={handleDeleteReview}
+              onClick={openModal}
               className="text-sm text-light hover:text-mid"
             >
               삭제
@@ -99,6 +102,18 @@ export default function ReviewCard({ review }: { review: Review }) {
           </div>
         )}
       </div>
+
+      {isModalOpen && (
+        <Modal
+          isModalOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={handleDeleteReview}
+          onCancel={closeModal}
+          title={"잠깐!"}
+          content={"정말 리뷰를 삭제할까요?"}
+          confirmBtnText={"확인"}
+        />
+      )}
     </div>
   );
 }
