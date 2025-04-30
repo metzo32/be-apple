@@ -4,8 +4,8 @@ export interface CreateReviewReq {
   content: string;
   photos: [string?, string?];
 
-  // userName: string;
-  // date: string;
+  userName: string;
+  date: string;
 }
 
 export interface CreateNewReviewReq {

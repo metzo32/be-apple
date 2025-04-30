@@ -50,6 +50,7 @@ export default function RenderProducts({
   const [productDetail, setProductDetail] = useState<ProductDetail | null>(
     null
   ); // 디테일 fetch 정보
+  const [isOptionOpen, setIsOptionOpen] = useState(false);
 
   // TODO productId와 productOptionId 필수 선택 검증
 
@@ -59,6 +60,8 @@ export default function RenderProducts({
       ...productSelectInfo,
       productId: productId,
     });
+
+    setIsOptionOpen(true) // 옵션 창 열기
 
     const fetchedDetail = await fetchProductDetail(productId);
     setIsLoading(true);
@@ -108,36 +111,53 @@ export default function RenderProducts({
   ) : (
     <div className="h-[500px] overflow-y-scroll">
       {/* 카테고리 별 상품 목록 */}
-      <RadioGroup
+      {/* <RadioGroup
         aria-labelledby="products-radio-buttons-group-label"
         name="radio-buttons-group"
         value={productSelectInfo.productId}
         sx={{
           display: "grid",
-          gridTemplateColumns: "repeat(5, 1fr)",
+          gridTemplateColumns: "repeat(3, 1fr)",
           columnGap: "20px", // 가로 간격
-          rowGap: "50px", 
+          rowGap: "50px",
         }}
-      >
+      > */}
+      <ul className="grid grid-cols-3 gap-10">
         {productList.map((product) => (
-          <FormControlLabel
-            labelPlacement={"bottom"}
+          <li
             key={product.id}
-            value={product.id}
             onClick={() => handleItemClick(product.id)}
-            control={<Radio sx={{ display: "none" }} />}
-            label={
-              <div className="h-[200px] flex flex-col items-center">
-                <span className="w-[160px] h-[120px] bg-amber-900"/>
-                {/* <img src={product.photos[0]} alt={product.name} /> */}
-                <p className="text-sm">{product.name}</p>
-                <p className="text-sm">{product.generation}</p>
-              </div>
-            }
-            sx={{ width: "100px", height: "100px" }}
-          />
+            value={product.id}
+            className="h-[300px] grid grid-cols-1 border border-red-400"
+          >
+            <span className="w-[200px] h-[100px] block">
+              <img src={product.photos[0]} alt={product.name} />
+            </span>
+            <div >
+              <p className="text-sm">{product.name}</p>
+              <p className="text-sm">{product.generation}</p>
+            </div>
+          </li>
+          // <FormControlLabel
+          //   labelPlacement={"bottom"}
+          //   key={product.id}
+          //   value={product.id}
+          //   onClick={() => handleItemClick(product.id)}
+          //   control={<Radio sx={{ display: "none" }} />}
+          //   label={
+          //     <div className="h-[200px] flex flex-col items-center">
+          //       <span className="w-[160px] h-[120px]"/>
+          //       <img src={product.photos[0]} alt={product.name} />
+          //       <p className="text-sm">{product.name}</p>
+          //       <p className="text-sm">{product.generation}</p>
+          //     </div>
+          //   }
+          //   sx={{ width: "100px", height: "100px" }}
+          // />
         ))}
-      </RadioGroup>
+      </ul>
+
+      {/* </RadioGroup> */}
 
       {/* 옵션 목록 */}
       {productSelectInfo.productId ? (
@@ -147,8 +167,8 @@ export default function RenderProducts({
           value={productSelectInfo.productOptionId}
           sx={{
             display: "grid",
-            gridTemplateColumns: "repeat(5, 1fr)",
-            gridColumnGap: "15px",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gridColumnGap: "150px",
           }}
         >
           {/* 맥 케이스 */}

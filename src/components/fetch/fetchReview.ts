@@ -1,4 +1,4 @@
-import { get, post, deleteCall } from "@/api/api";
+import { get, post, deleteCall, patch } from "@/api/api";
 import type { CreateNewReviewReq } from "@/types/Review";
 
 // 리뷰 생성하기
@@ -9,6 +9,24 @@ export async function createNewReview(
   const { userProductId, rating, content, photos } = reviewData;
   try {
     const response = await post(`/review`, {
+      userProductId,
+      rating,
+      content,
+      photos,
+    });
+
+    return true;
+  } catch (error) {
+    console.error("리뷰 생성 실패:", error);
+    return false;
+  }
+}
+
+// 리뷰 수정하기
+export async function editReview(id: number, reviewData: CreateNewReviewReq) {
+  const { userProductId, rating, content, photos } = reviewData;
+  try {
+    const response = await patch(`/review/${id}`, {
       userProductId,
       rating,
       content,

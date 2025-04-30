@@ -1,13 +1,13 @@
-import { GetUserProductResponse } from "@/types/userProduct";
 import { useEffect, useState } from "react";
+import useModal from "@/hooks/useModal";
+import { ProductCategoryLabels } from "@/types/productCategory";
+import { GetUserProductResponse } from "@/types/userProduct";
 import { deleteUserProduct, fetchUserProduct } from "../fetch/fetchUserProduct";
 import UserProductCard from "../UserProductAdd/UserProductCard";
 import SummaryCard from "./SummaryCard";
-import useModal from "@/hooks/useModal";
 import Modal from "../Modal/Modal";
 import DeletePopup from "../DeletePopup/DeletePopup";
-import { basicDeviceData } from "../../../public/fakeData/basicDeviceData";
-import { ProductCategoryLabels } from "@/types/productCategory";
+import { fetchReviewMe } from "../fetch/fetchReview";
 
 export default function UserProduct() {
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -20,13 +20,23 @@ export default function UserProduct() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [deleteTimer, setDeleteTimer] = useState<NodeJS.Timeout | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
+  const [reviewLength, setReviewLength] = useState<number>(0);
 
   useEffect(() => {
     const getUserProduct = async () => {
       try {
-        const userProductData = await fetchUserProduct();
+        // const userProductData = await fetchUserProduct();
+        // const userReviewList = await fetchReviewMe();
+        const [userProductData, userReviewList] = await Promise.all([
+          fetchUserProduct(),
+          fetchReviewMe(),
+        ]);
+
         const reversedData = userProductData.reverse();
-        setUserProducts(userProductData);
+
+        setUserProducts(reversedData);
+        setReviewLength(userReviewList?.data.length);
+        console.log("유저 리뷰목록", userReviewList);
       } catch (error) {
         console.error("유저 보유 목록 불러오기 실패", error);
       }
@@ -118,8 +128,8 @@ export default function UserProduct() {
           title="포화도"
           content={`${Math.round(categorySaturation)}%`}
         />
-        <SummaryCard title="총액" content={(totalPrice).toLocaleString()} />
-        <SummaryCard title="작성한 리뷰 수" content={0} />
+        <SummaryCard title="총액" content={totalPrice.toLocaleString()} />
+        <SummaryCard title="작성한 리뷰 수" content={reviewLength.toString()} />
       </div>
 
       <div className="bg-white min-h-[250px] p-12 rounded-3xl shadow-light">

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useUserStore } from "@/stores/useUserStore";
 import type { ProductDetail } from "@/types/productDetail";
+import type { Review } from "@/types/Review";
 import { fetchUserProduct } from "../fetch/fetchUserProduct";
 import ReviewCard from "./ReviewCard";
 import WriteReview from "./WriteReview";
@@ -10,6 +11,8 @@ import { fetchProductDetail } from "../fetch/fetchProduct";
 import { CreateUserProductReqDto } from "@/types/userProduct";
 import { Button } from "@mui/material";
 import ButtonStrong from "../designs/ButtonStrong";
+import ButtonBasic from "../designs/ButtonBasic";
+import Link from "next/link";
 
 interface ReviewClientProps {
   product: ProductDetail;
@@ -27,8 +30,9 @@ export default function ReviewClient({
 }: ReviewClientProps) {
   const { user } = useUserStore();
   const [isOpen, setIsOpen] = useState(false);
-  const [isAlreadyWritten, setIsWritten] = useState<boolean>(false);
+  const [isWritten, setIsWritten] = useState<boolean>(false);
   const [myProduct, setMyProduct] = useState<number | null>(null);
+  const [reviewsArr, setReviewsArr] = useState<Review[]>(product.reviews); // 리렌더링을 위해 리뷰배열 상태 관리
 
   const [fetchedDataArr, setFetchedDataArr] = useState<fetchedDataProps>({
     userProductArr: [],
@@ -93,22 +97,29 @@ export default function ReviewClient({
   }, [product.reviews, productId, user?.id]);
 
   const handleWriteReview = () => {
-    if (isAlreadyWritten) return;
+    if (isWritten) return;
     setIsOpen(true);
+  };
+
+  // 리뷰 삭제
+  const deleteReviewFromList = (reviewId: number) => {
+    setReviewsArr((prev) => prev.filter((review) => review.id !== reviewId));
   };
 
   return (
     <section className="w-full flex flex-col gap-10 mb-20 bg-white  shadow-strong rounded-2xl p-10 overflow-hidden">
       <div className="flex items-end gap-5">
         <h1 className="text-2xl">구매자들의 리뷰</h1>
-        <h2 className="text-base text-light">총 {product.reviews.length}명의 후기</h2>
+        <h2 className="text-base text-light">
+          총 {product.reviews.length}명의 후기
+        </h2>
       </div>
 
       {myProduct ? (
         <span className="w-[200px]">
-          {isAlreadyWritten ? (
+          {isWritten ? (
             <Button variant="contained" disabled>
-              이미 작성했습니다
+              이미 리뷰를 작성했습니다
             </Button>
           ) : (
             <ButtonStrong
@@ -119,12 +130,15 @@ export default function ReviewClient({
         </span>
       ) : (
         <div className="flex items-center gap-5">
-          <button className="w-[200px] bg-light text-bglight p-2">
-            보유하지 않은 상품
-          </button>
-          <button className="text-lg text-light hover:text-mid">
-            상품 등록하러 가기
-          </button>
+          <Button variant="contained" disabled>
+            {!user ? "로그인 후 이용 가능합니다" : "보유하지 않은 상품입니다"}
+          </Button>
+
+          {user && (
+            <Link href={"/user"}>
+              <ButtonBasic type="button" text="상품 등록하러 가기" />
+            </Link>
+          )}
         </div>
       )}
 
@@ -143,7 +157,11 @@ export default function ReviewClient({
           </div>
         ) : (
           product.reviews.map((review) => (
-            <ReviewCard key={review.id} review={review}/>
+            <ReviewCard
+              key={review.id}
+              review={review}
+              onDelete={deleteReviewFromList}
+            />
           ))
         )}
       </div>

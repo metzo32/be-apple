@@ -238,10 +238,6 @@ export default function SelectComp() {
     }
   };
 
-  useEffect(() => {
-    console.log("유저목록 추가 폼데이터", formData);
-  }, [formData]);
-
   return (
     <>
       {isModalOpen && ( // 작성 중 닫기 시도 모달

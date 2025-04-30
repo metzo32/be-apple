@@ -1,28 +1,36 @@
 import Image from "next/image";
-import type { Review } from "@/types/Review";
+import type { CreateNewReviewReq, Review } from "@/types/Review";
 import useModal from "@/hooks/useModal";
 import { formatDate } from "@/module/formatDate";
 import { useUserStore } from "@/stores/useUserStore";
-import { deleteReview } from "../fetch/fetchReview";
+import { deleteReview, editReview } from "../fetch/fetchReview";
 import Modal from "../Modal/Modal";
 import { FaStar } from "react-icons/fa6";
+import { useState } from "react";
 
-export default function ReviewCard({ review }: { review: Review }) {
+interface ReviewCardProps {
+  review: Review;
+  onDelete: (id: number) => void;
+}
+
+export default function ReviewCard({ review, onDelete }: ReviewCardProps) {
   const { user } = useUserStore(); // 현재 접속 중인 유저id
   const { isModalOpen, openModal, closeModal } = useModal();
   const currentUserId = user?.id;
+  const [updatedReview, setUpdatedReview] = useState();
 
   const createdTime = formatDate(review.createdAt, "yyyy년 M월 d일 E요일");
 
-  // 리뷰 수정
-  const handleChangeReview = () => {};
+  console.log("리뷰", review);
 
+  
   // 리뷰 삭제
   const handleDeleteReview = async () => {
     if (review && review.userId === Number(currentUserId)) {
       const success = await deleteReview(review.id);
       if (success) {
         console.log("리뷰 삭제 성공");
+        onDelete(review.id);
       } else {
         console.log("리뷰 삭제 실패");
       }
@@ -88,7 +96,7 @@ export default function ReviewCard({ review }: { review: Review }) {
         {review.userId === Number(currentUserId) && (
           <div className="flex justify-end items-center gap-5">
             <button
-              onClick={handleChangeReview}
+              // onClick={handleChangeReview}
               className="text-sm text-light hover:text-mid"
             >
               수정

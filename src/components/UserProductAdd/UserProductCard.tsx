@@ -11,6 +11,7 @@ import { useState } from "react";
 import useModal from "@/hooks/useModal";
 import Modal from "../Modal/Modal";
 import { IoCloseOutline } from "react-icons/io5";
+import { AiOutlineEdit } from "react-icons/ai";
 
 // 타입가드
 const isMacProduct = (product: ProductDetail): product is ProductDetailMac => {
@@ -84,12 +85,16 @@ export default function UserProductCard({
           )}
         </span>
 
-        <button
-          onClick={() => onDelete(userProduct.id)}
-          className="w-8 aspect-square justify-self-end bg-light text-white text-3xl flex justify-center items-center hover:bg-mid"
-        >
-          <IoCloseOutline />
-        </button>
+        <div className="flex items-center gap-5  justify-self-end">
+          <AiOutlineEdit />
+
+          <button
+            onClick={() => onDelete(userProduct.id)}
+            className="w-8 aspect-square bg-light text-white text-3xl flex justify-center items-center hover:bg-mid"
+          >
+            <IoCloseOutline />
+          </button>
+        </div>
 
         <Modal
           isModalOpen={isModalOpen}

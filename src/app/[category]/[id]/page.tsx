@@ -32,7 +32,7 @@ interface DetailPageProps {
 }
 
 export default async function DetailPage({ params }: DetailPageProps) {
-  const paramsInfo = await params;
+  const paramsInfo = params;
   const productId = Number(paramsInfo.id);
   const product: ProductDetail | null = await fetchProductDetail(productId);
   
