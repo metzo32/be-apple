@@ -9,6 +9,7 @@ interface ModalProps {
   title: string;
   content: string;
   confirmBtnText: string;
+  hideCancel?: boolean;
 }
 
 export default function Modal({
@@ -19,6 +20,7 @@ export default function Modal({
   title,
   content,
   confirmBtnText,
+  hideCancel = false, 
 }: ModalProps) {
   if (!isModalOpen) return null;
 
@@ -38,7 +40,7 @@ export default function Modal({
         <h3 className="text-3xl">{title}</h3>
         <p>{content}</p>
         <div className="flex gap-10">
-          <ButtonBasic text="취소" onClick={handleCancel} />
+          {!hideCancel && <ButtonBasic text="취소" onClick={handleCancel} />}
           <ButtonStrong text={confirmBtnText} onClick={handleConfirm} />
         </div>
       </div>

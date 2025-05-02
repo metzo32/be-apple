@@ -9,7 +9,7 @@ import ButtonBasic from "@/components/designs/ButtonBasic";
 import ButtonStrong from "@/components/designs/ButtonStrong";
 import LoadingScreen from "@/components/LoadingScreen";
 import { GoogleButton, KakaoButton } from "@/components/SocialLoginButton";
-import { Box, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -118,7 +118,7 @@ export default function LoginPage() {
             </span>
             <label
               htmlFor="rememberMe"
-              className="cursor-pointer select-none text-base text-mid"
+              className="cursor-pointer select-none text-sm text-mid"
             >
               내 정보 기억하기
             </label>

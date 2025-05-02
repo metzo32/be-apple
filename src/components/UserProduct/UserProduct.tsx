@@ -19,14 +19,13 @@ export default function UserProduct() {
     useState<GetUserProductResponse | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [deleteTimer, setDeleteTimer] = useState<NodeJS.Timeout | null>(null);
+  
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
   const [reviewLength, setReviewLength] = useState<number>(0);
 
   useEffect(() => {
     const getUserProduct = async () => {
       try {
-        // const userProductData = await fetchUserProduct();
-        // const userReviewList = await fetchReviewMe();
         const [userProductData, userReviewList] = await Promise.all([
           fetchUserProduct(),
           fetchReviewMe(),

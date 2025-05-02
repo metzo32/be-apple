@@ -8,6 +8,8 @@ import { fetchUploadPhoto } from "../fetch/fetchUploadPhoto";
 import { LuPlus } from "react-icons/lu";
 import ButtonStrong from "../designs/ButtonStrong";
 import { Rating } from "@mui/material";
+import useModal from "@/hooks/useModal";
+import Modal from "../Modal/Modal";
 
 interface WriteReviewProps {
   myProduct: number | null;
@@ -20,6 +22,7 @@ export default function WriteReview({
   isOpen,
   setIsOpen,
 }: WriteReviewProps) {
+  const { isModalOpen, openModal, closeModal } = useModal();
   const [review, setReview] = useState<string>("");
   const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([]);
   const [value, setValue] = useState<number>(2);
@@ -29,10 +32,14 @@ export default function WriteReview({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (review.length === 0) return; // 아무것도 입력하지 않은 경우
+    // 아무것도 입력하지 않은 경우
+    if (review.length === 0) {
+      openModal();
+      return;
+    }
 
+    // 유저 프로덕트 id를 가져오지 못한 경우
     if (!myProduct) {
-      // 유저 프로덕트 id를 가져오지 못한 경우
       console.error("리뷰를 등록할 수 없습니다.");
       return;
     }
@@ -48,12 +55,14 @@ export default function WriteReview({
     setIsOpen(false);
   };
 
+  // 리뷰 사진 추가하기
   const handleAddPhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    console.log("파일", file);
+
     if (file) {
-      await fetchUploadPhoto(file);
-      setUploadedPhotos([...uploadedPhotos, file.toString()]);
-      console.log(uploadedPhotos);
+      const imageUrl = await fetchUploadPhoto(file);
+      setUploadedPhotos([...uploadedPhotos, imageUrl]);
     }
   };
 
@@ -67,6 +76,19 @@ export default function WriteReview({
 
   return (
     <div className="overlay flex justify-center items-center">
+      {isModalOpen && (
+        <Modal
+          isModalOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={closeModal}
+          onCancel={closeModal}
+          title={"잠깐!"}
+          content={"리뷰 내용을 작성해주세요."}
+          confirmBtnText={"확인"}
+          hideCancel={true}
+        />
+      )}
+
       <form
         onSubmit={handleSubmit}
         className="w-[300px] md:w-[480px] p-5 md:p-10 bg-white rounded-2xl shadow-2xl flex flex-col gap-3 md:gap-5"
@@ -130,7 +152,7 @@ export default function WriteReview({
 
         <h3 className="font-semibold">포토</h3>
         <div className="flex gap-5 w-full">
-          {[0, 1].map((index) => (
+          {[0, 1].map((_, index) => (
             <div key={index} className="w-[200px] aspect-square relative">
               <input
                 type="file"

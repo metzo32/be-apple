@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { CreateNewReviewReq, Review } from "@/types/Review";
+import type { Review } from "@/types/Review";
 import useModal from "@/hooks/useModal";
 import { formatDate } from "@/module/formatDate";
 import { useUserStore } from "@/stores/useUserStore";
@@ -21,9 +21,6 @@ export default function ReviewCard({ review, onDelete }: ReviewCardProps) {
 
   const createdTime = formatDate(review.createdAt, "yyyy년 M월 d일 E요일");
 
-  console.log("리뷰", review);
-
-  
   // 리뷰 삭제
   const handleDeleteReview = async () => {
     if (review && review.userId === Number(currentUserId)) {
@@ -47,7 +44,7 @@ export default function ReviewCard({ review, onDelete }: ReviewCardProps) {
     .join("");
 
   return (
-    <div className="w-full flex flex-col gap-1">
+    <div className="w-full flex flex-col gap-3">
       <div
         className={`w-full p-5 border-2 ${
           review.userId === Number(currentUserId)
@@ -71,23 +68,23 @@ export default function ReviewCard({ review, onDelete }: ReviewCardProps) {
         <p className="text-sm text-light break-words break-keep">
           Macbook Air 13inch 10코어 CPU 10코어 GPU 16GB 통합 메모리 512GB SSD
         </p>
-      </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-1 xl:grid-cols-2 gap-5">
-        {review.photos.map(
-          (
-            photo,
-            index // TODO 등록된 사진 레이아웃 확인하기
-          ) => (
-            <span key={index} className="relative w-full aspect-[3/2]">
-              <Image
-                src={review.photos[index]}
-                alt={`제품 이미지 ${index + 1}`}
-                fill
-                className="object-cover"
-              />
-            </span>
-          )
+        {review.photos && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {review.photos.map((photo, index) => (
+              <span
+                key={index}
+                className="relative w-full aspect-[3/2] rounded-lg overflow-hidden"
+              >
+                <Image
+                  src={review.photos[index]}
+                  alt={`제품 이미지 ${index + 1}`}
+                  fill
+                  className="object-cover"
+                />
+              </span>
+            ))}
+          </div>
         )}
       </div>
 

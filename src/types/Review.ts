@@ -15,6 +15,7 @@ export interface CreateNewReviewReq {
   photos?: string[];
 }
 
+
 export interface CreateReviewReqLegacy {
   userProductId: number;
   rating: number;

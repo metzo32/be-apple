@@ -201,4 +201,15 @@ select:hover {
     @apply bg-transparent;
   }
 
+  .option-select {
+    @apply
+    border-2 border-transparent rounded-lg
+    cursor-pointer
+    p-5
+  }
+
+  .selected {
+    @apply
+    bg-bglight border-secondaryLight
+  }
 }

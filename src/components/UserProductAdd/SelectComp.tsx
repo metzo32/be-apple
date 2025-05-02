@@ -112,14 +112,12 @@ export default function SelectComp() {
     }
     if (
       currentPageNumber === 0 &&
-      (formData.productId === 0 ||
-        formData.productId === null ||
-        formData.productOptionId === 0 ||
-        formData.productOptionId === null)
+      (!formData.productId || !formData.productOptionId)
     ) {
       alert("등록할 제품과 옵션을 선택해주세요.");
       return;
     }
+    
 
     setCurrentPageNumber(currentPageNumber + 1);
   };
@@ -133,7 +131,6 @@ export default function SelectComp() {
 
   //TODO 2초 시간차 두고 submit되도록.
   const handleSubmit = async () => {
-    
     if (!isValidDto(formData)) {
       alert("제품과 제품 옵션을 선택해주세요.");
     } else {
@@ -141,9 +138,8 @@ export default function SelectComp() {
 
       if (success) {
         setIsClicked(false);
-        console.log("유저 보유 목록 추가 성공");
       } else {
-        console.log("유저 보유 목록 생성 실패");
+        console.error("유저 보유 목록 생성 실패");
       }
     }
   };

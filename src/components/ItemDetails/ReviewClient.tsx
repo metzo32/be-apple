@@ -101,6 +101,7 @@ export default function ReviewClient({
     setIsOpen(true);
   };
 
+
   // 리뷰 삭제
   const deleteReviewFromList = (reviewId: number) => {
     setReviewsArr((prev) => prev.filter((review) => review.id !== reviewId));

@@ -28,7 +28,7 @@ export default function UserWishCard({ wishList, onDelete }: WishCardProps) {
           src="/assets/images/fallback.png"
           alt="제품 이미지"
           width={250}
-          height={200}
+          height={150}
         /> */}
 
       <div className="h-[160px] flex flex-col justify-between flex-1/2">
