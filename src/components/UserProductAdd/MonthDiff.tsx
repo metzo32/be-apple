@@ -33,7 +33,7 @@ export default function MonthDiff({
 
   return monthDiff ? (
     <>
-      <div className="flex flex-col items-center gap-1">
+      <div className="flex flex-row md:flex-col items-center gap-3 md:gap-1">
         <p className="light-p">
           약 {checkRange(monthDiff)}
           {" "}경과

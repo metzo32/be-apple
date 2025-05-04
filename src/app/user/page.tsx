@@ -32,8 +32,8 @@ export default function UserPage() {
 
   return (
     <div className="relative">
-      <section className="py-24 flex flex-col items-center gap-10">
-        <h1 className="text-4xl font-bold">안녕하세요, {user?.name} 님.</h1>
+      <section className="py-24 flex flex-col items-center gap-5 md:gap-10">
+        <h1>안녕하세요, {user?.name} 님.</h1>
         <div className="flex items-center gap-10">
           <ChangePassword />
           <SignOut setIsSigningOut={setIsSigningOut} />

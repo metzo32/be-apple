@@ -1,6 +1,7 @@
 import Button from "@mui/material/Button";
 
 import type { ButtonProps } from "@/types/button";
+import { Typography } from "@mui/material";
 
 export default function ButtonStrong({
   text,
@@ -17,6 +18,10 @@ export default function ButtonStrong({
       className={`${margin ? "mt-10" : ""}`}
       sx={{
         background: "linear-gradient(to right, #476CF6, #C467F3)",
+        fontSize: "16px",
+        "@media (max-width: 767px)": {
+          fontSize: "12px",
+        },
       }}
     >
       {text}
@@ -33,7 +38,12 @@ export function ButtonMedium({ text, onClick, type, margin }: ButtonProps) {
       onClick={onClick}
       size="medium"
       className={`${margin ? "mt-10" : ""}`}
-      sx={{}}
+      sx={{
+        fontSize: "16px",
+        "@media (max-width: 767px)": {
+          fontSize: "12px",
+        },
+      }}
     >
       {text}
     </Button>

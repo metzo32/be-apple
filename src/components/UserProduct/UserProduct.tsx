@@ -8,20 +8,18 @@ import SummaryCard from "./SummaryCard";
 import Modal from "../Modal/Modal";
 import DeletePopup from "../DeletePopup/DeletePopup";
 import { fetchReviewMe } from "../fetch/fetchReview";
+import { Review } from "@/types/Review";
 
 export default function UserProduct() {
   const { isModalOpen, openModal, closeModal } = useModal();
   const [userProducts, setUserProducts] = useState<GetUserProductResponse[]>(
     []
   );
-  const [pendingDeleteIds, setPendingDeleteIds] = useState<number[]>([]);
-  const [recentlyDeleted, setRecentlyDeleted] =
-    useState<GetUserProductResponse | null>(null);
+
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [deleteTimer, setDeleteTimer] = useState<NodeJS.Timeout | null>(null);
-  
+
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
-  const [reviewLength, setReviewLength] = useState<number>(0);
+  const [reviewsArr, setReviewsArr] = useState<Review[]>([]);
 
   useEffect(() => {
     const getUserProduct = async () => {
@@ -34,8 +32,10 @@ export default function UserProduct() {
         const reversedData = userProductData.reverse();
 
         setUserProducts(reversedData);
-        setReviewLength(userReviewList?.data.length);
-        console.log("유저 리뷰목록", userReviewList);
+
+        const reviews = userReviewList?.data.map((item: Review) => item);
+
+        setReviewsArr(reviews);
       } catch (error) {
         console.error("유저 보유 목록 불러오기 실패", error);
       }
@@ -43,27 +43,8 @@ export default function UserProduct() {
     getUserProduct();
   }, []);
 
-  const handleDelete = (id: number) => {
-    const target = userProducts.find((item) => item.id === id);
-    if (!target) return;
 
-    setPendingDeleteIds((prev) => [...prev, id]);
-    setRecentlyDeleted(target);
-    setIsPopupOpen(true);
-
-    const timer = setTimeout(async () => {
-      const success = await tryDelete(id);
-      if (success) {
-        setUserProducts((prev) => prev.filter((item) => item.id !== id));
-      }
-      setIsPopupOpen(false);
-      setRecentlyDeleted(null);
-    }, 3000);
-
-    setDeleteTimer(timer);
-  };
-
-  const tryDelete = async (id: number) => {
+  const handleDelete = async (id: number) => {
     try {
       await deleteUserProduct(id, async () => {
         setConfirmDeleteId(id);
@@ -97,17 +78,6 @@ export default function UserProduct() {
     closeModal();
   };
 
-  const handleUndo = () => {
-    if (recentlyDeleted) {
-      if (deleteTimer) clearTimeout(deleteTimer);
-      setPendingDeleteIds((prev) =>
-        prev.filter((id) => id !== recentlyDeleted.id)
-      );
-      setIsPopupOpen(false);
-      setRecentlyDeleted(null);
-    }
-  };
-
   const categorySaturation = 100 / Object.keys(ProductCategoryLabels).length;
 
   const totalPrice = userProducts.reduce(
@@ -117,7 +87,7 @@ export default function UserProduct() {
 
   return (
     <section className="userSection">
-      <h2 className="font-bold mb-10">내 제품 목록</h2>
+      <h2 className="user-h2">내 제품 목록</h2>
       <div className="w-full mb-10 grid gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
         <SummaryCard
           title="현재 보유한 기기 수"
@@ -128,30 +98,23 @@ export default function UserProduct() {
           content={`${Math.round(categorySaturation)}%`}
         />
         <SummaryCard title="총액" content={totalPrice.toLocaleString()} />
-        <SummaryCard title="작성한 리뷰 수" content={reviewLength.toString()} />
+        <SummaryCard
+          title="작성한 리뷰 수"
+          content={reviewsArr.length.toString()}
+        />
       </div>
 
-      <div className="bg-white min-h-[250px] p-12 rounded-3xl shadow-light">
+      <div className="user-common-container min-h-[500px]">
         {userProducts.length > 0 ? (
           <div className="w-full flex flex-col gap-5">
-            {userProducts.map((userProduct) => {
-              const isPendingDelete = pendingDeleteIds.includes(userProduct.id);
-              return (
-                <div
-                  key={userProduct.id}
-                  className={
-                    isPendingDelete
-                      ? "saturate-0 opacity-30 pointer-events-none "
-                      : ""
-                  }
-                >
-                  <UserProductCard
-                    userProduct={userProduct}
-                    onDelete={handleDelete}
-                  />
-                </div>
-              );
-            })}
+            {userProducts.map((userProduct, index) => (
+              <div key={index}>
+                <UserProductCard
+                  userProduct={userProduct}
+                  onDelete={handleDelete}
+                />
+              </div>
+            ))}
           </div>
         ) : (
           <div>
@@ -170,7 +133,6 @@ export default function UserProduct() {
         confirmBtnText="확인"
       />
 
-      <DeletePopup isOpen={isPopupOpen} onUndo={handleUndo} />
     </section>
   );
 }

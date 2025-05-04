@@ -1,7 +1,7 @@
 import { deleteCall, get, patch, post } from "@/api/api";
 import type { CreateUserProductReqDto } from "@/types/userProduct";
 
-// 유저 보유 목록 생성
+// 유저 보유 목록 로드
 export async function fetchUserProduct() {
   try {
     const response = await get("/user-product");

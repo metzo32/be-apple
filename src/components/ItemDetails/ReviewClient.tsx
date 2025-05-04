@@ -38,6 +38,8 @@ export default function ReviewClient({
     userProductArr: [],
     productDetailData: null,
   });
+  
+  // 데이터를 조회하고, api응답이 오면 - setState하는 함수를 만들어두세요. -> onSuccess
 
   useEffect(() => {
     const getData = async () => {
@@ -50,17 +52,14 @@ export default function ReviewClient({
         ]);
 
         if (!userProducts) {
-          console.error("보유목록 불러오기 실패");
+          console.error("보유 목록 불러오기 실패");
           return;
         }
 
         if (!productsDetail) {
-          console.error("상세목록 불러오기 실패");
+          console.error("상세 목록 불러오기 실패");
           return;
         }
-
-        console.log("유저 보유 목록:", userProducts);
-        console.log("이 페이지의 제품 상세 정보:", productsDetail);
 
         setFetchedDataArr((prev) => ({
           ...prev,
@@ -70,8 +69,7 @@ export default function ReviewClient({
 
         // userProduct를 순회하여 어떤 요소의 product 객체의 id가 productsDetail.id 와 일치하는지 추적
         const productUserHave = userProducts.find(
-          //TODO
-          (userProduct: any) => userProduct.product.id === productsDetail.id
+          (userProduct: CreateUserProductReqDto) => userProduct.productId === productsDetail.id
         );
 
         setMyProduct(productUserHave.id);

@@ -22,6 +22,7 @@ export default function MUIThemeProvider({
       },
     },
   });
+  
   return (
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>

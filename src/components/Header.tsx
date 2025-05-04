@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
 import Image from "next/image";
-import { Button, TextField } from "@mui/material";
 import ButtonStrong from "./designs/ButtonStrong";
 import ButtonBasic from "./designs/ButtonBasic";
 import { basicDeviceData } from "../../public/fakeData/basicDeviceData";
@@ -22,7 +21,7 @@ export default function Header() {
       setText("로그인");
       setNextPath("/login");
     } else {
-      setText("내 페이지");
+      setText("내 정보");
       setNextPath("/user");
     }
   }, [user]);
@@ -51,22 +50,6 @@ export default function Header() {
           />
         ))}
       </nav>
-
-      {/* 
-      <form className="flex gap-1">
-        <TextField
-          // value={"입력값"}
-          color="secondary"
-          placeholder="검색어를 입력하세요..."
-          variant="outlined"
-          // onChange={handleMultiplePurchased}
-          size="small"
-          sx={{
-            width: "600px",
-          }}
-        />
-        <ButtonBasic text="검색" />
-      </form> */}
       <ButtonStrong text={text} onClick={handleClick} />
     </header>
   );

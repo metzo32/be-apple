@@ -104,12 +104,12 @@ select:hover {
 
   h1 {
     @apply font-bold
-      text-3xl
+      text-2xl
       lg:text-4xl;
   }
 
   h2 {
-    @apply text-2xl;
+    @applytext-xl md:text-2xl
   }
 
   h3,
@@ -117,7 +117,7 @@ select:hover {
   h5,
   h6 {
     @apply text-sm
-      lg:text-base;
+      md:text-base;
   }
 
   label {
@@ -146,7 +146,7 @@ select:hover {
 
   .global-px {
     @apply min-w-[320px]
-    px-10 
+    px-5
     md:px-30 
     xl:px-50 
     2xl:px-80;
@@ -167,15 +167,17 @@ select:hover {
     @apply text-xs text-mid
     leading-snug
 
-    md:text-base md:leading-tight;
+    md:text-sm md:leading-tight;
   }
 
   .user-product-card {
-    @apply shrink-0 w-full h-[60px] 
+    @apply shrink-0 w-full h-auto md:h-[60px] 
     bg-white rounded-xl
-    px-5
+    px-0
+    md:px-5
     border-2 border-transparent
-    grid grid-cols-5 gap-2 justify-center items-center
+    flex flex-col
+    md:grid md:grid-cols-5 gap-2 justify-center items-start md:items-center
     cursor-pointer
     relative
 
@@ -203,13 +205,40 @@ select:hover {
 
   .option-select {
     @apply
+    w-full
+    flex gap-2
+    /* grid grid-cols-3 gap-1 */
     border-2 border-transparent rounded-lg
     cursor-pointer
-    p-5
+
+    p-3
   }
 
   .selected {
     @apply
-    bg-bglight border-secondaryLight
+    bg-bglightHover border-secondaryLight
+  }
+
+  .user-common-container {
+    @apply
+    bg-white rounded-xl shadow-light
+    p-5 
+    md:p-12 md:rounded-3xl
+  }
+
+  .user-h2 {
+    @apply
+    font-bold mb-2 md:mb-5
+    text-xl md:text-2xl
+  }
+  
+  .user-wishcard-btn {
+    @apply
+    w-4 aspect-square text-xl 
+    flex items-center justify-center 
+    text-light 
+    hover:text-mid 
+
+    md:w-8 md:text-2xl 
   }
 }

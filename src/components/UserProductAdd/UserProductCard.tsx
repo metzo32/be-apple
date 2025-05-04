@@ -39,8 +39,8 @@ export default function UserProductCard({
   userProduct,
   onDelete,
 }: UserProductCardProps) {
-  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
   const { isModalOpen, openModal, closeModal } = useModal();
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
 
   const getConfirmation = () =>
     new Promise<boolean>((resolve) => {
@@ -67,8 +67,8 @@ export default function UserProductCard({
           {userProduct.product.name}
         </h3>
         <div className="flex gap-2 justify-self-center">
-          <p className="text-light">{myOption?.processor}</p>
-          <p className="text-light">{displaySize}</p>
+          <p className="justify-self-center text-xs md:text-sm text-light">{myOption?.processor}</p>
+          <p className="justify-self-center text-xs md:text-sm text-light">{displaySize}</p>
         </div>
 
         <span className="justify-self-center">
@@ -81,7 +81,7 @@ export default function UserProductCard({
           {userProduct.purchasePrice && userProduct.purchasePrice !== 0 ? (
             <p className="justify-self-end light-p">{`${userProduct.purchasePrice.toLocaleString()}원`}</p>
           ) : (
-            <p className="justify-self-center light-p">-</p>
+            <p className="justify-self-end light-p">-</p>
           )}
         </span>
 
@@ -115,8 +115,8 @@ export default function UserProductCard({
       <div className="user-product-card">
         <h3 className="font-bold">{userProduct.product.name}</h3>
         <div className="flex gap-5 items-center">
-          <p className="text-lg text-light">{userProduct.product.processor}</p>
-          <p className="text-lg text-light">{displaySize}</p>
+          <p className="text-xs md:text-lg text-light">{userProduct.product.processor}</p>
+          <p className="text-xs md:text-lg text-light">{displaySize}</p>
         </div>
 
         <button
@@ -129,14 +129,15 @@ export default function UserProductCard({
       </div>
     );
   }
+  
   if (isIphoneProduct(userProduct.product)) {
     const { displaySize } = userProduct.product;
 
     return (
       <div className="user-product-card">
         <h3 className="justify-self-start">{userProduct.product.name}</h3>
-        <p className="text-lg text-light">{displaySize}</p>
-        <p className="text-lg text-light">{userProduct.product.processor}</p>
+        <p className="text-xs md:text-lg text-light">{displaySize}</p>
+        <p className="text-xs md:text-lg text-light">{userProduct.product.processor}</p>
         <p>테스트</p>
         <button
           onClick={() => onDelete(userProduct.id)}

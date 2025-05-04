@@ -8,15 +8,17 @@ export default function ButtonBasic({ text, onClick, type }: ButtonProps) {
       variant="text"
       onClick={onClick}
       className="hover:text-textHover"
-      style={{ fontSize: '16px', lineHeight: "16px" }}
+      // style={{ fontSize: '14px', lineHeight: "16px" }}
       sx={{
-        // background: "#fff",
         color: "#797979", // light
         boxShadow: "none",
+        fontSize: "14px",
+        "@media (max-width: 767px)": {
+          fontSize: "10px",
+        },
         padding: 0,
         "&:hover": {
           boxShadow: "none",
-          // background: "#fff", 
           backgroundClip: "text",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
@@ -24,7 +26,7 @@ export default function ButtonBasic({ text, onClick, type }: ButtonProps) {
         },
       }}
     >
-      {text}
+ {text}
     </Button>
   );
 }

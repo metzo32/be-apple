@@ -1,9 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { addUserProduct } from "../fetch/fetchUserProduct";
 import useOpenSelect from "@/stores/useOpenSelect";
 import { CreateUserProductReqDto } from "@/types/userProduct";
-import { useState } from "react";
 import SelectComp from "./SelectComp";
 import ButtonStrong from "../designs/ButtonStrong";
 
@@ -18,9 +18,9 @@ export default function AddButton() {
     if (newUserProduct) {
       const success = await addUserProduct(newUserProduct);
       if (success) {
-        console.log("삭제 성공");
+        console.log("추가 성공");
       } else {
-        console.log("삭제 실패");
+        console.log("추가 실패");
       }
     }
   };

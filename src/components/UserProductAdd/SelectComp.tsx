@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useOpenSelect from "@/stores/useOpenSelect";
 import {
   UserProductCondition,
@@ -106,6 +106,7 @@ export default function SelectComp() {
   };
 
   // 다음 페이지
+  // TODO 이미 추가한 아이템 선택 시 alert
   const handleNextPage = () => {
     if (currentPageNumber > MAX_PAGE) {
       return;
@@ -117,7 +118,6 @@ export default function SelectComp() {
       alert("등록할 제품과 옵션을 선택해주세요.");
       return;
     }
-    
 
     setCurrentPageNumber(currentPageNumber + 1);
   };
@@ -274,7 +274,6 @@ export default function SelectComp() {
                   )}
                 </span>
 
-                {/* TODO 현재 카테고리 내에서 검색되도록 --- 클릭된 Radio 카테고리 꼬이지 않게 */}
                 {/* 검색바 */}
                 {currentPageNumber === 0 && (
                   <div className="w-full flex items-center justify-center gap-5">
@@ -381,7 +380,7 @@ export default function SelectComp() {
                     <ButtonStrong
                       type="submit"
                       text="등록하기"
-                      // TODO onClick={handleSubmitLoading} 아걸 쓰면 왜인지 submit이 되지 않는다. submit 함수에 로딩로직도 때려넣자
+                      // TODO onClick={handleSubmitLoading} 이걸 쓰면 왜인지 submit이 되지 않는다. submit 함수에 로딩로직도 때려넣자
                     />
                   ))}
               </span>
