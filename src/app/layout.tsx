@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
-import MUIThemeProvider from "@/components/MUIThemeProvider";
+import ClientProvider from "./ClientProvider";
+
 
 export const metadata: Metadata = {
   title: "앱등이가되",
@@ -16,10 +17,14 @@ export default function RootLayout({
   return (
     <html lang="kr">
       <body>
-        <Header />
-        <div className="global-px">
-          <MUIThemeProvider>{children}</MUIThemeProvider>
-        </div>
+        <ClientProvider>
+          <Header />
+          <div className="global-px">
+            {children}
+            {/* <Todos /> */}
+           
+          </div>
+        </ClientProvider>
       </body>
     </html>
   );

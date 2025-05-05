@@ -26,7 +26,7 @@ export default function ButtonBasic({ text, onClick, type }: ButtonProps) {
         },
       }}
     >
- {text}
+      {text}
     </Button>
   );
 }

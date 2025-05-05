@@ -1,9 +1,7 @@
-"use client";
-
 import { createTheme, ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import React, { ReactNode } from "react";
+import  { ReactNode } from "react";
 
 export default function MUIThemeProvider({
   children,
