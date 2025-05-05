@@ -2,17 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "@/stores/useUserStore";
 import useModal from "@/hooks/useModal";
 import { addWish, deleteWish } from "../fetch/fetchWishList";
 import Modal from "../Modal/Modal";
 import ButtonStrong from "../designs/ButtonStrong";
-// import { PiHeartBold, PiHeartFill } from "react-icons/pi";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
-import { useUserStore } from "@/stores/useUserStore";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 
 
-// 자식 컴포넌트에 무엇이 필요한지 알고, 그 의도에 맞게 props를 정하자. 그냥 때려넣지 마세요
 interface WishButtonProps {
   wishId: number | null; // 특히 여기.
   isInWish: boolean;

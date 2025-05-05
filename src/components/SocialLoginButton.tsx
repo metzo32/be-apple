@@ -9,13 +9,12 @@ export function GoogleButton() {
   };
 
   return (
-    <button onClick={handleGoogle} type="button">
-      <Image
-        src={"/assets/icons/google.svg"}
-        alt="구글"
-        width={30}
-        height={30}
-      />
+    <button
+      onClick={handleGoogle}
+      type="button"
+      className="relative w-[20px] md:w-[30px] aspect-square"
+    >
+      <Image src={"/assets/icons/google.svg"} alt="구글" fill />
     </button>
   );
 }
@@ -28,13 +27,12 @@ export function KakaoButton() {
   };
 
   return (
-    <button onClick={handleKakao} type="button">
-      <Image
-        src={"/assets/icons/kakao.svg"}
-        alt="카카오"
-        width={30}
-        height={30}
-      />
+    <button
+      onClick={handleKakao}
+      type="button"
+      className="relative w-[20px] md:w-[30px] aspect-square"
+    >
+      <Image src={"/assets/icons/kakao.svg"} alt="카카오" fill />
     </button>
   );
 }

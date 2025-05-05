@@ -42,7 +42,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <section className="py-32 flex flex-col items-center justify-center">
+    <section className="py-18 md:py-32 flex flex-col items-center justify-center">
       <form
         className="w-[400px] h-[600px] pt-36 pb-12 px-16 shadow-strong flex flex-col gap-14 items-center justify-center bg-white rounded-2xl"
         onSubmit={handleSubmit}

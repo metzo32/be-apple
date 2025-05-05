@@ -70,9 +70,9 @@ export default function LoginPage() {
   return checkingToken ? (
     <LoadingScreen />
   ) : (
-    <section className="py-32 flex flex-col items-center justify-center">
+    <section className="py-18 md:py-32 flex flex-col items-center justify-center">
       <form
-        className="w-[400px] h-[600px] pt-50 pb-12 px-16 shadow-strong flex flex-col gap-16 items-center justify-center bg-white rounded-2xl"
+        className="w-[260px] h-[420px] md:w-[400px] md:h-[600px] pt-32 pb-10 px-10 md:pt-50 md:pb-12 md:px-16 shadow-strong flex flex-col gap-3 md:gap-16 items-center justify-center bg-white rounded-2xl"
         onSubmit={handleSubmit}
       >
         <div className="w-full flex flex-col gap-5">
@@ -97,36 +97,40 @@ export default function LoginPage() {
           />
 
           <div className="flex items-center justify-center">
-            <input
-              type="checkbox"
-              id="rememberMe"
-              checked={remember}
-              onChange={rememberMe}
-              className="hidden"
-            />
-            <span onClick={rememberMe} className="cursor-pointer">
-              <Image
-                src={
-                  remember
-                    ? "/assets/icons/check_active.svg"
-                    : "/assets/icons/check_passive.svg"
-                }
-                alt="체크"
-                width={15}
-                height={15}
+            <div className="flex items-center gap-3 md:gap-1">
+              <input
+                type="checkbox"
+                id="rememberMe"
+                checked={remember}
+                onChange={rememberMe}
+                className="hidden"
               />
-            </span>
-            <label
-              htmlFor="rememberMe"
-              className="cursor-pointer select-none text-sm text-mid"
-            >
-              내 정보 기억하기
-            </label>
+              <span
+                onClick={rememberMe}
+                className="cursor-pointer relative w-[12px] md:w-[15px] aspect-square"
+              >
+                <Image
+                  src={
+                    remember
+                      ? "/assets/icons/check_active.svg"
+                      : "/assets/icons/check_passive.svg"
+                  }
+                  alt="체크"
+                  fill
+                />
+              </span>
+              <label
+                htmlFor="rememberMe"
+                className="w-[80px] md:w-[100px] cursor-pointer select-none text-xs md:text-sm text-mid"
+              >
+                내 정보 기억하기
+              </label>
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-7">
-          <div className="flex gap-10">
+        <div className="flex flex-col gap-3 md:gap-7 mt-3 md:mt-0">
+          <div className="flex gap-5 md:gap-10">
             <GoogleButton />
             <KakaoButton />
           </div>

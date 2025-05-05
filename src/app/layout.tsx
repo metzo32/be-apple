@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import ClientProvider from "./ClientProvider";
+import UserList from "@/components/QueryTest";
 
 
 export const metadata: Metadata = {
@@ -21,7 +22,7 @@ export default function RootLayout({
           <Header />
           <div className="global-px">
             {children}
-            {/* <Todos /> */}
+            {/* <UserList /> */}
            
           </div>
         </ClientProvider>

@@ -7,6 +7,7 @@ import Image from "next/image";
 import ButtonStrong from "./designs/ButtonStrong";
 import ButtonBasic from "./designs/ButtonBasic";
 import { basicDeviceData } from "../../public/fakeData/basicDeviceData";
+import { IoMdPerson } from "react-icons/io";
 
 type HeaderText = " " | "로그인" | "내 페이지";
 
@@ -31,27 +32,35 @@ export default function Header() {
   };
 
   return (
-    <header className="global-px py-3 flex justify-between items-center bg-white">
-      <button className="relative w-[40px] h-[40px] xl:w-[50px] xl:h-[50px]">
-        <Image
-          src="/assets/images/apple.png"
-          alt="홈"
-          fill
-          className="object-cover"
-          onClick={() => router.push("/")}
-        />
-      </button>
-      <nav className="w-1/2 flex items-end justify-between">
-        {basicDeviceData.map((device) => (
-          <ButtonBasic
-            key={device.alt}
-            text={device.alt}
-            onClick={() => router.push(`/${device.category}`)}
+    <>
+      <header className="global-px py-3 min-w-[320px] flex justify-center md:justify-between items-center bg-white">
+        <button className="relative w-[18px] md:w-[40px] xl:w-[50px] aspect-square">
+          <Image
+            src="/assets/images/apple.png"
+            alt="홈"
+            fill
+            className="object-cover"
+            onClick={() => router.push("/")}
           />
-        ))}
-      </nav>
-      <ButtonStrong text={text} onClick={handleClick} />
-    </header>
+        </button>
+        <nav className="w-[200px] md:w-1/2 mx-[10px] md:m-0 flex md:items-end justify-between">
+          {basicDeviceData.map((device) => (
+            <ButtonBasic
+              key={device.alt}
+              text={device.alt}
+              onClick={() => router.push(`/${device.category}`)}
+            />
+          ))}
+        </nav>
+        <span className="hidden md:block">
+          <ButtonStrong text={text} onClick={handleClick} />
+        </span>
+
+        <button className="block md:hidden text-primary" onClick={handleClick}>
+          <IoMdPerson />
+        </button>
+      </header>
+    </>
   );
 }
 

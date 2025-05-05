@@ -13,8 +13,9 @@ export async function fetchProduct({ category }: ProductCategory) {
     );
     return data;
   } catch (error) {
+    throw error;
     console.error("불러오기 실패:", error);
-    return null;
+    // return null; -- react query는 null을 반환하지 않으므로, error를 던져준다.
   }
 }
 
