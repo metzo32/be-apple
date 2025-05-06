@@ -61,7 +61,7 @@ export default function UserWishList() {
   };
 
   return (
-    <section className="mt-12">
+    <section className="my-12">
       <div className="user-common-container min-h-[500px]">
         <h2 className="user-h2">내 위시리스트</h2>
         {wishList.length > 0 ? (

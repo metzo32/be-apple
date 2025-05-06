@@ -6,7 +6,6 @@ import { deleteUserProduct, fetchUserProduct } from "../fetch/fetchUserProduct";
 import UserProductCard from "../UserProductAdd/UserProductCard";
 import SummaryCard from "./SummaryCard";
 import Modal from "../Modal/Modal";
-import DeletePopup from "../DeletePopup/DeletePopup";
 import { fetchReviewMe } from "../fetch/fetchReview";
 import { Review } from "@/types/Review";
 
@@ -15,8 +14,6 @@ export default function UserProduct() {
   const [userProducts, setUserProducts] = useState<GetUserProductResponse[]>(
     []
   );
-
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
   const [reviewsArr, setReviewsArr] = useState<Review[]>([]);
@@ -43,14 +40,20 @@ export default function UserProduct() {
     getUserProduct();
   }, []);
 
-
   const handleDelete = async (id: number) => {
     try {
-      await deleteUserProduct(id, async () => {
-        setConfirmDeleteId(id);
-        openModal();
-        return false;
+      // await deleteUserProduct(id, async () => {
+      //   setConfirmDeleteId(id);
+      //   openModal();
+      //   return false;
+      // });
+      await deleteUserProduct(id, {
+        onError: (error) => {
+          setConfirmDeleteId(id);
+          openModal();
+        },
       });
+
       return true;
     } catch (error) {
       return false;
@@ -61,7 +64,7 @@ export default function UserProduct() {
     if (confirmDeleteId === null) return;
 
     try {
-      await deleteUserProduct(confirmDeleteId, async () => true); // force:true로
+      await deleteUserProduct(confirmDeleteId, { force: true });
       setUserProducts((prev) =>
         prev.filter((item) => item.id !== confirmDeleteId)
       );
@@ -132,7 +135,6 @@ export default function UserProduct() {
         content="작성했던 리뷰도 삭제됩니다. 정말 삭제할까요?"
         confirmBtnText="확인"
       />
-
     </section>
   );
 }

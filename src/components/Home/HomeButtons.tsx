@@ -3,10 +3,11 @@
 import { useRouter } from "next/navigation";
 import ButtonStrong from "../designs/ButtonStrong";
 
-export default function GoSearchButton() {
+export function GoRecommendButton() {
   const router = useRouter();
   const handleClick = () => {
-    router.push("/user");
+    router.push("/recommend");
   };
-  return <ButtonStrong text="점수 확인하러 가기" onClick={handleClick} />;
+  return <ButtonStrong text="알맞는 상품 보러가기" onClick={handleClick} />;
 }
+

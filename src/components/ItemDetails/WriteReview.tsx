@@ -12,13 +12,13 @@ import { Rating } from "@mui/material";
 import { LuPlus } from "react-icons/lu";
 
 interface WriteReviewProps {
-  myProduct: number | null;
+  userProductId: number | null;
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
 }
 
 export default function WriteReview({
-  myProduct,
+  userProductId,
   isOpen,
   setIsOpen,
 }: WriteReviewProps) {
@@ -39,20 +39,22 @@ export default function WriteReview({
     }
 
     // 유저 프로덕트 id를 가져오지 못한 경우
-    if (!myProduct) {
+    if (!userProductId) {
       console.error("리뷰를 등록할 수 없습니다.");
       return;
     }
 
     const reviewData: CreateNewReviewReq = {
-      userProductId: myProduct,
+      userProductId: userProductId,
       rating: value,
       content: review,
       photos: uploadedPhotos,
     };
 
-    const createReview = await createNewReview(myProduct, reviewData);
+    const createReview = await createNewReview(userProductId, reviewData);
     setIsOpen(false);
+
+    window.location.reload();
   };
 
   // 리뷰 사진 추가하기

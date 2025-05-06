@@ -1,4 +1,4 @@
-import GoSearchButton from "@/components/Home/GoSearchButton";
+import { GoRecommendButton } from "@/components/Home/HomeButtons";
 import Image from "next/image";
 
 export default function HomePage() {
@@ -19,7 +19,7 @@ export default function HomePage() {
               다음 레벨까지 n점 남았습니다.
             </h2>
             <div className="xl:w-1/2">
-              <GoSearchButton />
+              <GoRecommendButton/>
             </div>
           </div>
           <span className="relative w-[200px] h-[120px] md:w-[400px] md:h-[250px] xl:w-[700px] xl:h-[300px]">

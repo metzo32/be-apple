@@ -10,10 +10,9 @@ import { useState } from "react";
 
 interface ReviewCardProps {
   review: Review;
-  onDelete: (id: number) => void;
 }
 
-export default function ReviewCard({ review, onDelete }: ReviewCardProps) {
+export default function ReviewCard({ review }: ReviewCardProps) {
   const { user } = useUserStore(); // 현재 접속 중인 유저id
   const { isModalOpen, openModal, closeModal } = useModal();
   const currentUserId = user?.id;
@@ -27,7 +26,7 @@ export default function ReviewCard({ review, onDelete }: ReviewCardProps) {
       const success = await deleteReview(review.id);
       if (success) {
         console.log("리뷰 삭제 성공");
-        onDelete(review.id);
+        window.location.reload() //TODO React query로 교체
       } else {
         console.log("리뷰 삭제 실패");
       }

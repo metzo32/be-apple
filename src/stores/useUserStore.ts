@@ -3,7 +3,7 @@ import { get } from "@/api/api";
 import { persist } from "zustand/middleware";
 
 type User = {
-  id: string;
+  id: number;
   name: string;
   email: string;
 };

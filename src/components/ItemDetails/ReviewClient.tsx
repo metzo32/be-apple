@@ -3,12 +3,9 @@
 import { useEffect, useState } from "react";
 import { useUserStore } from "@/stores/useUserStore";
 import type { ProductDetail } from "@/types/productDetail";
-import type { Review } from "@/types/Review";
-import { fetchUserProduct } from "../fetch/fetchUserProduct";
 import ReviewCard from "./ReviewCard";
 import WriteReview from "./WriteReview";
 import { fetchProductDetail } from "../fetch/fetchProduct";
-import { CreateUserProductReqDto } from "@/types/userProduct";
 import { Button } from "@mui/material";
 import ButtonStrong from "../designs/ButtonStrong";
 import ButtonBasic from "../designs/ButtonBasic";
@@ -19,26 +16,14 @@ interface ReviewClientProps {
   productId: number | null; // params에서 가져온 제품 id
 }
 
-interface fetchedDataProps {
-  userProductArr: CreateUserProductReqDto[] | [];
-  productDetailData: ProductDetail | null;
-}
-
 export default function ReviewClient({
   product,
   productId, // 이 페이지의 프로덕트id
 }: ReviewClientProps) {
   const { user } = useUserStore();
   const [isOpen, setIsOpen] = useState(false);
-  const [isWritten, setIsWritten] = useState<boolean>(false);
-  const [myProduct, setMyProduct] = useState<number | null>(null);
-  const [reviewsArr, setReviewsArr] = useState<Review[]>(product.reviews); // 리렌더링을 위해 리뷰배열 상태 관리
+  const [userProductId, setUserProductId] = useState<number | null>(null);
 
-  const [fetchedDataArr, setFetchedDataArr] = useState<fetchedDataProps>({
-    userProductArr: [],
-    productDetailData: null,
-  });
-  
   // 데이터를 조회하고, api응답이 오면 - setState하는 함수를 만들어두세요. -> onSuccess
 
   useEffect(() => {
@@ -46,46 +31,14 @@ export default function ReviewClient({
       if (!productId) return;
 
       try {
-        const [userProducts, productsDetail] = await Promise.all([
-          fetchUserProduct(), // 유저 보유목록 가져오기
-          fetchProductDetail(productId), // 현재 페이지의 제품 id
-        ]);
+        const productDetailData = await fetchProductDetail(productId);
 
-        if (!userProducts) {
-          console.error("보유 목록 불러오기 실패");
-          return;
-        }
-
-        if (!productsDetail) {
+        if (!productDetailData) {
           console.error("상세 목록 불러오기 실패");
           return;
         }
 
-        setFetchedDataArr((prev) => ({
-          ...prev,
-          userProductArr: userProducts,
-          productDetailData: productsDetail,
-        }));
-
-        // userProduct를 순회하여 어떤 요소의 product 객체의 id가 productsDetail.id 와 일치하는지 추적
-        const productUserHave = userProducts.find(
-          (userProduct: CreateUserProductReqDto) => userProduct.productId === productsDetail.id
-        );
-
-        setMyProduct(productUserHave.id);
-
-        // 이미 리뷰를 썼는지 여부
-        const hasWrittenReview = product.reviews.find(
-          (review) => review.userId.toString() === user?.id.toString()
-        );
-
-        if (!hasWrittenReview) {
-          setIsWritten(false);
-        } else if (hasWrittenReview && hasWrittenReview.content === undefined) {
-          setIsWritten(false);
-        } else {
-          setIsWritten(true);
-        }
+        setUserProductId(productDetailData.userProductId);
       } catch (error) {
         console.error("데이터 가져오기 실패", error);
       }
@@ -99,11 +52,14 @@ export default function ReviewClient({
     setIsOpen(true);
   };
 
+  // TODO react query 적용할 것
+  // const deleteReviewFromList = (reviewId: number) => {
+  //   setReviewsArr((prev) => prev.filter((review) => review.id !== reviewId));
+  // };
 
-  // 리뷰 삭제
-  const deleteReviewFromList = (reviewId: number) => {
-    setReviewsArr((prev) => prev.filter((review) => review.id !== reviewId));
-  };
+  const isWritten = product.reviews.some(
+    (review) => review.userId === user?.id
+  );
 
   return (
     <section className="w-full flex flex-col gap-10 mb-20 bg-white  shadow-strong rounded-2xl p-10 overflow-hidden">
@@ -114,7 +70,7 @@ export default function ReviewClient({
         </h2>
       </div>
 
-      {myProduct ? (
+      {userProductId ? (
         <span className="w-[200px]">
           {isWritten ? (
             <Button variant="contained" disabled>
@@ -143,7 +99,7 @@ export default function ReviewClient({
 
       {isOpen && (
         <WriteReview
-          myProduct={myProduct}
+          userProductId={userProductId}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
         />
@@ -156,11 +112,7 @@ export default function ReviewClient({
           </div>
         ) : (
           product.reviews.map((review) => (
-            <ReviewCard
-              key={review.id}
-              review={review}
-              onDelete={deleteReviewFromList}
-            />
+            <ReviewCard key={review.id} review={review} />
           ))
         )}
       </div>
