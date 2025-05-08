@@ -1,7 +1,6 @@
 import Button from "@mui/material/Button";
 
 import type { ButtonProps } from "@/types/button";
-import { Typography } from "@mui/material";
 
 export default function ButtonStrong({
   text,

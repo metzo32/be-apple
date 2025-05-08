@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
-import ClientProvider from "./ClientProvider";
-import UserList from "@/components/QueryTest";
-
+import ClientProvider from "@/components/provider/ClientProvider";
 
 export const metadata: Metadata = {
   title: "앱등이가되",
@@ -22,7 +20,6 @@ export default function RootLayout({
           <Header />
           <div className="global-px">
             {children}
-            {/* <UserList /> */}
           </div>
         </ClientProvider>
       </body>

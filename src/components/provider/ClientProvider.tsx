@@ -2,7 +2,7 @@
 
 // import QueryProvider from "@/components/QueryProvider";
 
-import MUIThemeProvider from "@/components/MUIThemeProvider";
+import MUIThemeProvider from "@/components/provider/MUIThemeProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 

@@ -9,10 +9,10 @@ import ButtonBasic from "./designs/ButtonBasic";
 import { basicDeviceData } from "../../public/fakeData/basicDeviceData";
 import { IoMdPerson } from "react-icons/io";
 
-type HeaderText = " " | "로그인" | "내 페이지";
+type HeaderText = "..." | "로그인" | "내 정보";
 
 export default function Header() {
-  const [text, setText] = useState<HeaderText>(" ");
+  const [text, setText] = useState<HeaderText>("...");
   const [nextPath, setNextPath] = useState<string>("/login");
   const router = useRouter();
   const { user } = useUserStore();
@@ -52,7 +52,7 @@ export default function Header() {
             />
           ))}
         </nav>
-        <span className="hidden md:block">
+        <span className="hidden md:block w-[80px]">
           <ButtonStrong text={text} onClick={handleClick} />
         </span>
 

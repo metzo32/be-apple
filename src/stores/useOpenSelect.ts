@@ -1,3 +1,5 @@
+//TODO 이 전역상태 정말 필요한지 확인
+
 import { create } from "zustand";
 
 interface OpenSelectState {

@@ -18,9 +18,7 @@ interface WishButtonProps {
   product: GetProductResponse;
 }
 
-export default function WishButton({
-  product,
-}: WishButtonProps) {
+export default function WishButton({ product }: WishButtonProps) {
   const [isFullHeart, setIsFullHeart] = useState<boolean>(product.isInWish); // 하트버튼 눌렸는지 여부
   const [isMemoOpen, setIsMemoOpen] = useState<boolean>(false); // 메모 팝업
   const [isDropped, setIsDropped] = useState<boolean>(false); // 메모 드랍다운 메뉴
