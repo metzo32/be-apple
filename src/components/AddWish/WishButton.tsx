@@ -2,27 +2,26 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  useWishAddMutation,
+  useWishDeleteMutation,
+} from "@/hooks/useWishQuery";
+import type { GetProductResponse } from "@/types/product";
 import { useUserStore } from "@/stores/useUserStore";
 import useModal from "@/hooks/useModal";
-import { addWish, deleteWish } from "../fetch/fetchWishList";
 import Modal from "../Modal/Modal";
 import ButtonStrong from "../designs/ButtonStrong";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 
-
 interface WishButtonProps {
-  wishId: number | null; // 특히 여기.
-  isInWish: boolean;
-  productId: number;
+  product: GetProductResponse;
 }
 
 export default function WishButton({
-  wishId,
-  isInWish,
-  productId,
+  product,
 }: WishButtonProps) {
-  const [isAdded, setIsAdded] = useState<boolean>(isInWish); // 하트버튼 눌렸는지 여부
+  const [isFullHeart, setIsFullHeart] = useState<boolean>(product.isInWish); // 하트버튼 눌렸는지 여부
   const [isMemoOpen, setIsMemoOpen] = useState<boolean>(false); // 메모 팝업
   const [isDropped, setIsDropped] = useState<boolean>(false); // 메모 드랍다운 메뉴
   const [memo, setMemo] = useState<string>(""); // 메모 내용
@@ -30,6 +29,17 @@ export default function WishButton({
   const { isModalOpen, openModal, closeModal } = useModal();
   const router = useRouter();
 
+  const addWish = useWishAddMutation();
+  const deleteWish = useWishDeleteMutation();
+
+  const productId = product.id;
+  const wishId = product.wishId;
+
+  const handleRoute = () => {
+    router.push("/login");
+  };
+
+  // 위시 추가 트라이 (memo 입력창 열기)
   const handleAddWish = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
@@ -38,43 +48,31 @@ export default function WishButton({
       return;
     }
     setIsMemoOpen(true);
+    setIsFullHeart(true);
   };
 
-  const handleRemoveWish = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  // confirm하면 memo가 전달되고, 비로소 위시리스트가 서버에 저장된다.
+  const handleSubmit = () => {
+    // memo는 빈 문자열일 수도 있음
+
+    setIsMemoOpen(false);
+    setIsDropped(false);
+    addWish.mutate({ memo, productId });
+  };
+
+  const handleDeleteWish = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
+    deleteWish.mutate(wishId!);
+    setIsFullHeart(false);
+
     if (!user) {
-      console.log("로그인 하세요");
+      console.log("로그인 해주세요");
       return;
     }
     if (!wishId) {
       console.log("삭제 실패: wishId 없음");
       return;
-    }
-
-    if (wishId) {
-      const success = await deleteWish(wishId);
-      if (success) {
-        setIsAdded(false);
-        setIsMemoOpen(false);
-      }
-    }
-  };
-
-  const handleRoute = () => {
-    router.push("/login");
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // memo가 빈 문자열일 수도 있음
-    const success = await addWish({ productId, memo });
-    if (success) {
-      setIsMemoOpen(false);
-      setIsDropped(false);
-      setMemo("");
-      setIsAdded(true);
     }
   };
 
@@ -101,16 +99,13 @@ export default function WishButton({
       )}
 
       {/* 하트 버튼 */}
-      {!isAdded ? (
-        <button
-          onClick={handleAddWish}
-          className="text-2xl hover:opacity-70"
-        >
+      {!isFullHeart ? (
+        <button onClick={handleAddWish} className="text-2xl hover:opacity-70">
           <GoHeart className="text-primary" />
         </button>
       ) : (
         <button
-          onClick={handleRemoveWish}
+          onClick={handleDeleteWish}
           className="text-2xl hover:opacity-70"
         >
           <GoHeartFill className="text-primary" />
@@ -123,10 +118,7 @@ export default function WishButton({
           onClick={(e) => e.stopPropagation()}
           className="w-screen h-screen fixed bg-overlay inset-0 z-20 flex justify-center items-center cursor-default"
         >
-          <form
-            onSubmit={handleSubmit}
-            className="w-[300px] md:w-[460px] p-8 flex flex-col gap-3 md:gap-5 rounded-xl bg-white shadow-2xl"
-          >
+          <div className="w-[300px] md:w-[460px] p-8 flex flex-col gap-3 md:gap-5 rounded-xl bg-white shadow-2xl">
             <h3 className="font-bold">위시리스트에 추가되었습니다.</h3>
             <button
               type="button"
@@ -155,8 +147,8 @@ export default function WishButton({
               </div>
             )}
 
-            <ButtonStrong text={"확인"} type="submit" />
-          </form>
+            <ButtonStrong text={"확인"} onClick={handleSubmit} />
+          </div>
         </div>
       )}
     </>

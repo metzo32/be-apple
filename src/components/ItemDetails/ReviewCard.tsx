@@ -1,12 +1,12 @@
 import Image from "next/image";
-import type { Review } from "@/types/Review";
+import type { CreateNewReviewReq, Review } from "@/types/Review";
 import useModal from "@/hooks/useModal";
 import { formatDate } from "@/module/formatDate";
 import { useUserStore } from "@/stores/useUserStore";
 import { deleteReview, editReview } from "../fetch/fetchReview";
 import Modal from "../Modal/Modal";
 import { FaStar } from "react-icons/fa6";
-import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ReviewCardProps {
   review: Review;
@@ -16,22 +16,58 @@ export default function ReviewCard({ review }: ReviewCardProps) {
   const { user } = useUserStore(); // 현재 접속 중인 유저id
   const { isModalOpen, openModal, closeModal } = useModal();
   const currentUserId = user?.id;
-  const [updatedReview, setUpdatedReview] = useState();
 
   const createdTime = formatDate(review.createdAt, "yyyy년 M월 d일 E요일");
 
-  // 리뷰 삭제
-  const handleDeleteReview = async () => {
-    if (review && review.userId === Number(currentUserId)) {
-      const success = await deleteReview(review.id);
-      if (success) {
-        console.log("리뷰 삭제 성공");
-        window.location.reload() //TODO React query로 교체
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteReviewMutationFn } = useMutation({
+    mutationFn: (id: number) => {
+      if (review.userId === currentUserId) {
+        return deleteReview(id);
       } else {
-        console.log("리뷰 삭제 실패");
+        return Promise.reject(new Error("내가 쓴 리뷰가 아닙니다."));
       }
-    }
-  };
+    },
+
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({
+        refetchType: "all",
+        queryKey: ["productDetail"],
+      });
+    },
+    onError: (error) => {
+      console.log("리뷰 삭제 도중 오류가 발생했습니다.", error);
+    },
+  });
+
+  //TODO 수정 로직 추가하기
+  const { mutate: editReviewMutationFn } = useMutation({
+    mutationFn: ({
+      id,
+      reviewData,
+    }: {
+      id: number;
+      reviewData: Partial<CreateNewReviewReq>;
+    }) => {
+      if (review.userId === currentUserId) {
+        return editReview(id, reviewData);
+      } else {
+        return Promise.reject(new Error("리뷰 수정에 실패했습니다."));
+      }
+    },
+
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({
+        refetchType: "all",
+        queryKey: ["productDetail"],
+      });
+    },
+
+    onError: (error) => {
+      console.log("리뷰 수정 도중 오류가 발생했습니다.", error);
+    },
+  });
 
   const maskedName = review.userName
     .split("")
@@ -92,7 +128,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
         {review.userId === Number(currentUserId) && (
           <div className="flex justify-end items-center gap-5">
             <button
-              // onClick={handleChangeReview}
+              // onClick={() => editReviewMutationFn(review.id, reviewData)}
               className="text-sm text-light hover:text-mid"
             >
               수정
@@ -111,7 +147,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
         <Modal
           isModalOpen={isModalOpen}
           onClose={closeModal}
-          onConfirm={handleDeleteReview}
+          onConfirm={() => deleteReviewMutationFn(review.id)}
           onCancel={closeModal}
           title={"잠깐!"}
           content={"정말 리뷰를 삭제할까요?"}

@@ -30,6 +30,8 @@ export default function UserPage() {
 
   if (checking || isSigningOut) return <LoadingScreen />;
 
+  const userId: number | null = user?.id ?? null;
+
   return (
     <div className="relative">
       <section className="py-24 flex flex-col items-center gap-5 md:gap-10">
@@ -42,9 +44,9 @@ export default function UserPage() {
 
       <UserInfo />
 
-      <UserProduct />
+      <UserProduct userId={userId}/>
 
-      <UserWishList />
+      <UserWishList userId={userId}/>
     </div>
   );
 }

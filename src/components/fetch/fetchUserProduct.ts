@@ -1,18 +1,13 @@
 import { deleteCall, get, patch, post } from "@/api/api";
 import type { CreateUserProductReqDto } from "@/types/userProduct";
-import { AxiosError, isAxiosError } from "axios";
+
 
 // 유저 보유 목록 로드
 export async function fetchUserProduct() {
-  try {
-    const response = await get("/user-product");
-    const productInfo = response.data;
+  const response = await get("/user-product");
+  const productInfo = response.data;
 
-    return productInfo;
-  } catch (error) {
-    console.error("유저 보유 목록 불러오기 실패:", error);
-    return null;
-  }
+  return productInfo;
 }
 
 // 유저 보유 목록 추가
@@ -53,7 +48,7 @@ export async function deleteUserProduct(
 
     return true;
   } catch (error) {
-    options?.onError?.(error)
+    options?.onError?.(error);
     console.error("유저 보유 목록 삭제 실패:", error);
     return false;
   }

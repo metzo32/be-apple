@@ -7,19 +7,12 @@ export async function createNewReview(
   reviewData: CreateNewReviewReq
 ) {
   const { userProductId, rating, content, photos } = reviewData;
-  try {
-    const response = await post(`/review`, {
-      userProductId,
-      rating,
-      content,
-      photos,
-    });
-
-    return true;
-  } catch (error) {
-    console.error("리뷰 생성 실패:", error);
-    return false;
-  }
+  return post(`/review`, {
+    userProductId,
+    rating,
+    content,
+    photos,
+  });
 }
 
 // 리뷰 수정하기
@@ -28,19 +21,13 @@ export async function editReview(
   reviewData: Partial<CreateNewReviewReq>
 ) {
   const { userProductId, rating, content, photos } = reviewData;
-  try {
-    const response = await patch(`/review/${id}`, {
-      userProductId,
-      rating,
-      content,
-      photos,
-    });
 
-    return true;
-  } catch (error) {
-    console.error("리뷰 생성 실패:", error);
-    return false;
-  }
+  return patch(`/review/${id}`, {
+    userProductId,
+    rating,
+    content,
+    photos,
+  });
 }
 
 // 제품 별 리뷰 조회
@@ -67,11 +54,6 @@ export async function fetchReviewMe() {
 
 // 리뷰 지우기
 export async function deleteReview(id: number) {
-  try {
-    const response = await deleteCall(`/review/${id}`);
-    return response;
-  } catch (error) {
-    console.error("리뷰 삭제 실패:", error);
-    return null;
-  }
+  const response = await deleteCall(`/review/${id}`);
+  return response;
 }

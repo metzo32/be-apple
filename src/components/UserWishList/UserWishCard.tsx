@@ -24,7 +24,7 @@ export default function UserWishCard({ wishList, onDelete }: WishCardProps) {
     <div className="w-full p-5 rounded-3xl border-2 border-bglight flex flex-col items-center gap-5 bg-bglight hover:bg-bglightHover hover:border-secondaryLight md:flex-row">
       <span className="w-full max-w-[160px] aspect-square rounded-2xl bg-gray-300" />
       {/* TODO: 실제 이미지로 교체 */}
-      
+
       {/* <Image
         src={wishList.product.photos[0]}
         alt="제품 이미지"

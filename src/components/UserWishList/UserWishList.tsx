@@ -1,46 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useWishDeleteMutation, useWishLoadQuery } from "@/hooks/useWishQuery";
 import type { GetWishResponse } from "@/types/wishlist";
-import { deleteWish, fetchWishList } from "../fetch/fetchWishList";
 import UserWishCard from "./UserWishCard";
 import DeletePopup from "../DeletePopup/DeletePopup";
 
-export default function UserWishList() {
-  const [wishList, setWishList] = useState<GetWishResponse[]>([]);
+interface UserProduct {
+  userId: number | null;
+}
+export default function UserWishList({ userId }: UserProduct) {
   const [pendingDeleteIds, setPendingDeleteIds] = useState<number[]>([]);
-  const [recentlyDeleted, setRecentlyDeleted] =
-    useState<GetWishResponse | null>(null);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [recentlyDeleted, setRecentlyDeleted] = useState<GetWishResponse | null>(null);
   const [deleteTimer, setDeleteTimer] = useState<NodeJS.Timeout | null>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  useEffect(() => {
-    const loadWishList = async () => {
-      const data = await fetchWishList();
-      if (data) {
-        const sorted = data.sort(
-          // 위시목록 최신순 정렬하기
-          (a: GetWishResponse, b: GetWishResponse) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-        setWishList(sorted);
-      }
-    };
-    loadWishList();
-  }, []);
+  const { data: wishList } = useWishLoadQuery(userId);
 
-  const handleDelete = (id: number) => {
-    const target = wishList.find((item) => item.id === id);
-    if (!target) return;
+  const deleteWishMutation = useWishDeleteMutation();
 
-    setPendingDeleteIds((prev) => [...prev, id]); 
-    setRecentlyDeleted(target);
+  if (!wishList) return null;
+
+  const handleDelete = (wish: GetWishResponse) => {
+    setPendingDeleteIds((prev) => [...prev, wish.id]);
+    setRecentlyDeleted(wish);
     setIsPopupOpen(true);
 
-    // 3초 뒤 데이터 상에서도 삭제
-    const timer = setTimeout(async () => {
-      await deleteWish(id);
-      setWishList((prev) => prev.filter((item) => item.id !== id));
+    const timer = setTimeout(() => {
+      deleteWishMutation.mutate(wish.id);
+      setPendingDeleteIds((prev) => prev.filter((id) => id !== wish.id));
       setIsPopupOpen(false);
       setRecentlyDeleted(null);
     }, 3000);
@@ -49,14 +37,11 @@ export default function UserWishList() {
   };
 
   const handleUndo = () => {
+    if (deleteTimer) clearTimeout(deleteTimer);
     if (recentlyDeleted) {
-      if (deleteTimer) clearTimeout(deleteTimer); // 타이머 중도 취소하기
-
-      setPendingDeleteIds(
-        (prev) => prev.filter((id) => id !== recentlyDeleted.id) // 취소한 id를 뺀 나머지 배열 요소만 남기기
-      );
-      setIsPopupOpen(false);
+      setPendingDeleteIds((prev) => prev.filter((id) => id !== recentlyDeleted.id));
       setRecentlyDeleted(null);
+      setIsPopupOpen(false);
     }
   };
 
@@ -71,15 +56,11 @@ export default function UserWishList() {
               return (
                 <div
                   key={wish.id}
-                  className={
-                    isPendingDelete
-                      ? "saturate-0 opacity-30 pointer-events-none"
-                      : ""
-                  }
+                  className={isPendingDelete ? "saturate-0 opacity-30 pointer-events-none" : ""}
                 >
                   <UserWishCard
                     wishList={wish}
-                    onDelete={() => handleDelete(wish.id)}
+                    onDelete={() => handleDelete(wish)}
                   />
                 </div>
               );
@@ -94,3 +75,4 @@ export default function UserWishList() {
     </section>
   );
 }
+

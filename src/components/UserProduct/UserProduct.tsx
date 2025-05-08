@@ -1,88 +1,53 @@
-import { useEffect, useState } from "react";
+import { useUserProductQuery } from "@/hooks/useUserProductQuery";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useModal from "@/hooks/useModal";
+import Modal from "../Modal/Modal";
 import { ProductCategoryLabels } from "@/types/productCategory";
-import { GetUserProductResponse } from "@/types/userProduct";
-import { deleteUserProduct, fetchUserProduct } from "../fetch/fetchUserProduct";
+import { deleteUserProduct } from "../fetch/fetchUserProduct";
 import UserProductCard from "../UserProductAdd/UserProductCard";
 import SummaryCard from "./SummaryCard";
-import Modal from "../Modal/Modal";
-import { fetchReviewMe } from "../fetch/fetchReview";
-import { Review } from "@/types/Review";
+import { GetUserProductResponse } from "@/types/userProduct";
 
-export default function UserProduct() {
+interface UserProduct {
+  userId: number | null;
+}
+
+export default function UserProduct({ userId }: UserProduct) {
   const { isModalOpen, openModal, closeModal } = useModal();
-  const [userProducts, setUserProducts] = useState<GetUserProductResponse[]>(
-    []
-  );
+  // const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
 
-  const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
-  const [reviewsArr, setReviewsArr] = useState<Review[]>([]);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const getUserProduct = async () => {
-      try {
-        const [userProductData, userReviewList] = await Promise.all([
-          fetchUserProduct(),
-          fetchReviewMe(),
-        ]);
+  const { data } = useUserProductQuery(userId);
 
-        const reversedData = userProductData.reverse();
-
-        setUserProducts(reversedData);
-
-        const reviews = userReviewList?.data.map((item: Review) => item);
-
-        setReviewsArr(reviews);
-      } catch (error) {
-        console.error("유저 보유 목록 불러오기 실패", error);
+  const { mutate: deleteUserProductMutaionFn } = useMutation({
+    mutationFn: (userProduct: GetUserProductResponse) => {
+      if (!userId) {
+        return Promise.reject(new Error("유저 정보가 올바르지 않습니다."));
       }
-    };
-    getUserProduct();
-  }, []);
-
-  const handleDelete = async (id: number) => {
-    try {
-      // await deleteUserProduct(id, async () => {
-      //   setConfirmDeleteId(id);
-      //   openModal();
-      //   return false;
-      // });
-      await deleteUserProduct(id, {
-        onError: (error) => {
-          setConfirmDeleteId(id);
-          openModal();
-        },
+      // TODO userProduct.reviews 기능 추가되면- 리뷰 있는 경우 확인 모달 추가
+      return deleteUserProduct(userProduct.id);
+    },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({
+        refetchType: "all",
+        queryKey: ["loadUserProduct"],
       });
+    },
+    onError: (error) => {
+      console.error("보유 상품 삭제에 실패했습니다.", error);
+    },
+  });
 
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
+  if (!data) return null;
 
-  const handleModalConfirm = async () => {
-    if (confirmDeleteId === null) return;
+  const userProducts = data.userProducts;
+  const reviews = data.userReviews;
 
-    try {
-      await deleteUserProduct(confirmDeleteId, { force: true });
-      setUserProducts((prev) =>
-        prev.filter((item) => item.id !== confirmDeleteId)
-      );
-    } catch (error) {
-      console.error("삭제 실패:", error);
-    } finally {
-      setConfirmDeleteId(null);
-      closeModal();
-    }
-  };
-
-  const handleModalCancel = () => {
-    setConfirmDeleteId(null);
-    closeModal();
-  };
-
+  // 포화도
   const categorySaturation = 100 / Object.keys(ProductCategoryLabels).length;
 
+  // 총액
   const totalPrice = userProducts.reduce(
     (sum, product) => sum + (product.purchasePrice ?? 0),
     0
@@ -103,7 +68,7 @@ export default function UserProduct() {
         <SummaryCard title="총액" content={totalPrice.toLocaleString()} />
         <SummaryCard
           title="작성한 리뷰 수"
-          content={reviewsArr.length.toString()}
+          content={reviews.length.toString()}
         />
       </div>
 
@@ -114,7 +79,7 @@ export default function UserProduct() {
               <div key={index}>
                 <UserProductCard
                   userProduct={userProduct}
-                  onDelete={handleDelete}
+                  onDelete={() => deleteUserProductMutaionFn(userProduct)}
                 />
               </div>
             ))}
@@ -125,7 +90,7 @@ export default function UserProduct() {
           </div>
         )}
       </div>
-
+      {/* 
       <Modal
         isModalOpen={isModalOpen}
         onClose={handleModalCancel}
@@ -134,7 +99,7 @@ export default function UserProduct() {
         title="잠깐!"
         content="작성했던 리뷰도 삭제됩니다. 정말 삭제할까요?"
         confirmBtnText="확인"
-      />
+      /> */}
     </section>
   );
 }

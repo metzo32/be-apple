@@ -5,17 +5,22 @@ import Link from "next/link";
 import { FaCheck } from "react-icons/fa6";
 
 interface SearchCardProps {
+  userId?: number | null;
   product: GetProductResponse;
 }
 
-export default function SearchCard({ product }: SearchCardProps) {
-
+export default function SearchCard({
+  userId,
+  product,
+}: SearchCardProps) {
+  
   return (
     <div className="w-[260px] h-[350px] py-5 bg-white shrink-0 rounded-2xl overflow-hidden flex flex-col justify-between items-start relative shadow-strong">
       <Link
         href={`/${product.category}/${product.id}`} // product의 Id
         className="w-full flex flex-col gap-5"
       >
+        {/* TODO 이미지 대체 */}
         <img
           src={product.photos[0]}
           alt={product.name}
@@ -39,9 +44,7 @@ export default function SearchCard({ product }: SearchCardProps) {
           )}
         </div>
         <WishButton
-          wishId={product.wishId}
-          isInWish={product.isInWish}
-          productId={product.id}
+          product={product}
         />
       </div>
     </div>

@@ -23,7 +23,6 @@ export default function RootLayout({
           <div className="global-px">
             {children}
             {/* <UserList /> */}
-           
           </div>
         </ClientProvider>
       </body>
