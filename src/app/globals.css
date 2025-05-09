@@ -32,8 +32,8 @@
 
   --color-text: #000000;
   --color-textHover: #444444;
-  --color-mid: #7D7D7D;
-  --color-light: #B4B4B4;
+  --color-mid: #7d7d7d;
+  --color-light: #b4b4b4;
   --color-overlay: rgba(0, 0, 0, 0.5);
   --color-customGrad: linear-gradient(to right, #476cf6, #c467f3);
   --font-apple: "AppleFont", sans-serif;
@@ -109,7 +109,7 @@ select:hover {
   }
 
   h2 {
-    @applytext-xl md:text-2xl
+    @applytext-xl md:text-2xl;
   }
 
   h3,
@@ -152,6 +152,20 @@ select:hover {
     2xl:px-80;
   }
 
+  .button-light {
+    @apply text-mid
+    text-[18px] max-md:text-[14px]
+    p-0    
+    hover:bg-clip-text hover:text-transparent
+    hover:bg-gradient-to-r hover:from-[#476CF6] hover:to-[#C467F3]
+  }
+
+  .button-light.selected {
+    @apply
+    bg-clip-text text-transparent
+    bg-gradient-to-r from-[#476CF6] to-[#C467F3]
+  }
+
   .register-label {
     @apply w-28 text-end font-bold
     lg:w-40;
@@ -182,7 +196,7 @@ select:hover {
     relative
 
     hover:bg-bglightHover
-    hover:border-secondaryLight
+    hover:border-secondaryLight;
   }
 
   .input-base {
@@ -196,7 +210,7 @@ select:hover {
   }
 
   .user-product-h3 {
-    @apply text-xl font-normal
+    @apply text-xl font-normal;
   }
 
   .custom-round-s {
@@ -204,41 +218,36 @@ select:hover {
   }
 
   .option-select {
-    @apply
-    w-full
+    @apply w-full
     flex gap-2
     /* grid grid-cols-3 gap-1 */
     border-2 border-transparent rounded-lg
     cursor-pointer
 
-    p-3
+    p-3;
   }
 
   .selected {
-    @apply
-    bg-bglightHover border-secondaryLight
+    @apply bg-bglightHover border-secondaryLight;
   }
 
   .user-common-container {
-    @apply
-    bg-white rounded-xl shadow-light
+    @apply bg-white rounded-xl shadow-light
     p-5 
-    md:p-12 md:rounded-3xl
+    md:p-12 md:rounded-3xl;
   }
 
   .user-h2 {
-    @apply
-    font-bold mb-2 md:mb-5
-    text-xl md:text-2xl
+    @apply font-bold mb-2 md:mb-5
+    text-xl md:text-2xl;
   }
-  
+
   .user-wishcard-btn {
-    @apply
-    w-4 aspect-square text-xl 
+    @apply w-4 aspect-square text-xl 
     flex items-center justify-center 
     text-light 
     hover:text-mid 
 
-    md:w-8 md:text-2xl 
+    md:w-8 md:text-2xl;
   }
 }

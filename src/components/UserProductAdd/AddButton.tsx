@@ -2,18 +2,17 @@
 
 import { useState } from "react";
 import { addUserProduct } from "../fetch/fetchUserProduct";
-import useOpenSelect from "@/stores/useOpenSelect";
 import { CreateUserProductReqDto } from "@/types/userProduct";
 import SelectComp from "./SelectComp";
 import ButtonStrong from "../designs/ButtonStrong";
 
 export default function AddButton() {
-  const { isClicked, setIsClicked } = useOpenSelect();
+  const [isSelectWindowOpened, setIsSelectWindowOpened] = useState(false);
   const [newUserProduct, setNewUserProduct] =
     useState<CreateUserProductReqDto | null>(null);
 
   const handleClick = async () => {
-    setIsClicked(true);
+    setIsSelectWindowOpened(true);
 
     if (newUserProduct) {
       const success = await addUserProduct(newUserProduct);
@@ -31,7 +30,11 @@ export default function AddButton() {
         <ButtonStrong text="장비 추가하고 티어 올리기" onClick={handleClick} />
       </div>
 
-      <SelectComp />
+      <SelectComp
+        isSelectWindowOpened={isSelectWindowOpened}
+        setIsSelectWindowOpened={setIsSelectWindowOpened}
+        onOpen={handleClick}
+      />
     </>
   );
 }

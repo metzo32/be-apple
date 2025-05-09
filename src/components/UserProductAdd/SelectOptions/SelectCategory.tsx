@@ -1,14 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
-import {
-  ProductCategoryEnum,
-  ProductCategoryLabels,
-} from "@/types/productCategory";
+import { ProductCategoryEnum } from "@/types/productCategory";
 import RenderProducts from "./RenderProducts";
 import type { ProductSelectInfoProps } from "@/types/addUserProducts";
-
 
 interface SelectCategoryProps {
   productSelectInfo: ProductSelectInfoProps;
@@ -28,36 +23,31 @@ export default function SelectCategory({
 
   const categories = Object.values(ProductCategoryEnum);
 
-  const handleCategorySelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedCategory(e.target.value as ProductCategoryEnum);
+  const handleCategorySelect = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const value = (e.target as HTMLButtonElement).value;
+    setSelectedCategory(value as ProductCategoryEnum);
     setproductSelectInfo({ productId: 0, productOptionId: 0 });
   };
 
   return (
     <div>
-      <div className="w-full flex flex-row justify-between">
-        <RadioGroup
-          aria-labelledby="category-radio-buttons-group-label"
-          name="radio-buttons-group"
-          value={selectedCategory}
-          onChange={handleCategorySelect}
-          sx={{
-            width: "1000px",
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gridColumnGap: "100px",
-          }}
-        >
+      <div className="pb-7 flex justify-center">
+        <div className="w-[300px] px-5 py-3 flex flex-row gap-10">
           {categories.map((category) => (
-            <FormControlLabel
-              key={category}
-              value={category}
-              control={<Radio />}
-              label={ProductCategoryLabels[category]}
-              sx={{ width: "300px" }}
-            />
+            <span key={category} className="px-5 pt-1 pb-2 bg-bglight rounded-lg">
+              <button
+                className={`button-light ${
+                  selectedCategory === category ? "selected" : ""
+                }`}
+                type="button"
+                value={category}
+                onClick={handleCategorySelect}
+              >
+                {category}
+              </button>
+            </span>
           ))}
-        </RadioGroup>
+        </div>
       </div>
 
       <div>

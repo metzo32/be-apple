@@ -7,23 +7,26 @@ import { ProductCategoryEnum } from "@/types/productCategory";
 // TODO 임시로 "t" 설정해둔 것 수정하기
 export async function createNewRecommend() {
   const response = await post(`/product-recommendation`, { force: "t" });
+
+  return response.data.productRecommendationId;
 }
 // 작성 중 이탈 시 완료되지 않은 추천이 있다는 것을 보여주는게 force: "f",
 // 그거 날리고 처음부터 하겠다 force "t"
 
-export async function editRecommend01(
-  productId: number,
+// 단계별 요청
+export async function postRecommend01(
+  productRecommendationId: number,
   args: { step: "STEP_1"; productCategory: ProductCategoryEnum }
 ) {
   const { data } = await patch<{
     productRecommendationId: number;
     nextStep: "STEP_2";
     tags: string[]; // 관련된 태그들을 미리 보내줍니다 10개
-  }>(`/product-recommendation/${productId}`, args);
-  return true;
+  }>(`/product-recommendation/${productRecommendationId}`, args);
+  return data;
 }
 
-export async function editRecommend02(
+export async function postRecommend02(
   productId: number,
   args: { step: "STEP_2"; tags?: string[] }
 ) {
@@ -32,11 +35,11 @@ export async function editRecommend02(
     nextStep: "STEP_3";
     minPrice: number;
     maxPrice: number;
-  }>(`/product-recommendation/${productId}`, args);
-  return true;
+  }>("/product-recommendation", args);
+  return data;
 }
 
-export async function editRecommend03(
+export async function postRecommend03(
   productId: number,
   arg: { step: "STEP_3"; minPrice?: number; maxPrice?: number }
 ) {
@@ -44,12 +47,12 @@ export async function editRecommend03(
     productRecommendationId: number;
     nextStep: "STEP_4";
     minReleasedDate: string | null;
-  }>(`/product-recommendation/${productId}`, arg);
+  }>("/product-recommendation", arg);
 
-  return true;
+  return data;
 }
 
-export async function editRecommend04(
+export async function postRecommend04(
   productId: number,
   args: { step: "STEP_4"; minReleasedDate?: string }
 ) {
@@ -57,17 +60,17 @@ export async function editRecommend04(
     productRecommendationId: number;
     nextStep: "STEP_5";
     specs: { type: string; value: string }[];
-  }>(`/product-recommendation/${productId}`, args);
-  return true;
+  }>("/product-recommendation", args);
+  return data;
 }
 
-export async function editRecommend05(
+export async function postRecommend05(
   productId: number,
   args: { step: "STEP_5"; specs?: { type: string; value: string }[] }
 ) {
   const { data } = await patch<{
     productRecommendationId: number;
     nextStep: null;
-  }>(`/product-recommendation/${productId}`, args);
-  return true;
+  }>("/product-recommendation", args);
+  return data;
 }

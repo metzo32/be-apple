@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import useOpenSelect from "@/stores/useOpenSelect";
 import {
   UserProductCondition,
   UserProductStatus,
@@ -24,9 +23,19 @@ import { IoCloseOutline } from "react-icons/io5";
 import ButtonStrong, { ButtonMedium } from "../designs/ButtonStrong";
 import ButtonBasic from "../designs/ButtonBasic";
 import { Button } from "@mui/material";
+import SearchBar from "./SelectOptions/SearchBar";
 
-export default function SelectComp() {
-  const { isClicked, setIsClicked } = useOpenSelect();
+interface SelectCompProps {
+  isSelectWindowOpened: boolean;
+  setIsSelectWindowOpened: (isSelectWindowOpened: boolean) => void;
+  onOpen: () => void;
+}
+
+export default function SelectComp({
+  isSelectWindowOpened,
+  setIsSelectWindowOpened,
+  onOpen,
+}: SelectCompProps) {
   const { isModalOpen, openModal, closeModal } = useModal();
 
   const [formData, setFormData] = useState<UserProductFormData>({
@@ -66,9 +75,9 @@ export default function SelectComp() {
   const MAX_MEMO_LENGTH = 200;
 
   // 보유제품 추가 팝업 닫기
-  const handleClose = () => {
+  const handleCloseSelectWindow = () => {
     if (isEqual(initialForm, formData)) {
-      setIsClicked(false);
+      setIsSelectWindowOpened(false);
     } else {
       openModal();
     }
@@ -91,7 +100,7 @@ export default function SelectComp() {
     setCurrentPageNumber(0);
     setIsLoading(false);
     closeModal();
-    setIsClicked(false);
+    setIsSelectWindowOpened(false);
   };
 
   // 이전 페이지
@@ -137,7 +146,7 @@ export default function SelectComp() {
       const success = await addUserProduct(formData); //TODO 타입가드로 UserProductFormData를 CreateUserProductReqDto로 검증
 
       if (success) {
-        setIsClicked(false);
+        setIsSelectWindowOpened(false);
       } else {
         console.error("유저 보유 목록 생성 실패");
       }
@@ -248,22 +257,22 @@ export default function SelectComp() {
         />
       )}
 
-      {isClicked ? (
+      {isSelectWindowOpened ? (
         <div className="overlay flex justify-center items-center">
-          <div className="w-[1200px] h-[800px] p-16 bg-white rounded-3xl relative">
+          <div className="w-[300px] md:w-[600px] xl:w-[1200px] h-[800px] p-5 pt-10 md:p-10 md:pt-18 xl:p-16 bg-white rounded-xl md:rounded-3xl relative">
             <button // 창 닫기 버튼
               type="button"
-              onClick={handleClose}
-              className="w-12 h-12 text-4xl flex items-center justify-center absolute top-0 right-0 bg-light text-white hover:bg-mid"
+              onClick={handleCloseSelectWindow}
+              className="w-7 md:w-12 aspect-square text-xl md:text-4xl flex items-center justify-center absolute top-0 right-0 bg-light text-white hover:bg-mid"
             >
               <IoCloseOutline />
             </button>
 
             <form
               onSubmit={handleSubmit}
-              className="w-full h-full flex flex-col justify-between"
+              className="w-full h-full flex flex-col gap-5"
             >
-              <div className="w-full flex items-center justify-between">
+              <div className="w-full flex items-center justify-end md:justify-between">
                 <span className="w-[65px]">
                   {currentPageNumber !== 0 && (
                     <ButtonBasic
@@ -276,10 +285,9 @@ export default function SelectComp() {
 
                 {/* 검색바 */}
                 {currentPageNumber === 0 && (
-                  <div className="w-full flex items-center justify-center gap-5">
-                    <div className="w-[50%] h-[35px] border-2 border-secondary rounded-lg bg-bglightHover" />
-                    <ButtonMedium text="검색" type="button" />
-                  </div>
+                  <span className="hidden xl:block">
+                    <SearchBar />
+                  </span>
                 )}
 
                 <span className="w-[65px]">
@@ -292,6 +300,13 @@ export default function SelectComp() {
                   )}
                 </span>
               </div>
+
+              {/* 검색바 */}
+              {currentPageNumber === 0 && (
+                <span className="block xl:hidden">
+                  <SearchBar />
+                </span>
+              )}
 
               {currentPageNumber === 0 && ( // 카테고리 선택바 및 검색바
                 <SelectCategory

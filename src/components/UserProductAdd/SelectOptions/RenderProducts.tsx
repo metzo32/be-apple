@@ -123,7 +123,7 @@ export default function RenderProducts({
   ) : (
     <div className="h-[500px] overflow-y-scroll">
       {/* 카테고리 별 상품 목록 */}
-      <div className="grid grid-cols-3 gap-[50px]">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-[50px]">
         {productList.map((product) => (
           <div key={product.id} className="relative">
             <FormControlLabel
@@ -132,12 +132,12 @@ export default function RenderProducts({
               control={<Radio sx={{ display: "none" }} />}
               className={`${
                 clickedProductId === product.id
-                  ? "border-secondaryLight bg-bglight brightness-50"
+                  ? "border-secondaryLight bg-bglight brightness-70 saturate-70"
                   : "border-transparent"
               } border-2 rounded-2xl flex items-center justify-center overflow-hidden p-5 hover:bg-bglightHover hover:border-secondaryLight`}
               label={
                 <div className="w-full h-full flex flex-col items-center">
-                  <span className="w-[300px] h-[180px] overflow-hidden relative">
+                  <span className="w-[200px] xl:w-[300px] aspect-[5/3] overflow-hidden relative">
                     <Image
                       src={product.photos[0]}
                       alt={product.name}
@@ -164,7 +164,7 @@ export default function RenderProducts({
 
             {/* 옵션 목록 */}
             {product.id === productSelectInfo.productId && (
-              <div className="absolute top-0 right-0">
+              <div className="absolute top-3 right-3">
                 {isOptionLoading ? (
                   <p>옵션 불러오는 중...</p>
                 ) : productSelectInfo.productId ? (
