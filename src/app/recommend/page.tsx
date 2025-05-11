@@ -12,7 +12,7 @@ import {
   useRecommendStep03,
   useRecommendStep04,
   useRecommendStep05,
-} from "@/hooks/useRecommend";
+} from "@/hooks/useRecommendQuery";
 import ButtonStrong from "@/components/designs/ButtonStrong";
 import {
   ProductCategoryEnum,

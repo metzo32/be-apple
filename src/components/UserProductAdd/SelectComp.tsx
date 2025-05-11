@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   UserProductCondition,
   UserProductStatus,
@@ -20,7 +20,7 @@ import SelectCondition from "./SelectOptions/SelectCondition";
 import SelectMultiplePurchased from "./SelectOptions/SelectMultiplePurchased";
 import SelectMemo from "./SelectOptions/SelectMemo";
 import { IoCloseOutline } from "react-icons/io5";
-import ButtonStrong, { ButtonMedium } from "../designs/ButtonStrong";
+import ButtonStrong from "../designs/ButtonStrong";
 import ButtonBasic from "../designs/ButtonBasic";
 import { Button } from "@mui/material";
 import SearchBar from "./SelectOptions/SearchBar";
@@ -69,6 +69,10 @@ export default function SelectComp({
     condition: UserProductCondition.NEW,
     memo: "",
   };
+
+  useEffect(() => {
+    console.log("작성된 폼 데이터", formData);
+  }, [formData]);
 
   // 전체 페이지
   const MAX_PAGE = 6;

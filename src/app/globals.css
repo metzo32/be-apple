@@ -154,7 +154,7 @@ select:hover {
 
   .button-light {
     @apply text-mid
-    text-[18px] max-md:text-[14px]
+    text-[16px] max-md:text-[12px]
     p-0    
     hover:bg-clip-text hover:text-transparent
     hover:bg-gradient-to-r hover:from-[#476CF6] hover:to-[#C467F3]
@@ -220,14 +220,12 @@ select:hover {
   .option-select {
     @apply w-full
     flex gap-2
-    /* grid grid-cols-3 gap-1 */
     border-2 border-transparent rounded-lg
     cursor-pointer
-
     p-3;
   }
 
-  .selected {
+  .option-select.selected {
     @apply bg-bglightHover border-secondaryLight;
   }
 

@@ -32,9 +32,9 @@ export default function SelectCategory({
   return (
     <div>
       <div className="pb-7 flex justify-center">
-        <div className="w-[300px] px-5 py-3 flex flex-row gap-10">
+        <div className="px-5 py-3 flex flex-row gap-3 md:gap-10">
           {categories.map((category) => (
-            <span key={category} className="px-5 pt-1 pb-2 bg-bglight rounded-lg">
+            <span key={category} className="px-3 pb-1 pt-0 md:px-5 md:pt-1 md:pb-2 bg-bglight rounded-lg">
               <button
                 className={`button-light ${
                   selectedCategory === category ? "selected" : ""
