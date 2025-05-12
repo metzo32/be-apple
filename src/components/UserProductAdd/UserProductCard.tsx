@@ -1,33 +1,15 @@
 import type { GetUserProductResponse } from "@/types/userProduct";
-import type {
-  ProductDetail,
-  ProductDetailIpad,
-  ProductDetailIphone,
-  ProductDetailMac,
-} from "@/types/productDetail";
-import { ProductCategoryEnum } from "@/types/productCategory";
 import MonthDiff from "./MonthDiff";
 import useModal from "@/hooks/useModal";
 import Modal from "../Modal/Modal";
 import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlineEdit } from "react-icons/ai";
-
-// 타입가드
-const isMacProduct = (product: ProductDetail): product is ProductDetailMac => {
-  return product.category === ProductCategoryEnum.MAC;
-};
-
-const isIpadProduct = (
-  product: ProductDetail
-): product is ProductDetailIpad => {
-  return product.category === ProductCategoryEnum.IPAD;
-};
-
-const isIphoneProduct = (
-  product: ProductDetail
-): product is ProductDetailIphone => {
-  return product.category === ProductCategoryEnum.IPHONE;
-};
+import {
+  isIpadProduct,
+  isIphoneProduct,
+  isMacProduct,
+} from "@/types/productTypeGurards";
+import Link from "next/link";
 
 interface UserProductCardProps {
   userProduct: GetUserProductResponse;
@@ -40,11 +22,17 @@ export default function UserProductCard({
 }: UserProductCardProps) {
   const { isModalOpen, openModal, closeModal } = useModal();
 
+  console.log("유저 프로덕트", userProduct);
+
+  // TODO 유저프로덕트에 reviews조회기능 추가되면 - 리뷰 있는 경우 확인모달 띄우기 추가
   if (isMacProduct(userProduct.product)) {
     const { myOption, displaySize } = userProduct.product;
 
     return (
-      <div className="user-product-card">
+      <Link
+        href={`/Mac/${userProduct.product.id}`}
+        className="user-product-card"
+      >
         <h3
           className={`justify-self-start ${
             userProduct.status === "SOLD" && "line-through text-light"
@@ -95,7 +83,7 @@ export default function UserProductCard({
           content="이 제품에는 리뷰가 작성되어 있어요. 그래도 삭제하시겠어요?"
           confirmBtnText="삭제하기"
         />
-      </div>
+      </Link>
     );
   }
 
@@ -104,7 +92,10 @@ export default function UserProductCard({
     const { displaySize } = userProduct.product;
 
     return (
-      <div className="user-product-card">
+      <Link
+        href={`/iPad/${userProduct.product.id}`}
+        className="user-product-card"
+      >
         <h3
           className={`justify-self-start ${
             userProduct.status === "SOLD" && "line-through text-light"
@@ -145,7 +136,7 @@ export default function UserProductCard({
             <IoCloseOutline />
           </button>
         </div>
-      </div>
+      </Link>
     );
   }
 
@@ -153,13 +144,17 @@ export default function UserProductCard({
     const { displaySize } = userProduct.product;
 
     return (
-      <div className="user-product-card">
+      <Link
+        href={`/iPhone/${userProduct.product.id}`}
+        className="user-product-card"
+      >
         <h3
           className={`justify-self-start ${
             userProduct.status === "SOLD" && "line-through text-light"
           }`}
         >
           {userProduct.product.name}
+          {userProduct.product.id}
         </h3>
         <div className="flex gap-2 justify-self-center">
           <p className="justify-self-center text-xs md:text-sm text-light">
@@ -194,7 +189,7 @@ export default function UserProductCard({
             <IoCloseOutline />
           </button>
         </div>
-      </div>
+      </Link>
     );
   }
   return <></>;

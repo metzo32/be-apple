@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/Header";
 import ClientProvider from "@/components/provider/ClientProvider";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "앱등이가되",
@@ -21,6 +22,7 @@ export default function RootLayout({
           <div className="global-px">
             {children}
           </div>
+          <Footer/>
         </ClientProvider>
       </body>
     </html>

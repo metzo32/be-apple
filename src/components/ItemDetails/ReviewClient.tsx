@@ -1,15 +1,16 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { useUserStore } from "@/stores/useUserStore";
+import { useProductDetailQuery } from "@/hooks/useProductDetailQuery";
 import type { ProductDetail } from "@/types/productDetail";
 import ReviewCard from "./ReviewCard";
 import WriteReview from "./WriteReview";
 import { Button } from "@mui/material";
 import ButtonStrong from "../designs/ButtonStrong";
 import ButtonBasic from "../designs/ButtonBasic";
-import Link from "next/link";
-import { useProductDetailQuery } from "@/hooks/useProductDetailQuery";
+import { FaStar } from "react-icons/fa6";
 
 interface ReviewClientProps {
   product: ProductDetail;
@@ -23,27 +24,33 @@ export default function ReviewClient({
   const { user } = useUserStore();
   const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
 
-  const { data: productDetail } = useProductDetailQuery(productId)
-  const userProductId = productDetail?.userProductId ?? null
+  const { data: productDetail } = useProductDetailQuery(productId);
+  const userProductId = productDetail?.userProductId ?? null;
 
   const handleWriteReview = () => {
     if (isWritten) return;
     setIsWriteReviewOpen(true);
   };
 
-  const reviews = productDetail ? productDetail.reviews : product.reviews
+  const reviews = productDetail ? productDetail.reviews : product.reviews;
 
-  const isWritten = reviews.some(
-    (review) => review.userId === user?.id
-  );
+  const isWritten = reviews.some((review) => review.userId === user?.id);
+
+  const totalRatings = reviews.reduce((sum, review) => sum + review.rating, 0);
+  const averageRatings = totalRatings / reviews.length;
 
   return (
-    <section className="w-full flex flex-col gap-10 mb-20 bg-white  shadow-strong rounded-2xl p-10 overflow-hidden">
+    <section className="w-full flex flex-col gap-10 bg-white global-px py-36 overflow-hidden">
       <div className="flex items-end gap-5">
-        <h1 className="text-2xl">구매자들의 리뷰</h1>
+        <h1 className="text-2xl">리뷰 및 평점</h1>
         <h2 className="text-base text-light">
           총 {product.reviews.length}명의 후기
         </h2>
+      </div>
+
+      <div className="flex gap-5 items-center">
+        <p className="text-4xl">{averageRatings}</p>
+        <FaStar className="text-primary"/>
       </div>
 
       {userProductId ? (
@@ -81,7 +88,7 @@ export default function ReviewClient({
         />
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-1 gap-5 lg:gap-10">
         {product.reviews.length === 0 ? (
           <div className="h-[300px]">
             <p>등록된 리뷰가 없습니다.</p>

@@ -95,7 +95,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
 
         <div className="flex">
           {Array.from({ length: review.rating }).map((_, index) => (
-            <FaStar key={index} className="text-amber-400" />
+            <FaStar key={index} className="text-primary" />
           ))}
         </div>
 

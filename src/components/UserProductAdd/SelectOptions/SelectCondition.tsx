@@ -2,48 +2,40 @@ import {
   UserProductCondition,
   UserProductConditionLables,
 } from "@/types/userProduct";
-import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import { FaCheck } from "react-icons/fa6";
+import OptionTitle from "./OptionTitleForm";
 
 interface SelectConditionProps {
-  condition: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  selectedCondition: string;
+  onChangeCondition: (value: UserProductCondition) => void;
 }
 
 export default function SelectCondition({
-  condition,
-  onChange,
+  selectedCondition,
+  onChangeCondition,
 }: SelectConditionProps) {
-    
-  const conditions = Object.values(UserProductCondition); // 제품 손상도 배열
+  const conditions = Object.values(UserProductCondition);
 
   return (
-    <div className="flex flex-col gap-5">
-      <h3 className="user-product-h3">제품 상태</h3>
-      <RadioGroup
-        aria-labelledby="condition-radio-buttons-group-label"
-        value={condition}
-        name="radio-buttons-group"
-        onChange={onChange}
-        sx={{
-          width: "1000px",
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
+    <OptionTitle title="제품 상태는...">
+      <ul className="flex flex-col xl:flex-row gap-3 xl:gap-26">
         {conditions.map((condition) => (
-          <FormControlLabel
+          <li
             key={condition}
-            value={condition}
-            control={<Radio />}
-            label={UserProductConditionLables[condition]}
-            sx={{
-              width: "50px",
-            }}
-          />
+            onClick={() => onChangeCondition(condition)}
+            className={`cursor-pointer select-none flex items-center gap-3 hover:text-mid ${
+              selectedCondition === condition ? "text-green-600" : ""
+            }`}
+          >
+            <span className="w-[20px] aspect-square">
+              {selectedCondition === condition && (
+                <FaCheck className="text-green-500" />
+              )}
+            </span>
+            {UserProductConditionLables[condition]}
+          </li>
         ))}
-      </RadioGroup>
-    </div>
+      </ul>
+    </OptionTitle>
   );
 }

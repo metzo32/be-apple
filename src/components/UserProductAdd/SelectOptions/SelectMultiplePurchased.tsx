@@ -1,4 +1,5 @@
 import { FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
+import OptionTitle from "./OptionTitleForm";
 
 interface SelectMultiplePurchasedProps {
   isMultiplePurchased: boolean;
@@ -7,7 +8,6 @@ interface SelectMultiplePurchasedProps {
   value: number | string;
   handleMultiplePurchased: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleMultiplePurchasedBlur: () => void;
-
 }
 
 export default function SelectMultiplePurchased({
@@ -19,9 +19,7 @@ export default function SelectMultiplePurchased({
   handleMultiplePurchasedBlur,
 }: SelectMultiplePurchasedProps) {
   return (
-    <div className="w-[360px] flex flex-col gap-5 relative">
-      <h3 className="user-product-h3">이 제품을 재구매한 적 있나요?</h3>
-
+    <OptionTitle title="이 제품을 재구매한 적 있나요?">
       <RadioGroup
         aria-labelledby="status-radio-buttons-group-label"
         value={isMultiplePurchased ? "true" : "false"}
@@ -69,6 +67,6 @@ export default function SelectMultiplePurchased({
           <h4>회</h4>
         </div>
       )}
-    </div>
+    </OptionTitle>
   );
 }

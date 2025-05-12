@@ -210,7 +210,7 @@ select:hover {
   }
 
   .user-product-h3 {
-    @apply text-xl font-normal;
+    @apply text-3xl font-normal text-light;
   }
 
   .custom-round-s {

@@ -1,13 +1,13 @@
 "use client";
 
 import { use } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useUserStore } from "@/stores/useUserStore";
 import { fetchProduct } from "@/components/fetch/fetchProduct";
 import type { GetProductResponse } from "@/types/product";
 import SearchCard from "@/components/Search/SearchCard";
 import LoadingScreen from "@/components/LoadingScreen";
-import { useQuery } from "@tanstack/react-query";
-import { useUserStore } from "@/stores/useUserStore";
-import { useWishLoadQuery } from "@/hooks/useWishQuery";
+import { ProductCategoryEnum } from "@/types/productCategory";
 
 export default function SearchPage({
   params,
@@ -16,6 +16,7 @@ export default function SearchPage({
 }) {
   const { user } = useUserStore();
   const { category } = use(params);
+  const typedCategory = category as ProductCategoryEnum;
 
   const userId: number | null = user?.id ?? null;
 
@@ -24,8 +25,8 @@ export default function SearchPage({
     isLoading,
     error,
   } = useQuery<GetProductResponse[]>({
-    queryKey: ["searchList", category],
-    queryFn: () => fetchProduct({ category }),
+    queryKey: ["searchList", typedCategory],
+    queryFn: () => fetchProduct(typedCategory)
   });
 
   if (isLoading) return <LoadingScreen />;
@@ -37,7 +38,7 @@ export default function SearchPage({
         <SearchCard
           key={product.id}
           product={product}
-          userId={user?.id}
+          userId={userId}
         />
       ))}
     </div>

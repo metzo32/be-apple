@@ -1,4 +1,5 @@
 import { TextField } from "@mui/material";
+import OptionTitle from "./OptionTitleForm";
 
 interface SelectPurchasedPriceProps {
   displayedPrice: string;
@@ -10,8 +11,7 @@ export default function SelectPurchasedPrice({
   onChange,
 }: SelectPurchasedPriceProps) {
   return (
-    <div className="h-[500px] flex flex-col">
-      <h3 className="user-product-h3"> 해당 제품의 구매가를 작성해주세요.</h3>
+    <OptionTitle title="구매한 가격을 작성해주세요.">
       <TextField
         label="가격"
         variant="outlined"
@@ -19,6 +19,6 @@ export default function SelectPurchasedPrice({
         value={displayedPrice}
         onChange={(event) => onChange(event.target.value)}
       />
-    </div>
+    </OptionTitle>
   );
 }

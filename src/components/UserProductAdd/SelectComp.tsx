@@ -176,23 +176,26 @@ export default function SelectComp({
   };
 
   // 보유상태 선택
-  const handleStatusSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleStatusSelect = (value: UserProductStatus) => {
+    if (formData.status === value) return;
     setFormData((prev) => ({
       ...prev,
-      status: e.target.value as UserProductStatus,
+      status: value as UserProductStatus,
     }));
   };
 
   // 제품 상태 선택
-  const handleConditionSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleConditionSelect = (value: UserProductCondition) => {
+    if (formData.condition === value) return;
     setFormData((prev) => ({
       ...prev,
-      condition: e.target.value as UserProductCondition,
+      condition: value as UserProductCondition,
     }));
   };
 
   // 구매일 선택
   const handlePurchasedDateChange = (date: Date) => {
+    if (formData.purchasedAt === formatDate(String(date))) return;
     setFormData({
       ...formData,
       purchasedAt: formatDate(String(date)),
@@ -201,6 +204,7 @@ export default function SelectComp({
 
   // 판매일 선택
   const handleSoldDateChange = (date: Date) => {
+    if (formData.soldAt === formatDate(String(date))) return;
     setFormData({
       ...formData,
       soldAt: formatDate(String(date)),
@@ -217,6 +221,7 @@ export default function SelectComp({
       memo: tempMemo,
     }));
   };
+
   // 함수 시그니처....
   const handleMultiplePurchased = (e: React.ChangeEvent<HTMLInputElement>) => {
     const purchaseCount = Number(e.target.value.replace(/[^0-9]/g, ""));
@@ -263,7 +268,7 @@ export default function SelectComp({
 
       {isSelectWindowOpened ? (
         <div className="overlay flex justify-center items-center">
-          <div className="w-[300px] md:w-[600px] xl:w-[1200px] h-[800px] p-5 pt-10 md:p-10 md:pt-18 xl:p-16 bg-white rounded-xl md:rounded-3xl relative">
+          <div className="w-[300px] md:w-[600px] xl:w-[1200px] h-[800px] p-5 pt-10 md:p-12 md:pt-18 xl:p-16 bg-white rounded-xl md:rounded-3xl relative">
             <button // 창 닫기 버튼
               type="button"
               onClick={handleCloseSelectWindow}
@@ -276,8 +281,8 @@ export default function SelectComp({
               onSubmit={handleSubmit}
               className="w-full h-full flex flex-col gap-5"
             >
-              <div className="w-full flex items-center justify-end md:justify-between">
-                <span className="w-[65px]">
+              <div className="w-full h-[40px] flex items-center justify-end md:justify-between">
+                <span>
                   {currentPageNumber !== 0 && (
                     <ButtonBasic
                       type="button"
@@ -294,7 +299,7 @@ export default function SelectComp({
                   </span>
                 )}
 
-                <span className="w-[65px]">
+                <span>
                   {currentPageNumber !== MAX_PAGE && (
                     <ButtonStrong
                       type="button"
@@ -344,20 +349,16 @@ export default function SelectComp({
 
               {currentPageNumber === 3 && ( // 제품 활성화 상태
                 <SelectStatus
-                  status={formData.status}
                   onStatusChange={handleStatusSelect}
-                  isSoldSelected={isSoldSelected}
-                  setIsSoldSelected={setIsSoldSelected}
-                  soldDate={new Date(formData.soldAt)}
-                  onSoldDateChange={handleSoldDateChange}
-                  purchasedDate={new Date(formData.purchasedAt)}
+                  selectedStatus={formData.status}
+                  purchasedDate={formData.purchasedAt}
                 />
               )}
 
               {currentPageNumber === 4 && ( // 제품 손상도
                 <SelectCondition
-                  onChange={handleConditionSelect}
-                  condition={formData.condition}
+                  selectedCondition={formData.condition}
+                  onChangeCondition={handleConditionSelect}
                 />
               )}
 

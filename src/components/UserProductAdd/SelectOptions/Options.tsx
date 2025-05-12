@@ -1,28 +1,5 @@
 import { useProductOptionsQuery } from "@/hooks/useProductQuery";
-import { ProductCategoryEnum } from "@/types/productCategory";
-import {
-  ProductDetail,
-  ProductDetailIpad,
-  ProductDetailIphone,
-  ProductDetailMac,
-} from "@/types/productDetail";
-
-// 타입가드
-const isMacProduct = (product: ProductDetail): product is ProductDetailMac => {
-  return product.category === ProductCategoryEnum.MAC;
-};
-
-const isIpadProduct = (
-  product: ProductDetail
-): product is ProductDetailIpad => {
-  return product.category === ProductCategoryEnum.IPAD;
-};
-
-const isIphoneProduct = (
-  product: ProductDetail
-): product is ProductDetailIphone => {
-  return product.category === ProductCategoryEnum.IPHONE;
-};
+import { isIpadProduct, isIphoneProduct, isMacProduct } from "@/types/productTypeGurards";
 
 interface OptionsProps {
   productId: number;
