@@ -8,6 +8,6 @@ export function GoRecommendButton() {
   const handleClick = () => {
     router.push("/recommend");
   };
-  return <ButtonStrong text="알맞는 상품 보러가기" onClick={handleClick} />;
+  return <ButtonStrong text="알맞은 상품 보러가기" onClick={handleClick} />;
 }
 

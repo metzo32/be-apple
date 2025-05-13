@@ -89,7 +89,7 @@ select:hover {
 }
 
 .userSection {
-  @apply min-h-[350px] py-12;
+  @apply min-h-[350px] py-5 md:py-12;
 }
 
 @tailwind utilities;
@@ -147,7 +147,7 @@ select:hover {
   .global-px {
     @apply min-w-[320px]
     px-5
-    md:px-30 
+    md:px-20 
     xl:px-50 
     2xl:px-80;
   }
@@ -185,13 +185,13 @@ select:hover {
   }
 
   .user-product-card {
-    @apply shrink-0 w-full h-auto md:h-[60px] 
-    bg-white rounded-xl
-    px-0
-    md:px-5
-    border-2 border-transparent
+    @apply shrink-0 w-full h-auto 
+    border-b-2 border-secondaryLight 
+    /* rounded-xl */
+    py-2
+    md:p-5
     flex flex-col
-    md:grid md:grid-cols-5 gap-2 justify-center items-start md:items-center
+    md:grid md:grid-cols-6 gap-2 justify-center items-start md:items-center
     cursor-pointer
     relative
 
@@ -230,9 +230,9 @@ select:hover {
   }
 
   .user-common-container {
-    @apply bg-white rounded-xl shadow-light
+    @apply bg-white rounded-lg shadow-light
     p-5 
-    md:p-12 md:rounded-3xl;
+    md:p-12 md:rounded-2xl;
   }
 
   .user-h2 {
@@ -241,11 +241,11 @@ select:hover {
   }
 
   .user-wishcard-btn {
-    @apply w-4 aspect-square text-xl 
+    @apply w-2 aspect-square text-base
     flex items-center justify-center 
-    text-light 
-    hover:text-mid 
+    text-mid 
+    hover:text-light 
 
-    md:w-8 md:text-2xl;
+    md:w-5 md:text-xl;
   }
 }

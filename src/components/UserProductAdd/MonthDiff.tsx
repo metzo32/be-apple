@@ -1,6 +1,6 @@
-import { differenceInMonths } from "date-fns";
-import ButtonBasic from "../designs/ButtonBasic";
 import { useRouter } from "next/navigation";
+import ButtonBasic from "../designs/ButtonBasic";
+import { differenceInMonths } from "date-fns";
 
 export default function MonthDiff({
   purchasedAt,
@@ -9,7 +9,7 @@ export default function MonthDiff({
 }) {
   const router = useRouter();
 
-  const handleRouter = (category: string) => {
+  const handleCheckNewProduct = (category: string) => {
     router.push(category);
   };
 
@@ -34,17 +34,15 @@ export default function MonthDiff({
   return monthDiff ? (
     <>
       <div className="flex flex-row md:flex-col items-center gap-3 md:gap-1">
-        <p className="light-p">
-          약 {checkRange(monthDiff)}
-          {" "}경과
-        </p>
+        <p className="light-p mb-[3px] md:m-0">약 {checkRange(monthDiff)} 경과</p>
         {monthDiff >= 6 ? (
           <ButtonBasic
             text="최신 제품 알아보기"
-            onClick={() => handleRouter("a")}
+            // TODO 경로 수정
+            onClick={() => handleCheckNewProduct("test")}
           />
         ) : null}
       </div>
     </>
-  ) : null;
+  ) : <p className="light-p whitespace-nowrap">구매일 미입력</p>;
 }

@@ -8,7 +8,6 @@ export default function ButtonBasic({ text, onClick, type }: ButtonProps) {
       variant="text"
       onClick={onClick}
       className="hover:text-textHover"
-      // style={{ fontSize: '14px', lineHeight: "16px" }}
       sx={{
         color: "#797979", // light
         boxShadow: "none",
@@ -17,6 +16,8 @@ export default function ButtonBasic({ text, onClick, type }: ButtonProps) {
           fontSize: "10px",
         },
         padding: 0,
+        margin: 0,
+        minWidth: 0,
         "&:hover": {
           boxShadow: "none",
           backgroundClip: "text",

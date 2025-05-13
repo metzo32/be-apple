@@ -116,16 +116,14 @@ export default function WishButton({ product }: WishButtonProps) {
           onClick={(e) => e.stopPropagation()}
           className="w-screen h-screen fixed bg-overlay inset-0 z-20 flex justify-center items-center cursor-default"
         >
-          <div className="w-[300px] md:w-[460px] p-8 flex flex-col gap-3 md:gap-5 rounded-xl bg-white shadow-2xl">
+          <div className="w-[300px] md:w-[460px] p-5 md:p-8 flex flex-col gap-3 md:gap-5 rounded-xl bg-white shadow-2xl">
             <h3 className="font-bold">위시리스트에 추가되었습니다.</h3>
             <button
               type="button"
               onClick={handleDrop}
-              className="w-[100px] flex gap-3 items-center"
+              className="w-[100px] flex gap-2 items-center light-p font-medium"
             >
-              <label className="light-p cursor-pointer font-medium">
-                메모 남기기
-              </label>
+              메모 남기기
               {isDropped ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
             </button>
 
@@ -137,9 +135,9 @@ export default function WishButton({ product }: WishButtonProps) {
                   onChange={handleChange}
                   maxLength={100}
                   placeholder="나만의 메모를 남겨보세요"
-                  className="w-full h-[150px] p-3 border-3 border-bglight text-base resize-none"
+                  className="w-full h-[150px] p-3 border-3 border-bglight text-xs md:text-base resize-none"
                 />
-                <p className="text-sm text-gray-500 text-right mt-1">
+                <p className="text-xs md:text-sm text-gray-500 text-right mt-1">
                   {memo.length} / 100자
                 </p>
               </div>

@@ -26,21 +26,19 @@ export default function SearchPage({
     error,
   } = useQuery<GetProductResponse[]>({
     queryKey: ["searchList", typedCategory],
-    queryFn: () => fetchProduct(typedCategory)
+    queryFn: () => fetchProduct(typedCategory),
   });
 
   if (isLoading) return <LoadingScreen />;
   if (error || !productsList) return <h2>문제가 발생했습니다.</h2>;
 
   return (
-    <div className="mt-12 md:mt-24 grid place-items-center gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      {productsList.map((product) => (
-        <SearchCard
-          key={product.id}
-          product={product}
-          userId={userId}
-        />
-      ))}
+    <div className="mt-12 min-h-[500px] md:min-h-[700px] md:mt-24">
+      <div className="grid place-items-center gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {productsList.map((product) => (
+          <SearchCard key={product.id} product={product} userId={userId} />
+        ))}
+      </div>
     </div>
   );
 }

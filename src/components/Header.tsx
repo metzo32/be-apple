@@ -43,7 +43,7 @@ export default function Header() {
             onClick={() => router.push("/")}
           />
         </button>
-        <nav className="w-[200px] md:w-1/2 mx-[10px] md:m-0 flex md:items-end justify-between">
+        <nav className="w-[160px] md:w-1/2 mx-[30px] md:m-0 flex md:items-end justify-between">
           {basicDeviceData.map((device) => (
             <ButtonBasic
               key={device.alt}

@@ -1,9 +1,8 @@
 import { ReactNode } from "react";
 
 export interface ButtonProps {
-    text: ReactNode;
-    onClick?: () => void;
-    type?: "submit" | "reset" | "button" | undefined;
-    margin?: boolean;
-  }
-  
+  text: ReactNode;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  type?: "submit" | "reset" | "button" | undefined;
+  margin?: boolean;
+}

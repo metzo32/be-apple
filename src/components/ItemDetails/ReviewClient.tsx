@@ -37,7 +37,12 @@ export default function ReviewClient({
   const isWritten = reviews.some((review) => review.userId === user?.id);
 
   const totalRatings = reviews.reduce((sum, review) => sum + review.rating, 0);
-  const averageRatings = totalRatings / reviews.length;
+
+  let averageRatings = (totalRatings / reviews.length).toFixed(1).toString();
+
+  if (reviews.length === 0) {
+    averageRatings = "0.0"
+  }
 
   return (
     <section className="w-full flex flex-col gap-10 bg-white global-px py-36 overflow-hidden">
@@ -50,7 +55,7 @@ export default function ReviewClient({
 
       <div className="flex gap-5 items-center">
         <p className="text-4xl">{averageRatings}</p>
-        <FaStar className="text-primary"/>
+        <FaStar className="text-primary" />
       </div>
 
       {userProductId ? (
@@ -91,7 +96,7 @@ export default function ReviewClient({
       <div className="grid grid-cols-1 lg:grid-cols-1 gap-5 lg:gap-10">
         {product.reviews.length === 0 ? (
           <div className="h-[300px]">
-            <p>등록된 리뷰가 없습니다.</p>
+            <p>아직 등록된 리뷰가 없습니다.</p>
           </div>
         ) : (
           reviews.map((review) => (

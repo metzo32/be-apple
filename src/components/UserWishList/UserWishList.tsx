@@ -50,7 +50,7 @@ export default function UserWishList({ userId }: UserProduct) {
       <div className="user-common-container min-h-[500px]">
         <h2 className="user-h2">내 위시리스트</h2>
         {wishList.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {wishList.map((wish) => {
               const isPendingDelete = pendingDeleteIds.includes(wish.id);
               return (

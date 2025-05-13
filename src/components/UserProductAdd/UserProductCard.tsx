@@ -2,14 +2,13 @@ import type { GetUserProductResponse } from "@/types/userProduct";
 import MonthDiff from "./MonthDiff";
 import useModal from "@/hooks/useModal";
 import Modal from "../Modal/Modal";
-import { IoCloseOutline } from "react-icons/io5";
-import { AiOutlineEdit } from "react-icons/ai";
 import {
   isIpadProduct,
   isIphoneProduct,
   isMacProduct,
 } from "@/types/productTypeGurards";
 import Link from "next/link";
+import ButtonBasic from "../designs/ButtonBasic";
 
 interface UserProductCardProps {
   userProduct: GetUserProductResponse;
@@ -22,7 +21,17 @@ export default function UserProductCard({
 }: UserProductCardProps) {
   const { isModalOpen, openModal, closeModal } = useModal();
 
-  console.log("유저 프로덕트", userProduct);
+  const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("수정하기");
+  };
+
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onDelete(userProduct.id);
+  };
 
   // TODO 유저프로덕트에 reviews조회기능 추가되면 - 리뷰 있는 경우 확인모달 띄우기 추가
   if (isMacProduct(userProduct.product)) {
@@ -33,20 +42,26 @@ export default function UserProductCard({
         href={`/Mac/${userProduct.product.id}`}
         className="user-product-card"
       >
-        <h3
-          className={`justify-self-start ${
-            userProduct.status === "SOLD" && "line-through text-light"
-          }`}
-        >
-          {userProduct.product.name}
-        </h3>
-        <div className="flex gap-2 justify-self-center">
-          <p className="justify-self-center text-xs md:text-sm text-light">
-            {myOption?.processor}
-          </p>
-          <p className="justify-self-center text-xs md:text-sm text-light">
-            {displaySize}
-          </p>
+        {/* TODO 이미지로 대체 */}
+        <div className="w-16 h-16 bg-gray-300" />
+
+        <div className="flex flex-col items-start gap-1 col-span-2">
+          <h3
+            className={`justify-self-start font-bold ${
+              userProduct.status === "SOLD" && "line-through text-light"
+            }`}
+          >
+            {userProduct.product.name}
+          </h3>
+
+          <div className="flex gap-1 justify-self-center">
+            <p className="justify-self-center text-xs md:text-sm text-light">
+              {myOption?.processor}
+            </p>
+            <p className="justify-self-center text-xs md:text-sm text-light">
+              {displaySize}
+            </p>
+          </div>
         </div>
 
         <span className="justify-self-center">
@@ -55,23 +70,22 @@ export default function UserProductCard({
           )}
         </span>
 
-        <span>
+        <span className="w-full flex justify-between md:justify-end items-center">
           {userProduct.purchasePrice && userProduct.purchasePrice !== 0 ? (
-            <p className="justify-self-end light-p">{`${userProduct.purchasePrice.toLocaleString()}원`}</p>
+            <p className="justify-self-end light-p whitespace-nowrap">{`${userProduct.purchasePrice.toLocaleString()}원`}</p>
           ) : (
-            <p className="justify-self-end light-p">-</p>
+            <p className="justify-self-end light-p whitespace-nowrap">가격 미입력</p>
           )}
+
+          <div className="flex gap-3 md:hidden">
+            <ButtonBasic text="수정하기" onClick={handleEdit} />
+            <ButtonBasic text="삭제하기" onClick={handleDelete} />
+          </div>
         </span>
 
-        <div className="flex items-center gap-5  justify-self-end">
-          <AiOutlineEdit />
-
-          <button
-            onClick={() => onDelete(userProduct.id)}
-            className="w-8 aspect-square bg-light text-white text-3xl flex justify-center items-center hover:bg-mid"
-          >
-            <IoCloseOutline />
-          </button>
+        <div className="ml-10 hidden md:flex flex-col">
+          <ButtonBasic text="수정하기" onClick={handleEdit} />
+          <ButtonBasic text="삭제하기" onClick={handleDelete} />
         </div>
 
         <Modal
@@ -89,27 +103,34 @@ export default function UserProductCard({
 
   // TODO 카테고리별로 쌓이는 오류.
   if (isIpadProduct(userProduct.product)) {
-    const { displaySize } = userProduct.product;
+    const { myOption, displaySize } = userProduct.product;
 
     return (
       <Link
         href={`/iPad/${userProduct.product.id}`}
         className="user-product-card"
       >
-        <h3
-          className={`justify-self-start ${
-            userProduct.status === "SOLD" && "line-through text-light"
-          }`}
-        >
-          {userProduct.product.name}
-        </h3>
-        <div className="flex gap-2 justify-self-center">
-          <p className="justify-self-center text-xs md:text-sm text-light">
-            {userProduct.product.processor}
-          </p>
-          <p className="justify-self-center text-xs md:text-sm text-light">
-            {displaySize}
-          </p>
+        {/* TODO 이미지로 대체 */}
+        <div className="w-16 h-16 bg-gray-300" />
+        <div className="flex flex-col items-start gap-1 col-span-2">
+          <h3
+            className={`justify-self-start ${
+              userProduct.status === "SOLD" && "line-through text-light"
+            }`}
+          >
+            {userProduct.product.name}
+          </h3>
+          <div className="flex gap-2 justify-self-center">
+            <p className="justify-self-center text-xs md:text-sm text-light">
+              {userProduct.product.processor}
+            </p>
+            <p className="justify-self-center text-xs md:text-sm text-light">
+              {displaySize}
+            </p>
+            <p className="justify-self-center text-xs md:text-sm text-light">
+              {myOption?.storage}
+            </p>
+          </div>
         </div>
 
         <span className="justify-self-center">
@@ -118,51 +139,56 @@ export default function UserProductCard({
           )}
         </span>
 
-        <span>
+        <span className="w-full flex justify-between md:justify-end items-center">
           {userProduct.purchasePrice && userProduct.purchasePrice !== 0 ? (
-            <p className="justify-self-end light-p">{`${userProduct.purchasePrice.toLocaleString()}원`}</p>
+            <p className="justify-self-end light-p whitespace-nowrap">{`${userProduct.purchasePrice.toLocaleString()}원`}</p>
           ) : (
-            <p className="justify-self-end light-p">-</p>
+            <p className="justify-self-end light-p whitespace-nowrap">가격 미입력</p>
           )}
+
+          <div className="flex gap-3 md:hidden">
+            <ButtonBasic text="수정하기" onClick={handleEdit} />
+            <ButtonBasic text="삭제하기" onClick={handleDelete} />
+          </div>
         </span>
 
-        <div className="flex items-center gap-5  justify-self-end">
-          <AiOutlineEdit />
-
-          <button
-            onClick={() => onDelete(userProduct.id)}
-            className="w-8 aspect-square bg-light text-white text-3xl flex justify-center items-center hover:bg-mid"
-          >
-            <IoCloseOutline />
-          </button>
+        <div className="ml-10 hidden md:flex flex-col">
+          <ButtonBasic text="수정하기" onClick={handleEdit} />
+          <ButtonBasic text="삭제하기" onClick={handleDelete} />
         </div>
       </Link>
     );
   }
 
   if (isIphoneProduct(userProduct.product)) {
-    const { displaySize } = userProduct.product;
+    const { myOption, displaySize } = userProduct.product;
 
     return (
       <Link
-        href={`/iPhone/${userProduct.product.id}`}
+        href={`/iPad/${userProduct.product.id}`}
         className="user-product-card"
       >
-        <h3
-          className={`justify-self-start ${
-            userProduct.status === "SOLD" && "line-through text-light"
-          }`}
-        >
-          {userProduct.product.name}
-          {userProduct.product.id}
-        </h3>
-        <div className="flex gap-2 justify-self-center">
-          <p className="justify-self-center text-xs md:text-sm text-light">
-            {userProduct.product.processor}
-          </p>
-          <p className="justify-self-center text-xs md:text-sm text-light">
-            {displaySize}
-          </p>
+        {/* TODO 이미지로 대체 */}
+        <div className="w-16 h-16 bg-gray-300" />
+        <div className="flex flex-col items-start gap-1 col-span-2">
+          <h3
+            className={`justify-self-start ${
+              userProduct.status === "SOLD" && "line-through text-light"
+            }`}
+          >
+            {userProduct.product.name}
+          </h3>
+          <div className="flex gap-2 justify-self-center">
+            <p className="justify-self-center text-xs md:text-sm text-light">
+              {userProduct.product.processor}
+            </p>
+            <p className="justify-self-center text-xs md:text-sm text-light">
+              {displaySize}
+            </p>
+            <p className="justify-self-center text-xs md:text-sm text-light">
+              {myOption?.storage}
+            </p>
+          </div>
         </div>
 
         <span className="justify-self-center">
@@ -171,23 +197,22 @@ export default function UserProductCard({
           )}
         </span>
 
-        <span>
+        <span className="w-full flex justify-between md:justify-end items-center">
           {userProduct.purchasePrice && userProduct.purchasePrice !== 0 ? (
-            <p className="justify-self-end light-p">{`${userProduct.purchasePrice.toLocaleString()}원`}</p>
+            <p className="justify-self-end light-p whitespace-nowrap">{`${userProduct.purchasePrice.toLocaleString()}원`}</p>
           ) : (
-            <p className="justify-self-end light-p">-</p>
+            <p className="justify-self-end light-p whitespace-nowrap">가격 미입력</p>
           )}
+
+          <div className="flex gap-3 md:hidden">
+            <ButtonBasic text="수정하기" onClick={handleEdit} />
+            <ButtonBasic text="삭제하기" onClick={handleDelete} />
+          </div>
         </span>
 
-        <div className="flex items-center gap-5  justify-self-end">
-          <AiOutlineEdit />
-
-          <button
-            onClick={() => onDelete(userProduct.id)}
-            className="w-8 aspect-square bg-light text-white text-3xl flex justify-center items-center hover:bg-mid"
-          >
-            <IoCloseOutline />
-          </button>
+        <div className="ml-10 hidden md:flex flex-col">
+          <ButtonBasic text="수정하기" onClick={handleEdit} />
+          <ButtonBasic text="삭제하기" onClick={handleDelete} />
         </div>
       </Link>
     );
