@@ -1,4 +1,4 @@
-import { fetchProductDetail } from "@/components/fetch/fetchProduct"
+import { getProductDetail } from "@/components/fetch/fetchProduct"
 import { useQuery } from "@tanstack/react-query"
 import { isNil, isNumber } from "lodash"
 
@@ -7,7 +7,7 @@ export const useProductDetailQuery = (productId: number | null) => {
     queryKey: ['productDetail', productId],
     queryFn: () => {
       if (isNil(productId)) return;
-      return fetchProductDetail(productId)
+      return getProductDetail(productId)
     },
     enabled: isNumber(productId)
   })

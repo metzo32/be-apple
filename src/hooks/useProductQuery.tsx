@@ -1,6 +1,6 @@
 import {
-  fetchProduct,
-  fetchProductDetail,
+  getProduct,
+  getProductDetail,
 } from "@/components/fetch/fetchProduct";
 import { ProductCategoryEnum } from "@/types/productCategory";
 import { useQuery } from "@tanstack/react-query";
@@ -10,7 +10,7 @@ export const useProductLoadQuery = (category: ProductCategoryEnum) => {
   return useQuery({
     queryKey: ["loadProducts", category],
     queryFn: async () => {
-      const response = await fetchProduct(category);
+      const response = await getProduct(category);
 
       return response;
     },
@@ -24,7 +24,7 @@ export const useProductOptionsQuery = (
   return useQuery({
     queryKey: ["loadProductDetail", productId],
     queryFn: async () => {
-      const response = await fetchProductDetail(productId);
+      const response = await getProductDetail(productId);
       console.log("디테일", response);
       return response;
     },
@@ -38,7 +38,7 @@ export const useProductOptionsQuery = (
 
 //   return useMutation({
 //     mutationFn: (productId: number) => {
-//       const options = fetchProductDetail(productId);
+//       const options = getProductDetail(productId);
 //       return options;
 //     },
 //     onSuccess: async () => {

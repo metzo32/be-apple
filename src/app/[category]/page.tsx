@@ -3,7 +3,7 @@
 import { use } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useUserStore } from "@/stores/useUserStore";
-import { fetchProduct } from "@/components/fetch/fetchProduct";
+import { getProduct } from "@/components/fetch/fetchProduct";
 import type { GetProductResponse } from "@/types/product";
 import SearchCard from "@/components/Search/SearchCard";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -17,7 +17,7 @@ export default function SearchPage({
 }) {
   const { user } = useUserStore();
   const { category } = use(params);
-  const typedCategory = (category as ProductCategoryEnum);
+  const typedCategory = category as ProductCategoryEnum;
 
   const userId: number | null = user?.id ?? null;
 
@@ -27,18 +27,18 @@ export default function SearchPage({
     error,
   } = useQuery<GetProductResponse[]>({
     queryKey: ["searchList", typedCategory],
-    queryFn: () => fetchProduct(typedCategory),
+    queryFn: () => getProduct(typedCategory),
   });
 
   if (isLoading) return <LoadingScreen />;
   if (error || !productsList) return <h2>문제가 발생했습니다.</h2>;
 
   return (
-    <div className="my-12 min-h-[500px] md:min-h-[700px] md:mt-24">
+    <div className="w-[100vw] mb-24 -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72 bg-white global-px">
       <span className="w-[full] flex justify-between items-center mb-24 px-36">
-        <ProductSearchBar category={typedCategory}/>
+        <ProductSearchBar category={typedCategory} />
       </span>
-      <div className="grid place-items-center gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid place-items-center gap-y-15 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
         {productsList.map((product) => (
           <SearchCard key={product.id} product={product} userId={userId} />
         ))}
@@ -47,7 +47,7 @@ export default function SearchPage({
   );
 }
 
-// import { fetchProduct } from "@/components/fetch/fetchProduct";
+// import { getProduct } from "@/components/fetch/fetchProduct";
 // import SearchCard from "@/components/Search/SearchCard";
 
 // export default async function SearchPage({

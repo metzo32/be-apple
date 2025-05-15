@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { fetchProductDetail } from "@/components/fetch/fetchProduct";
+import { getProductDetail } from "@/components/fetch/fetchProduct";
 import ReviewClient from "@/components/ItemDetails/ReviewClient";
 import { ProductDetail } from "@/types/productDetail";
 import { isMacProduct } from "@/types/productTypeGurards";
@@ -14,7 +14,7 @@ interface DetailPageProps {
 export default async function DetailPage({ params }: DetailPageProps) {
   const paramsInfo = params;
   const productId = Number(paramsInfo.id);
-  const product: ProductDetail | null = await fetchProductDetail(productId);
+  const product: ProductDetail | null = await getProductDetail(productId);
 
   console.log("서버에서의 프로덕트", product);
 
