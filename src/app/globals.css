@@ -149,7 +149,7 @@ select:hover {
     px-5
     md:px-20 
     xl:px-50 
-    2xl:px-80;
+    2xl:px-72;
   }
 
   .button-light {
@@ -210,7 +210,7 @@ select:hover {
   }
 
   .user-product-h3 {
-    @apply text-3xl font-normal text-light;
+    @apply text-lg md:text-2xl font-normal text-light;
   }
 
   .custom-round-s {
@@ -241,7 +241,7 @@ select:hover {
   }
 
   .user-wishcard-btn {
-    @apply w-2 aspect-square text-base
+    @apply w-3 aspect-square text-lg
     flex items-center justify-center 
     text-mid 
     hover:text-light 

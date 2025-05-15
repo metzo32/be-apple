@@ -36,9 +36,9 @@ export default function Modal({
 
   return (
     <div className="overlay z-50">
-      <div className="w-[400px] h-[250px] p-10 rounded-xl bg-white flex flex-col justify-between items-center fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        <h3 className="text-3xl">{title}</h3>
-        <p>{content}</p>
+      <div className="w-[260px] h-[200px] md:w-[400px] md:h-[250px] px-6 py-8 md:p-10 rounded-xl bg-white flex flex-col justify-between items-center fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <h3 className="text-lg md:text-3xl">{title}</h3>
+        <p className="text-sm md:text-base text-center break-keep">{content}</p>
         <div className="flex gap-10">
           {!hideCancel && <ButtonBasic text="취소" onClick={handleCancel} />}
           <ButtonStrong text={confirmBtnText} onClick={handleConfirm} />

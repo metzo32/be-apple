@@ -13,9 +13,6 @@ export default function SelectPurchasedDate({
 }: SelectPurchasedDateProps) {
   return (
     <OptionTitle title="구매 시기">
-      <button type="button" className="hover:text-textHover">
-        <FaRegCalendarCheck />
-      </button>
 
       <PickDate
         pickedDate={pickedDate}

@@ -31,7 +31,7 @@ export default function SelectStatus({
           <li
             key={status}
             onClick={() => onStatusChange(status)}
-            className={`cursor-pointer select-none flex items-center gap-3 hover:text-mid ${
+            className={`text-sm md:text-base cursor-pointer select-none flex items-center gap-3 hover:text-mid ${
               selectedStatus === status ? "text-green-600" : ""
             }`}
           >

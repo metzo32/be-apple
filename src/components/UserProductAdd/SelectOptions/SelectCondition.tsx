@@ -23,7 +23,7 @@ export default function SelectCondition({
           <li
             key={condition}
             onClick={() => onChangeCondition(condition)}
-            className={`cursor-pointer select-none flex items-center gap-3 hover:text-mid ${
+            className={`text-sm md:text-base cursor-pointer select-none flex items-center gap-3 hover:text-mid ${
               selectedCondition === condition ? "text-green-600" : ""
             }`}
           >

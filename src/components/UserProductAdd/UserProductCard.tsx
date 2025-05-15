@@ -74,7 +74,9 @@ export default function UserProductCard({
           {userProduct.purchasePrice && userProduct.purchasePrice !== 0 ? (
             <p className="justify-self-end light-p whitespace-nowrap">{`${userProduct.purchasePrice.toLocaleString()}원`}</p>
           ) : (
-            <p className="justify-self-end light-p whitespace-nowrap">가격 미입력</p>
+            <p className="justify-self-end light-p whitespace-nowrap">
+              가격 미입력
+            </p>
           )}
 
           <div className="flex gap-3 md:hidden">
@@ -143,7 +145,9 @@ export default function UserProductCard({
           {userProduct.purchasePrice && userProduct.purchasePrice !== 0 ? (
             <p className="justify-self-end light-p whitespace-nowrap">{`${userProduct.purchasePrice.toLocaleString()}원`}</p>
           ) : (
-            <p className="justify-self-end light-p whitespace-nowrap">가격 미입력</p>
+            <p className="justify-self-end light-p whitespace-nowrap">
+              가격 미입력
+            </p>
           )}
 
           <div className="flex gap-3 md:hidden">
@@ -201,7 +205,9 @@ export default function UserProductCard({
           {userProduct.purchasePrice && userProduct.purchasePrice !== 0 ? (
             <p className="justify-self-end light-p whitespace-nowrap">{`${userProduct.purchasePrice.toLocaleString()}원`}</p>
           ) : (
-            <p className="justify-self-end light-p whitespace-nowrap">가격 미입력</p>
+            <p className="justify-self-end light-p whitespace-nowrap">
+              가격 미입력
+            </p>
           )}
 
           <div className="flex gap-3 md:hidden">

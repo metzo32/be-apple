@@ -8,6 +8,7 @@ import type { GetProductResponse } from "@/types/product";
 import SearchCard from "@/components/Search/SearchCard";
 import LoadingScreen from "@/components/LoadingScreen";
 import { ProductCategoryEnum } from "@/types/productCategory";
+import ProductSearchBar from "@/components/ProductSearchBar";
 
 export default function SearchPage({
   params,
@@ -16,7 +17,7 @@ export default function SearchPage({
 }) {
   const { user } = useUserStore();
   const { category } = use(params);
-  const typedCategory = category as ProductCategoryEnum;
+  const typedCategory = (category as ProductCategoryEnum);
 
   const userId: number | null = user?.id ?? null;
 
@@ -33,7 +34,10 @@ export default function SearchPage({
   if (error || !productsList) return <h2>문제가 발생했습니다.</h2>;
 
   return (
-    <div className="mt-12 min-h-[500px] md:min-h-[700px] md:mt-24">
+    <div className="my-12 min-h-[500px] md:min-h-[700px] md:mt-24">
+      <span className="w-[full] flex justify-between items-center mb-24 px-36">
+        <ProductSearchBar category={typedCategory}/>
+      </span>
       <div className="grid place-items-center gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {productsList.map((product) => (
           <SearchCard key={product.id} product={product} userId={userId} />

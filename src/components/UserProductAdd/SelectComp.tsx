@@ -23,7 +23,7 @@ import { IoCloseOutline } from "react-icons/io5";
 import ButtonStrong from "../designs/ButtonStrong";
 import ButtonBasic from "../designs/ButtonBasic";
 import { Button } from "@mui/material";
-import SearchBar from "./SelectOptions/SearchBar";
+import SearchBar from "../ProductSearchBar";
 
 interface SelectCompProps {
   isSelectWindowOpened: boolean;
@@ -268,7 +268,7 @@ export default function SelectComp({
 
       {isSelectWindowOpened ? (
         <div className="overlay flex justify-center items-center">
-          <div className="w-[300px] md:w-[600px] xl:w-[1200px] h-[800px] p-5 pt-10 md:p-12 md:pt-18 xl:p-16 bg-white rounded-xl md:rounded-3xl relative">
+          <div className="overflow-hidden w-[300px] h-[500px] md:w-[800px] md:h-[600px] xl:w-[1200px] xl:h-[800px] p-5 pt-10 md:p-12 md:pt-18 xl:p-16 bg-white rounded-xl md:rounded-3xl relative">
             <button // 창 닫기 버튼
               type="button"
               onClick={handleCloseSelectWindow}
@@ -281,8 +281,8 @@ export default function SelectComp({
               onSubmit={handleSubmit}
               className="w-full h-full flex flex-col gap-5"
             >
-              <div className="w-full h-[40px] flex items-center justify-end md:justify-between">
-                <span>
+              <div className="w-full h-[40px] flex items-center justify-between">
+                <span className="ml-5 md:m-0">
                   {currentPageNumber !== 0 && (
                     <ButtonBasic
                       type="button"
@@ -294,8 +294,8 @@ export default function SelectComp({
 
                 {/* 검색바 */}
                 {currentPageNumber === 0 && (
-                  <span className="hidden xl:block">
-                    <SearchBar />
+                  <span className="hidden xl:flex w-[260px] h-[40px] md:w-full xl:w-[500px] ml-0 xl:ml-16 items-center justify-center gap-5">
+                    {/* <SearchBar /> */}
                   </span>
                 )}
 
@@ -313,7 +313,7 @@ export default function SelectComp({
               {/* 검색바 */}
               {currentPageNumber === 0 && (
                 <span className="block xl:hidden">
-                  <SearchBar />
+                  {/* <SearchBar /> */}
                 </span>
               )}
 

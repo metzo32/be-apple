@@ -25,7 +25,7 @@ export default async function DetailPage({ params }: DetailPageProps) {
 
   if (isMacProduct(product)) {
     return (
-      <div className="w-[100vw] mb-24 -ml-5 md:-ml-30 xl:-ml-50 2xl:-ml-80">
+      <div className="w-[100vw] mb-24 -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72">
         {/* <Link href={`/${params.category}`} className="w-[50px] text-custombg">
           <Image
             src={"/assets/icons/arrow_left.svg"}

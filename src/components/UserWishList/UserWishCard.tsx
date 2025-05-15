@@ -67,9 +67,9 @@ export default function UserWishCard({ wishList, onDelete }: WishCardProps) {
               {isMemoOpen && (
                 <span
                   onClick={() => setIsMemoOpen(!isMemoOpen)}
-                  className="select-none absolute top-full transform translate-y-20 md:translate-y-4 -translate-x-50  md:translate-x-0 z-30 w-[200px] xl:w-[300px] h-[120px] bg-white p-5 rounded-xl border-2 border-secondaryLight shadow-strong"
+                  className="select-none absolute top-full transform translate-y-0 md:translate-y-4 -translate-x-0  md:translate-x-0 z-30 w-[200px] xl:w-[300px] h-[120px] bg-white p-5 rounded-xl border-2 border-secondaryLight shadow-strong"
                 >
-                  <p className="text-sm text-mid">{wishList.memo}</p>
+                  <p className="text-xs md:text-sm text-mid">{wishList.memo}</p>
                 </span>
               )}
             </>

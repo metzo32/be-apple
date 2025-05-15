@@ -15,9 +15,17 @@ export default function SelectPurchasedPrice({
       <TextField
         label="가격"
         variant="outlined"
-        sx={{ width: "330px" }}
+        sx={{ width: "330px", margin: 0 }}
         value={displayedPrice}
         onChange={(event) => onChange(event.target.value)}
+        slotProps={{
+          inputLabel: {
+            sx: {
+              textAlign: "left",
+              width: "100%",
+            },
+          },
+        }}
       />
     </OptionTitle>
   );
