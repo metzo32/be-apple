@@ -12,8 +12,7 @@ interface DetailPageProps {
 }
 
 export default async function DetailPage({ params }: DetailPageProps) {
-  const paramsInfo = params;
-  const productId = Number(paramsInfo.id);
+  const productId = Number(params.id);
   const product: ProductDetail | null = await getProductDetail(productId);
 
   console.log("서버에서의 프로덕트", product);
@@ -78,7 +77,7 @@ export default async function DetailPage({ params }: DetailPageProps) {
           </div>
         </section>
 
-        <section className="flex justify-center">
+        <section className="flex justify-center items-center">
           <div className="w-[1000px] grid grid-cols-3 py-36 justify-center items-center">
             {product.options.map((option, index) => (
               <div

@@ -1,16 +1,16 @@
-import {
-  getProduct,
-  getProductDetail,
-} from "@/components/fetch/fetchProduct";
-import { ProductCategoryEnum } from "@/types/productCategory";
+import { getProduct, getProductDetail } from "@/components/fetch/fetchProduct";
+import { ProductCategoryEnum, ProductQueryString } from "@/types/productCategory";
 import { useQuery } from "@tanstack/react-query";
 
 // 카테고리별 프로덕트 전체 목록 조회
-export const useProductLoadQuery = (category: ProductCategoryEnum) => {
+export const useProductLoadQuery = (
+  category: ProductCategoryEnum,
+  query?: Omit<ProductQueryString, "category">
+) => {
   return useQuery({
-    queryKey: ["loadProducts", category],
+    queryKey: ["loadProducts", category, query],
     queryFn: async () => {
-      const response = await getProduct(category);
+      const response = await getProduct(category, query);
 
       return response;
     },
@@ -25,7 +25,6 @@ export const useProductOptionsQuery = (
     queryKey: ["loadProductDetail", productId],
     queryFn: async () => {
       const response = await getProductDetail(productId);
-      console.log("디테일", response);
       return response;
     },
     enabled: options?.enabled,

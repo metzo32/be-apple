@@ -10,24 +10,30 @@ interface SearchCardProps {
 }
 
 export default function SearchCard({ userId, product }: SearchCardProps) {
+
+  const originalName = product.name;
+  const idx = originalName.indexOf("(");
+  const resultName = originalName.slice(0, idx)
+
   return (
-    <div className="w-[280px] lg:w-full lg:max-w-[460px] h-[80px] lg:h-[150px] shrink-0 overflow-hidden flex gap-0 lg:gap-3 items-start relative">
+    <div className=" h-[80px] lg:h-[150px] shrink-0 overflow-hidden flex gap-0 lg:gap-0 items-start relative">
       <Link
         href={`/${product.category}/${product.id}`} // product의 Id
+        className="w-[130px] lg:w-[260px] h-[75px] lg:h-[150px] "
       >
         {/* TODO 이미지 대체 */}
         <img
           // src={product.photos[0]}
           src="/assets/images/macbook_m3_air_example.png"
           alt={product.name}
-          className="w-[130px] lg:w-[260px] h-[75px] lg:h-[150px] object-cover"
+          className="object-cover"
           // fill
         />
       </Link>
 
-      <div className="w-[150px] lg:w-[200px] h-full flex flex-col py-0 lg:py-2 justify-between">
+      <div className="w-[150px] lg:w-[150px] h-full flex flex-col py-0 lg:py-2 justify-between">
         <div className="flex flex-col gap-0 lg:gap-2">
-          <h5 className="text-sm lg:text-base font-bold whitespace-nowrap">{product.name}</h5>
+          <h5 className="text-sm lg:text-base font-bold whitespace-nowrap">{resultName}</h5>
           <p className="light-p">{product.generation}</p>
 
           <span className="flex gap-3 items-center">

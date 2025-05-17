@@ -1,14 +1,14 @@
 "use client";
 
 import { use } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
-import { getProduct } from "@/components/fetch/fetchProduct";
-import type { GetProductResponse } from "@/types/product";
+import { useProductLoadQuery } from "@/hooks/useProductQuery";
+import { ProductCategoryEnum } from "@/types/productCategory";
 import SearchCard from "@/components/Search/SearchCard";
 import LoadingScreen from "@/components/LoadingScreen";
-import { ProductCategoryEnum } from "@/types/productCategory";
 import ProductSearchBar from "@/components/ProductSearchBar";
+import { useRouterQuery } from "@/hooks/useRouterQuery";
 
 export default function SearchPage({
   params,
@@ -18,6 +18,7 @@ export default function SearchPage({
   const { user } = useUserStore();
   const { category } = use(params);
   const typedCategory = category as ProductCategoryEnum;
+  const { query } = useRouterQuery();
 
   const userId: number | null = user?.id ?? null;
 
@@ -25,26 +26,44 @@ export default function SearchPage({
     data: productsList,
     isLoading,
     error,
-  } = useQuery<GetProductResponse[]>({
-    queryKey: ["searchList", typedCategory],
-    queryFn: () => getProduct(typedCategory),
-  });
+  } = useProductLoadQuery(typedCategory, query);
 
   if (isLoading) return <LoadingScreen />;
   if (error || !productsList) return <h2>문제가 발생했습니다.</h2>;
 
   return (
-    <div className="w-[100vw] mb-24 -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72 bg-white global-px">
-      <span className="w-[full] flex justify-between items-center mb-24 px-36">
+    <div className="flex flex-col items-center min-w-[320px] w-[100vw] pt-20 pb-28 -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72 bg-white">
+      <span className="w-[280px] md:w-[350px] lg:w-[450px] flex justify-center items-center mb-24">
         <ProductSearchBar category={typedCategory} />
       </span>
-      <div className="grid place-items-center gap-y-15 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+
+      <div className="w-full flex justify-end items-center gap-5 global-px">
+        <button>오름차순</button>
+        <button>내림차순</button>
+      </div>
+
+      <div className="grid place-items-center gap-8 md:gap-15 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
         {productsList.map((product) => (
           <SearchCard key={product.id} product={product} userId={userId} />
         ))}
       </div>
     </div>
   );
+}
+
+{
+  /* <span className="px-5 border-2 border-custombg rounded-full bg-bglight h-[50px] w-[280px] md:w-[350px] lg:w-[600px] mb-24 grid grid-cols-4 gap-x-5">
+        <span className="w-full border-r-2 border-custombg col-span-2">
+          <input className="w-full pt-2" placeholder="제품명" />
+        </span>
+        <span className="w-full border-r-2 border-custombg">
+          <input type="option" className="w-full pt-2" placeholder="가격대" />
+        </span>
+      </span>
+
+      <span className="w-full grid-cols-4">
+        
+      </span> */
 }
 
 // import { getProduct } from "@/components/fetch/fetchProduct";
