@@ -4,26 +4,22 @@ import Image from "next/image";
 import { useState } from "react";
 import useModal from "@/hooks/useModal";
 import type { CreateNewReviewReq } from "@/types/Review";
-import { createNewReview } from "../fetch/fetchReview";
 import { fetchUploadPhoto } from "../fetch/fetchUploadPhoto";
 import ButtonStrong from "../designs/ButtonStrong";
 import Modal from "../Modal/Modal";
 import { Rating } from "@mui/material";
 import { LuPlus } from "react-icons/lu";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAddReviewMutation } from "@/hooks/useProductDetailQuery";
+import { useAddReviewMutation } from "@/hooks/useReviewsQuery";
 
 interface WriteReviewProps {
   productId: number;
   userProductId: number | null;
-  isWriteReviewOpen: boolean;
   setIsOpen: (value: boolean) => void;
 }
 
 export default function WriteReview({
   productId,
   userProductId,
-  isWriteReviewOpen,
   setIsOpen,
 }: WriteReviewProps) {
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -33,11 +29,10 @@ export default function WriteReview({
 
   const MAX_LENGTH = 200;
 
-  const { mutate: createReviewMutationFn } = useAddReviewMutation();
- 
+  const { mutate: createReviewMutationFn } = useAddReviewMutation(productId);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
 
     // 아무것도 입력하지 않은 경우
     if (review.length === 0) {
@@ -58,9 +53,10 @@ export default function WriteReview({
       photos: uploadedPhotos,
     };
 
-    console.log(productId, reviewData)
+    console.log(productId, reviewData);
 
     createReviewMutationFn(reviewData);
+    setIsOpen(false)
   };
 
   // 리뷰 사진 추가하기

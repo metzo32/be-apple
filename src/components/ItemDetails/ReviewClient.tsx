@@ -32,9 +32,6 @@ export default function ReviewClient({
 
   const writtenReview = reviews.filter((review) => review.userId === user?.id); // 내가 쓴 리뷰 객체
 
-  console.log("내가 쓴 리뷰", writtenReview);
-  console.log("이 제품의 productId", productId);
-
   const totalRatings = reviews.reduce((sum, review) => sum + review.rating, 0); // 총점
   let averageRatings = (totalRatings / reviews.length).toFixed(1).toString(); // 평균 평점
 
@@ -91,7 +88,6 @@ export default function ReviewClient({
         <WriteReview
           productId={productId}
           userProductId={userProductId}
-          isWriteReviewOpen={isWriteReviewOpen}
           setIsOpen={setIsWriteReviewOpen}
         />
       )}

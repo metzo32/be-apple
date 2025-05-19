@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import ButtonBasic from "@/components/designs/ButtonBasic";
-import ButtonStrong from "@/components/designs/ButtonStrong";
 import { useRouter } from "next/navigation";
 import { fetchSignUp } from "@/components/fetch/fetchSignUp";
+import ButtonBasic from "@/components/designs/ButtonBasic";
+import ButtonStrong from "@/components/designs/ButtonStrong";
 import { GoogleButton, KakaoButton } from "@/components/SocialLoginButton";
-import { TextField } from "@mui/material";
 import CustomTextField from "@/components/designs/CustomTextField";
 
 export default function RegisterPage() {

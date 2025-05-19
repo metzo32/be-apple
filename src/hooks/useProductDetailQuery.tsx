@@ -25,7 +25,7 @@ export const useProductReviewQuery = (productId: number | null) => {
   });
 };
 
-export const useAddReviewMutation = () => {
+export const useAddReviewMutation = (productId: number) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (reviewData: CreateNewReviewReq) => {
