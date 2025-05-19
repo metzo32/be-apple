@@ -1,8 +1,15 @@
 import { fetchReviewMe } from "@/components/fetch/fetchReview";
-import { fetchUserProduct } from "@/components/fetch/fetchUserProduct";
+import {
+  addUserProduct,
+  editUserProduct,
+  fetchUserProduct,
+} from "@/components/fetch/fetchUserProduct";
 import { Review } from "@/types/Review";
-import { GetUserProductResponse } from "@/types/userProduct";
-import { useQuery } from "@tanstack/react-query";
+import {
+  CreateUserProductReqDto,
+  GetUserProductResponse,
+} from "@/types/userProduct";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { isNil, isNumber } from "lodash";
 
 export const useUserProductQuery = (userId: number | null) => {
@@ -29,5 +36,49 @@ export const useUserProductQuery = (userId: number | null) => {
       };
     },
     enabled: isNumber(userId), // 숫자타입의 userId가 있을 때만 실행
+  });
+};
+
+export const useAddUserProductMutation = (userId: number | null) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (userProduct: CreateUserProductReqDto) => {
+      return addUserProduct(userProduct);
+    },
+    onSuccess: () => {
+      if (userId !== null) {
+        queryClient.invalidateQueries({
+          queryKey: ["loadUserProduct", userId],
+          refetchType: "all",
+        });
+      }
+    },
+    onError: (error) => {
+      console.error("유저 제품 추가 실패:", error);
+    },
+  });
+};
+
+export const useEditUserProductMutation = (userId: number | null) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: number) => {
+      return editUserProduct(id);
+    },
+
+    onSuccess: () => {
+      if (userId !== null) {
+        queryClient.invalidateQueries({
+          queryKey: ["loadUserProduct", userId],
+          refetchType: "all",
+        });
+      }
+    },
+
+    onError: (error) => {
+      console.error("유저 제품 수정 실패:", error);
+    },
   });
 };

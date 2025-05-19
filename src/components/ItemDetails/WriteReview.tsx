@@ -9,27 +9,42 @@ import ButtonStrong from "../designs/ButtonStrong";
 import Modal from "../Modal/Modal";
 import { Rating } from "@mui/material";
 import { LuPlus } from "react-icons/lu";
-import { useAddReviewMutation } from "@/hooks/useReviewsQuery";
+import {
+  useAddReviewMutation,
+  useEditReviewMutation,
+} from "@/hooks/useReviewsQuery";
 
 interface WriteReviewProps {
   productId: number;
   userProductId: number | null;
   setIsOpen: (value: boolean) => void;
+  existingReview?: {
+    id: number;
+    content: string;
+    rating: number;
+    photos: string[];
+  };
 }
 
 export default function WriteReview({
   productId,
   userProductId,
   setIsOpen,
+  existingReview,
 }: WriteReviewProps) {
   const { isModalOpen, openModal, closeModal } = useModal();
-  const [review, setReview] = useState<string>("");
-  const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([]);
-  const [value, setValue] = useState<number>(2);
+  const isEditMode = !!existingReview;
+
+  const [review, setReview] = useState<string>(existingReview?.content ?? "");
+  const [uploadedPhotos, setUploadedPhotos] = useState<string[]>(
+    existingReview?.photos ?? []
+  );
+  const [value, setValue] = useState<number>(existingReview?.rating ?? 2);
 
   const MAX_LENGTH = 200;
 
   const { mutate: createReviewMutationFn } = useAddReviewMutation(productId);
+  const { mutate: editReviewMutationFn } = useEditReviewMutation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,16 +68,21 @@ export default function WriteReview({
       photos: uploadedPhotos,
     };
 
-    console.log(productId, reviewData);
+    if (isEditMode && existingReview) {
+      editReviewMutationFn({
+        id: existingReview.id,
+        reviewData,
+      });
+    } else {
+      createReviewMutationFn(reviewData);
+    }
 
-    createReviewMutationFn(reviewData);
-    setIsOpen(false)
+    setIsOpen(false);
   };
 
   // 리뷰 사진 추가하기
   const handleAddPhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    console.log("파일", file);
 
     if (file) {
       const imageUrl = await fetchUploadPhoto(file);
@@ -129,7 +149,6 @@ export default function WriteReview({
         <h3 className="font-semibold">평점</h3>
         <div className="bg-amber-200">
           <Rating
-            // TODO review 점수값이 1로 넘어감
             value={value}
             max={5}
             onChange={(event, newValue) => {
@@ -154,37 +173,46 @@ export default function WriteReview({
           />
         </div>
 
-        <h3 className="font-semibold">포토</h3>
+        <div className="flex items-center gap-3">
+          <h3 className="font-semibold">포토</h3>
+          {isEditMode && (
+            <p className="text-sm text-light">
+              이미 업로드한 사진은 수정할 수 없습니다.
+            </p>
+          )}
+        </div>
         <div className="flex gap-5 w-full">
-          {[0, 1].map((_, index) => (
+          {uploadedPhotos.map((photo, index) => (
             <div key={index} className="w-[200px] aspect-square relative">
-              <input
-                type="file"
-                accept="image/*"
-                id={`file-input-${index}`}
-                onChange={(e) => handleAddPhoto(e)}
-                className="hidden"
+              <Image
+                src={photo}
+                alt={`이미지 ${index + 1}`}
+                fill
+                className="object-cover rounded-2xl"
               />
+            </div>
+          ))}
 
-              <label
-                htmlFor={`file-input-${index}`}
-                className="cursor-pointer w-full h-full bg-bglight rounded-2xl flex items-center justify-center hover:bg-bglightHover"
-              >
-                {uploadedPhotos && uploadedPhotos[index] ? (
-                  <Image
-                    src={uploadedPhotos[index]}
-                    alt="업로드된 이미지"
-                    fill
-                    className="object-cover"
-                  />
-                ) : (
+          {!isEditMode &&
+            [0, 1].slice(uploadedPhotos.length).map((_, index) => (
+              <div key={index} className="w-[200px] aspect-square relative">
+                <input
+                  type="file"
+                  accept="image/*"
+                  id={`file-input-${index}`}
+                  onChange={handleAddPhoto}
+                  className="hidden"
+                />
+                <label
+                  htmlFor={`file-input-${index}`}
+                  className="cursor-pointer w-full h-full bg-bglight rounded-2xl flex items-center justify-center hover:bg-bglightHover"
+                >
                   <span className="text-gray-400 text-4xl">
                     <LuPlus />
                   </span>
-                )}
-              </label>
-            </div>
-          ))}
+                </label>
+              </div>
+            ))}
         </div>
 
         <ButtonStrong text="등록" type="submit" />

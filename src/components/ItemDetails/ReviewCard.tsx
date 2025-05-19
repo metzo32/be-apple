@@ -1,79 +1,42 @@
+"use client";
+
 import Image from "next/image";
-import type { CreateNewReviewReq, Review } from "@/types/Review";
+import { useState } from "react";
+import type { Review } from "@/types/Review";
 import useModal from "@/hooks/useModal";
 import { formatDate } from "@/module/formatDate";
 import { useUserStore } from "@/stores/useUserStore";
-import { deleteReview, editReview } from "../fetch/fetchReview";
 import Modal from "../Modal/Modal";
 import { FaStar } from "react-icons/fa6";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useDeleteReviewMutation } from "@/hooks/useReviewsQuery";
+import WriteReview from "./WriteReview";
+import { ProductDetail } from "@/types/productDetail";
 
 interface ReviewCardProps {
   review: Review;
+  productId: number; // 부모 컴포넌트에서 전달 필요
 }
 
-export default function ReviewCard({ review }: ReviewCardProps) {
-  const { user } = useUserStore(); // 현재 접속 중인 유저id
-  const { isModalOpen, openModal, closeModal } = useModal();
+export default function ReviewCard({ review, productId }: ReviewCardProps) {
+  const { user } = useUserStore();
   const currentUserId = user?.id;
+  const { isModalOpen, openModal, closeModal } = useModal();
+
+  const [isEditOpen, setIsEditOpen] = useState(false);
+
+  const { mutate: deleteReviewMutationFn } = useDeleteReviewMutation();
+
+  const handleEditReview = () => {
+    setIsEditOpen(true);
+  };
 
   const createdTime = formatDate(review.createdAt, "yyyy년 M월 d일 E요일");
-
-  const queryClient = useQueryClient();
-
-  const { mutate: deleteReviewMutationFn } = useMutation({
-    mutationFn: (id: number) => {
-      if (review.userId === currentUserId) {
-        return deleteReview(id);
-      } else {
-        return Promise.reject(new Error("내가 쓴 리뷰가 아닙니다."));
-      }
-    },
-
-    onSuccess: async (data) => {
-      await queryClient.invalidateQueries({
-        refetchType: "all",
-        queryKey: ["productDetail"],
-      });
-    },
-    onError: (error) => {
-      console.log("리뷰 삭제 도중 오류가 발생했습니다.", error);
-    },
-  });
-
-  //TODO 수정 로직 추가하기
-  const { mutate: editReviewMutationFn } = useMutation({
-    mutationFn: ({
-      id,
-      reviewData,
-    }: {
-      id: number;
-      reviewData: Partial<CreateNewReviewReq>;
-    }) => {
-      if (review.userId === currentUserId) {
-        return editReview(id, reviewData);
-      } else {
-        return Promise.reject(new Error("리뷰 수정에 실패했습니다."));
-      }
-    },
-
-    onSuccess: async (data) => {
-      await queryClient.invalidateQueries({
-        refetchType: "all",
-        queryKey: ["productDetail"],
-      });
-    },
-
-    onError: (error) => {
-      console.log("리뷰 수정 도중 오류가 발생했습니다.", error);
-    },
-  });
+  const updatedTime = formatDate(review.updatedAt, "yyyy년 M월 d일 E요일");
 
   const maskedName = review.userName
     .split("")
     .map((char, index) => {
-      if (index < 1) return char;
-      if (index === review.userName.length - 1) return char;
+      if (index === 0 || index === review.userName.length - 1) return char;
       return "*";
     })
     .join("");
@@ -88,9 +51,13 @@ export default function ReviewCard({ review }: ReviewCardProps) {
         } rounded-xl flex flex-col gap-3 lg:gap-5 bg-bglight`}
       >
         <div className="flex justify-between">
-          <h2 className="text-sm md:text-lg">{maskedName}</h2>
+          <div className="flex items-center gap-5">
+            <h2 className="text-sm md:text-lg">{maskedName}</h2>
+            {review.createdAt !== review.updatedAt && <p className="text-sm text-light">{updatedTime} (수정됨)</p>} 
+          </div>
           <p className="text-sm text-light">{createdTime}</p>
         </div>
+
         <p className="light-p">{review.content}</p>
 
         <div className="flex">
@@ -99,12 +66,12 @@ export default function ReviewCard({ review }: ReviewCardProps) {
           ))}
         </div>
 
-        {/* TODO 실제 옵션 데이터로 바꾸기*/}
+        {/* TODO: 실제 옵션 데이터로 바꾸기 */}
         <p className="text-sm text-light break-words break-keep">
           Macbook Air 13inch 10코어 CPU 10코어 GPU 16GB 통합 메모리 512GB SSD
         </p>
 
-        {review.photos && (
+        {review.photos && review.photos.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {review.photos.map((photo, index) => (
               <span
@@ -112,7 +79,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
                 className="relative w-full aspect-[3/2] rounded-lg overflow-hidden"
               >
                 <Image
-                  src={review.photos[index]}
+                  src={photo}
                   alt={`제품 이미지 ${index + 1}`}
                   fill
                   className="object-cover"
@@ -123,12 +90,11 @@ export default function ReviewCard({ review }: ReviewCardProps) {
         )}
       </div>
 
-      {/* 이 리뷰가 현재 로그인한 유저가 작성한 것이라면 */}
-      <div className="w-full h-[20px] pr-5 ">
-        {review.userId === Number(currentUserId) && (
+      {review.userId === Number(currentUserId) && (
+        <div className="w-full h-[20px] pr-5">
           <div className="flex justify-end items-center gap-5">
             <button
-              // onClick={() => editReviewMutationFn(review.id, reviewData)}
+              onClick={handleEditReview}
               className="text-sm text-light hover:text-mid"
             >
               수정
@@ -140,8 +106,8 @@ export default function ReviewCard({ review }: ReviewCardProps) {
               삭제
             </button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {isModalOpen && (
         <Modal
@@ -152,6 +118,20 @@ export default function ReviewCard({ review }: ReviewCardProps) {
           title={"잠깐!"}
           content={"정말 리뷰를 삭제할까요?"}
           confirmBtnText={"확인"}
+        />
+      )}
+
+      {isEditOpen && (
+        <WriteReview
+          productId={productId}
+          userProductId={review.userId}
+          setIsOpen={setIsEditOpen}
+          existingReview={{
+            id: review.id,
+            content: review.content,
+            rating: review.rating,
+            photos: review.photos,
+          }}
         />
       )}
     </div>

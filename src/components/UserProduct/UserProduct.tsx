@@ -13,8 +13,6 @@ interface UserProduct {
 }
 
 export default function UserProduct({ userId }: UserProduct) {
-  const { isModalOpen, openModal, closeModal } = useModal();
-  // const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
 
   const queryClient = useQueryClient();
 
@@ -25,7 +23,6 @@ export default function UserProduct({ userId }: UserProduct) {
       if (!userId) {
         return Promise.reject(new Error("유저 정보가 올바르지 않습니다."));
       }
-      // TODO userProduct.reviews 기능 추가되었으니- 리뷰 있는 경우 확인 모달 추가
       return deleteUserProduct(userProduct.id);
     },
     onSuccess: async () => {
@@ -81,6 +78,7 @@ export default function UserProduct({ userId }: UserProduct) {
                 <UserProductCard
                   userProduct={userProduct}
                   onDelete={() => deleteUserProductMutaionFn(userProduct)}
+                  userId={userId}
                 />
               </div>
             ))}
@@ -91,16 +89,6 @@ export default function UserProduct({ userId }: UserProduct) {
           </div>
         )}
       </div>
-      {/* 
-      <Modal
-        isModalOpen={isModalOpen}
-        onClose={handleModalCancel}
-        onConfirm={handleModalConfirm}
-        onCancel={handleModalCancel}
-        title="잠깐!"
-        content="작성했던 리뷰도 삭제됩니다. 정말 삭제할까요?"
-        confirmBtnText="확인"
-      /> */}
     </section>
   );
 }

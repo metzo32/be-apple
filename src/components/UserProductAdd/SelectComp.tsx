@@ -23,7 +23,8 @@ import { IoCloseOutline } from "react-icons/io5";
 import ButtonStrong from "../designs/ButtonStrong";
 import ButtonBasic from "../designs/ButtonBasic";
 import { Button } from "@mui/material";
-import SearchBar from "../ProductSearchBar";
+import { useAddUserProductMutation } from "@/hooks/useUserProductQuery";
+import { useUserStore } from "@/stores/useUserStore";
 
 interface SelectCompProps {
   isSelectWindowOpened: boolean;
@@ -36,7 +37,10 @@ export default function SelectComp({
   setIsSelectWindowOpened,
   onOpen,
 }: SelectCompProps) {
+  const { user } = useUserStore();
   const { isModalOpen, openModal, closeModal } = useModal();
+
+  const userId = user?.id;
 
   const [formData, setFormData] = useState<UserProductFormData>({
     productId: null,
@@ -69,7 +73,11 @@ export default function SelectComp({
     condition: UserProductCondition.NEW,
     memo: "",
   };
-
+  const { mutate: addUserProductMutationFn } =
+    useAddUserProductMutation(userId);
+  if (!userId) {
+    return null; // 또는 fallback UI
+  }
   useEffect(() => {
     console.log("작성된 폼 데이터", formData);
   }, [formData]);
@@ -86,6 +94,10 @@ export default function SelectComp({
       openModal();
     }
   };
+  
+  if (!userId) {
+    return null; // 또는 fallback UI
+  }
 
   // 보유 제품 작성 중 이탈 시, 모달 확인 로직
   const handleResetForm = () => {
@@ -143,22 +155,20 @@ export default function SelectComp({
   };
 
   //TODO 2초 시간차 두고 submit되도록.
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!isValidDto(formData)) {
       alert("제품과 제품 옵션을 선택해주세요.");
-    } else {
-      const success = await addUserProduct(formData); //TODO 타입가드로 UserProductFormData를 CreateUserProductReqDto로 검증
-
-      if (success) {
-        setIsSelectWindowOpened(false);
-      } else {
-        console.error("유저 보유 목록 생성 실패");
-      }
+      return;
     }
-  };
 
-  const handleSubmitLoading = () => {
-    setIsLoading(!isLoading);
+    addUserProductMutationFn(formData as CreateUserProductReqDto, {
+      onSuccess: () => {
+        setIsSelectWindowOpened(false);
+      },
+      onError: () => {
+        console.error("유저 보유 목록 생성 실패");
+      },
+    });
   };
 
   const handlePriceChange = (value: string) => {
@@ -312,9 +322,7 @@ export default function SelectComp({
 
               {/* 검색바 */}
               {currentPageNumber === 0 && (
-                <span className="block xl:hidden">
-                  {/* <SearchBar /> */}
-                </span>
+                <span className="block xl:hidden">{/* <SearchBar /> */}</span>
               )}
 
               {currentPageNumber === 0 && ( // 카테고리 선택바 및 검색바
@@ -397,11 +405,7 @@ export default function SelectComp({
                       Disabled
                     </Button>
                   ) : (
-                    <ButtonStrong
-                      type="submit"
-                      text="등록하기"
-                      // TODO onClick={handleSubmitLoading} 이걸 쓰면 왜인지 submit이 되지 않는다. submit 함수에 로딩로직도 때려넣자
-                    />
+                    <ButtonStrong type="submit" text="등록하기" />
                   ))}
               </span>
             </form>

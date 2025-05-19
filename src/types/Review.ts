@@ -15,14 +15,6 @@ export interface CreateNewReviewReq {
   photos?: string[];
 }
 
-
-export interface CreateReviewReqLegacy {
-  userProductId: number;
-  rating: number;
-  content: string;
-  photos: [string?, string?];
-}
-
 export interface Review {
   // 리뷰 ID
   id: number;

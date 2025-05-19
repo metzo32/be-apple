@@ -1,7 +1,6 @@
 import { deleteCall, get, patch, post } from "@/api/api";
 import type { CreateUserProductReqDto } from "@/types/userProduct";
 
-
 // 유저 보유 목록 로드
 export async function fetchUserProduct() {
   const response = await get("/user-product");
@@ -12,27 +11,17 @@ export async function fetchUserProduct() {
 
 // 유저 보유 목록 추가
 export async function addUserProduct(userProduct: CreateUserProductReqDto) {
-  try {
-    const response = await post("/user-product", userProduct);
-    const result = response.data;
+  const response = await post("/user-product", userProduct);
+  const result = response.data;
 
-    return result;
-  } catch (error) {
-    console.error("유저 보유 목록 추가 실패:", error);
-    return null;
-  }
+  return result;
 }
 
 // 유저 보유 목록 수정
 export async function editUserProduct(id: number) {
-  try {
-    const response = await patch("/user-product", id);
+  const response = await patch("/user-product", id);
 
-    return true;
-  } catch (error) {
-    console.error("유저 보유 목록 수정 실패:", error);
-    return false;
-  }
+  return true;
 }
 
 // 유저 보유 목록 삭제

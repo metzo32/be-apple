@@ -39,7 +39,7 @@ export default function ReviewClient({
     averageRatings = "0.0";
   }
 
-  const handleWriteReview = () => {
+  const handleOpenWriteReview = () => {
     setIsWriteReviewOpen(true);
   };
 
@@ -66,7 +66,7 @@ export default function ReviewClient({
           ) : (
             <ButtonStrong
               text="나의 리뷰 작성하기"
-              onClick={handleWriteReview}
+              onClick={handleOpenWriteReview}
             />
           )}
         </span>
@@ -99,7 +99,7 @@ export default function ReviewClient({
           </div>
         ) : (
           reviews.map((review) => (
-            <ReviewCard key={review.id} review={review} />
+            <ReviewCard key={review.id} review={review} productId={productId} />
           ))
         )}
       </div>

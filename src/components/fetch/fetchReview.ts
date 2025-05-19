@@ -16,7 +16,7 @@ export async function createNewReview(
 
 // 리뷰 수정하기
 export async function editReview(
-  id: number,
+  id: number, // 리뷰의 id
   reviewData: Partial<CreateNewReviewReq>
 ) {
   const { userProductId, rating, content, photos } = reviewData;
