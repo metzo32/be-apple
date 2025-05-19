@@ -31,7 +31,7 @@ export default function RecommendPage() {
   const recommendMutationStep04 = useRecommendStep04();
   const recommendMutationStep05 = useRecommendStep05();
 
-  const MAX_STEP = 5
+  const MAX_STEP = 5;
 
   // 로그인 여부 체크
   useEffect(() => {
@@ -60,14 +60,16 @@ export default function RecommendPage() {
 
   const { data: productRecommendationId } = useRecommendCreateQuery(userId);
 
-
   if (!user) return;
 
   const handleStep01 = (
     productRecommendationId: number,
     productCategory: ProductCategoryEnum
   ) => {
-    recommendMutationStep01.mutate({ productRecommendationId, productCategory });
+    recommendMutationStep01.mutate({
+      productRecommendationId,
+      productCategory,
+    });
   };
 
   const handleStep02 = () => {
@@ -114,7 +116,9 @@ export default function RecommendPage() {
                     <li
                       key={category}
                       value={ProductCategoryLabels[category]}
-                      onClick={() => handleStep01(category)}
+                      onClick={() =>
+                        handleStep01(productRecommendationId, category)
+                      }
                       className="cursor-pointer"
                     >
                       {ProductCategoryLabels[category]}

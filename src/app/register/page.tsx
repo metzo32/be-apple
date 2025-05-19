@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { fetchSignUp } from "@/components/fetch/fetchSignUp";
 import { GoogleButton, KakaoButton } from "@/components/SocialLoginButton";
 import { TextField } from "@mui/material";
+import CustomTextField from "@/components/designs/CustomTextField";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -44,51 +45,52 @@ export default function RegisterPage() {
   return (
     <section className="py-18 md:py-32 flex flex-col items-center justify-center">
       <form
-        className="w-[400px] h-[600px] pt-36 pb-12 px-16 shadow-strong flex flex-col gap-14 items-center justify-center bg-white rounded-2xl"
+       className="w-[260px] h-[420px] md:w-[400px] md:h-[600px] py-10 px-10 md:py-12 md:px-16 shadow-strong flex flex-col gap-10 md:gap-16 items-center justify-center bg-white rounded-2xl"
         onSubmit={handleSubmit}
       >
-        <div className="w-full flex flex-col gap-5">
-          <TextField
-            required
+        <div className="w-full flex flex-col gap-3 md:gap-5">
+          <CustomTextField
             id="email"
             name="email"
             label="이메일"
-            size="small"
+            type="text"
             value={formData.email}
-            onChange={handleChange}
+            handleChange={handleChange}
+            required={true}
           />
-          <TextField
-            required
+
+          <CustomTextField
             id="name"
             name="name"
             label="이름"
-            size="small"
+            type="text"
             value={formData.name}
-            onChange={handleChange}
+            handleChange={handleChange}
+            required={true}
           />
-          <TextField
-            required
+
+          <CustomTextField
             id="password"
             name="password"
             label="비밀번호"
             type="password"
-            size="small"
             value={formData.password}
-            onChange={handleChange}
+            handleChange={handleChange}
+            required={true}
           />
-          <TextField
-            required
+
+          <CustomTextField
             id="passwordConfirm"
             name="passwordConfirm"
-            label="비밀번호"
+            label="비밀번호 확인"
             type="password"
-            size="small"
             value={formData.passwordConfirm}
-            onChange={handleChange}
+            handleChange={handleChange}
+            required={true}
           />
         </div>
 
-        <div className="flex flex-col gap-7">
+        <div className="flex flex-col gap-5 md:gap-7">
           <div className="flex gap-10">
             <GoogleButton />
             <KakaoButton />

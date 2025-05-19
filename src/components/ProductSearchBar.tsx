@@ -8,6 +8,7 @@ import {
 import { IoSearchSharp } from "react-icons/io5";
 import { useRouterQuery } from "@/hooks/useRouterQuery";
 import { isEqual } from "lodash";
+import { ButtonMedium } from "./designs/ButtonStrong";
 
 export default function ProductSearchBar({
   category,
@@ -42,6 +43,16 @@ export default function ProductSearchBar({
   const onChangeSearchMaxPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setSearchForm((prev) => ({ ...prev, maxPrice: Number(e.target.value) }));
+  };
+
+  const handleSortAsc = () => {
+    setSearchForm((prev) => ({ ...prev, order: "asc" }));
+    push(`/${category}`, searchForm);
+  };
+
+  const handleSortDesc = () => {
+    setSearchForm((prev) => ({ ...prev, order: "desc" }));
+    push(`/${category}`, searchForm);
   };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -97,7 +108,10 @@ export default function ProductSearchBar({
         </button>
       </form>
 
-      {/* <MinimumDistanceSlider /> */}
+      <div className="w-full flex justify-center  items-center gap-5 global-px">
+        <ButtonMedium text="오름차순" onClick={handleSortAsc} />
+        <ButtonMedium text="내림차순" onClick={handleSortDesc} />
+      </div>
     </div>
   );
 }

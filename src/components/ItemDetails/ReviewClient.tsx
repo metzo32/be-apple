@@ -14,7 +14,7 @@ import { FaStar } from "react-icons/fa6";
 
 interface ReviewClientProps {
   product: ProductDetail;
-  productId: number | null; // params에서 가져온 제품 id
+  productId: number; // params에서 가져온 제품 id
 }
 
 export default function ReviewClient({
@@ -27,22 +27,24 @@ export default function ReviewClient({
   const { data: productDetail } = useProductDetailQuery(productId);
   const userProductId = productDetail?.userProductId ?? null;
 
-  const handleWriteReview = () => {
-    if (isWritten) return;
-    setIsWriteReviewOpen(true);
-  };
+  const reviews = productDetail?.reviews; // 리뷰 배열
+  if (!reviews) return [];
 
-  const reviews = productDetail ? productDetail.reviews : product.reviews;
+  const writtenReview = reviews.filter((review) => review.userId === user?.id); // 내가 쓴 리뷰 객체
 
-  const isWritten = reviews.some((review) => review.userId === user?.id);
+  console.log("내가 쓴 리뷰", writtenReview);
+  console.log("이 제품의 productId", productId);
 
-  const totalRatings = reviews.reduce((sum, review) => sum + review.rating, 0);
-
-  let averageRatings = (totalRatings / reviews.length).toFixed(1).toString();
+  const totalRatings = reviews.reduce((sum, review) => sum + review.rating, 0); // 총점
+  let averageRatings = (totalRatings / reviews.length).toFixed(1).toString(); // 평균 평점
 
   if (reviews.length === 0) {
-    averageRatings = "0.0"
+    averageRatings = "0.0";
   }
+
+  const handleWriteReview = () => {
+    setIsWriteReviewOpen(true);
+  };
 
   return (
     <section className="w-full flex flex-col gap-10 bg-white global-px py-36 overflow-hidden">
@@ -60,7 +62,7 @@ export default function ReviewClient({
 
       {userProductId ? (
         <span className="w-[200px]">
-          {isWritten ? (
+          {writtenReview.length > 0 ? (
             <Button variant="contained" disabled>
               이미 리뷰를 작성했습니다
             </Button>
@@ -87,6 +89,7 @@ export default function ReviewClient({
 
       {isWriteReviewOpen && (
         <WriteReview
+          productId={productId}
           userProductId={userProductId}
           isWriteReviewOpen={isWriteReviewOpen}
           setIsOpen={setIsWriteReviewOpen}

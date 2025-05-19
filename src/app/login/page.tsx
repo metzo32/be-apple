@@ -10,6 +10,7 @@ import ButtonStrong from "@/components/designs/ButtonStrong";
 import LoadingScreen from "@/components/LoadingScreen";
 import { GoogleButton, KakaoButton } from "@/components/SocialLoginButton";
 import { TextField } from "@mui/material";
+import CustomTextField from "@/components/designs/CustomTextField";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -76,28 +77,28 @@ export default function LoginPage() {
         onSubmit={handleSubmit}
       >
         <div className="w-full flex flex-col gap-5">
-          <TextField
-            required
+          <CustomTextField
             id="email"
             name="email"
             label="이메일"
-            size="small"
+            type="text"
             value={formData.email}
-            onChange={handleChange}
+            handleChange={handleChange}
+            required={true}
           />
-          <TextField
-            required
+          
+          <CustomTextField
             id="password"
             name="password"
             label="비밀번호"
             type="password"
-            size="small"
             value={formData.password}
-            onChange={handleChange}
+            required={true}
+            handleChange={handleChange}
           />
-
+          
           <div className="flex items-center justify-center">
-            <div className="flex items-center gap-3 md:gap-1">
+            <div className="flex items-center gap-2 md:gap-1">
               <input
                 type="checkbox"
                 id="rememberMe"

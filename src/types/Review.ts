@@ -1,12 +1,12 @@
-export interface CreateReviewReq {
-  userProductId: number;
-  rating: number;
-  content: string;
-  photos: [string?, string?];
+// export interface CreateReviewReq {
+//   userProductId: number;
+//   rating: number;
+//   content: string;
+//   photos: [string?, string?];
 
-  userName: string;
-  date: string;
-}
+//   userName: string;
+//   date: string;
+// }
 
 export interface CreateNewReviewReq {
   userProductId: number;

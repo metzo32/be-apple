@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 
+export const baseURL = process.env.NEXT_PUBLIC_API_URL; //기본 경로
+
 export function GoogleButton() {
   const handleGoogle = () => {
-    window.location.href =
-      "https://stage-api.backend-challenge.com/auth/signin/google"; //리다이렉션
+    window.location.href = `${baseURL}/auth/signin/google`; //리다이렉션
   };
 
   return (
@@ -22,8 +23,7 @@ export function GoogleButton() {
 export function KakaoButton() {
   const handleKakao = () => {
     //리다이렉션
-    window.location.href =
-      "https://stage-api.backend-challenge.com/auth/signin/kakao";
+    window.location.href = `${baseURL}/auth/signin/kakao`;
   };
 
   return (

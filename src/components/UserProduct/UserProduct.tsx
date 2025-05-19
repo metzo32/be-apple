@@ -18,14 +18,14 @@ export default function UserProduct({ userId }: UserProduct) {
 
   const queryClient = useQueryClient();
 
-  const { data } = useUserProductQuery(userId);
+  const { data: userProductData } = useUserProductQuery(userId);
 
   const { mutate: deleteUserProductMutaionFn } = useMutation({
     mutationFn: (userProduct: GetUserProductResponse) => {
       if (!userId) {
         return Promise.reject(new Error("유저 정보가 올바르지 않습니다."));
       }
-      // TODO userProduct.reviews 기능 추가되면- 리뷰 있는 경우 확인 모달 추가
+      // TODO userProduct.reviews 기능 추가되었으니- 리뷰 있는 경우 확인 모달 추가
       return deleteUserProduct(userProduct.id);
     },
     onSuccess: async () => {
@@ -39,10 +39,11 @@ export default function UserProduct({ userId }: UserProduct) {
     },
   });
 
-  if (!data) return null;
+  if (!userProductData) return null;
 
-  const userProducts = data.userProducts;
-  const reviews = data.userReviews;
+  const userProducts = userProductData.userProducts;
+  const reviews = userProductData.userReviews;
+
 
   // 포화도
   const categorySaturation = 100 / Object.keys(ProductCategoryLabels).length;

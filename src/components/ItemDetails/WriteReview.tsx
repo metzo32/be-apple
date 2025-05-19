@@ -11,14 +11,17 @@ import Modal from "../Modal/Modal";
 import { Rating } from "@mui/material";
 import { LuPlus } from "react-icons/lu";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAddReviewMutation } from "@/hooks/useProductDetailQuery";
 
 interface WriteReviewProps {
+  productId: number;
   userProductId: number | null;
   isWriteReviewOpen: boolean;
   setIsOpen: (value: boolean) => void;
 }
 
 export default function WriteReview({
+  productId,
   userProductId,
   isWriteReviewOpen,
   setIsOpen,
@@ -30,29 +33,11 @@ export default function WriteReview({
 
   const MAX_LENGTH = 200;
 
-  const queryClient = useQueryClient()
-
-  const { mutate: createReviewMutationFn } = useMutation({
-    mutationFn: (reviewData: CreateNewReviewReq) => {
-      if (!userProductId) {
-        return Promise.reject(new Error('no userProductId! UserProduct를 생성 안하면 리뷰도 생성 못 한다 이자식아'))
-      }
-      return createNewReview(userProductId, reviewData)
-    },
-    onSuccess: async (data) => {
-      await queryClient.invalidateQueries({
-        refetchType: 'all',
-        queryKey: ['productDetail'],
-      }) // ProductDetail의 쿼리키를 갱신해서 새로운 데이터를 받아온다. 새로고침 안해도됨 나이스
-      setIsOpen(false)
-    },
-    onError: (error) => {
-      console.error('리뷰 생성 중 에러가 발생했습니다. 에러, 너의 이름은', error)
-    },
-  })
-
+  const { mutate: createReviewMutationFn } = useAddReviewMutation();
+ 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
 
     // 아무것도 입력하지 않은 경우
     if (review.length === 0) {
@@ -73,7 +58,9 @@ export default function WriteReview({
       photos: uploadedPhotos,
     };
 
-    createReviewMutationFn(reviewData)
+    console.log(productId, reviewData)
+
+    createReviewMutationFn(reviewData);
   };
 
   // 리뷰 사진 추가하기

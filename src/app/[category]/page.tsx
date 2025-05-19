@@ -1,7 +1,6 @@
 "use client";
 
 import { use } from "react";
-import { useSearchParams } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
 import { useProductLoadQuery } from "@/hooks/useProductQuery";
 import { ProductCategoryEnum } from "@/types/productCategory";
@@ -36,11 +35,6 @@ export default function SearchPage({
       <span className="w-[280px] md:w-[350px] lg:w-[450px] flex justify-center items-center mb-24">
         <ProductSearchBar category={typedCategory} />
       </span>
-
-      <div className="w-full flex justify-end items-center gap-5 global-px">
-        <button>오름차순</button>
-        <button>내림차순</button>
-      </div>
 
       <div className="grid place-items-center gap-8 md:gap-15 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
         {productsList.map((product) => (

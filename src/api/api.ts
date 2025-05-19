@@ -1,4 +1,4 @@
-export const baseURL = process.env.NEXT_PUBLIC_API_URL; //기본 경로
+export const baseURL = process.env.NEXT_PUBLIC_API_URL; // 기본 경로
 
 import Axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 

@@ -17,9 +17,13 @@ export default function ButtonStrong({
       className={`${margin ? "mt-10" : ""}`}
       sx={{
         background: "linear-gradient(to right, #476CF6, #C467F3)",
-        fontSize: "16px",
+        fontSize: "14px",
+        paddingX: "10px",
+        paddingY: "3px",
         "@media (max-width: 767px)": {
           fontSize: "12px",
+          paddingX: "8px",
+          paddingY: "2px",
         },
       }}
     >
@@ -38,9 +42,13 @@ export function ButtonMedium({ text, onClick, type, margin }: ButtonProps) {
       size="medium"
       className={`${margin ? "mt-10" : ""}`}
       sx={{
-        fontSize: "16px",
+        fontSize: "14px",
+        paddingX: "10px",
+        paddingY: "3px",
         "@media (max-width: 767px)": {
           fontSize: "12px",
+          paddingX: "8px",
+          paddingY: "2px",
         },
       }}
     >
