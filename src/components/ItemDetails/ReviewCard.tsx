@@ -10,7 +10,6 @@ import Modal from "../Modal/Modal";
 import { FaStar } from "react-icons/fa6";
 import { useDeleteReviewMutation } from "@/hooks/useReviewsQuery";
 import WriteReview from "./WriteReview";
-import { ProductDetail } from "@/types/productDetail";
 
 interface ReviewCardProps {
   review: Review;

@@ -1,5 +1,5 @@
 import { deleteCall, get, patch, post } from "@/api/api";
-import type { CreateUserProductReqDto } from "@/types/userProduct";
+import type { CreateUserProductReqDto, UpdateUserProductReqDto } from "@/types/userProduct";
 
 // 유저 보유 목록 로드
 export async function fetchUserProduct() {
@@ -18,8 +18,8 @@ export async function addUserProduct(userProduct: CreateUserProductReqDto) {
 }
 
 // 유저 보유 목록 수정
-export async function editUserProduct(id: number) {
-  const response = await patch("/user-product", id);
+export async function editUserProduct(userProduct: UpdateUserProductReqDto) {
+  const response = await patch("/user-product", userProduct);
 
   return true;
 }

@@ -5,10 +5,10 @@ import {
   UserProductCondition,
   UserProductStatus,
   CreateUserProductReqDto,
+  GetUserProductResponse,
 } from "@/types/userProduct";
 import type { UserProductFormData } from "@/types/addUserProducts";
 import useModal from "@/hooks/useModal";
-import { addUserProduct } from "../fetch/fetchUserProduct";
 import { formatDate } from "@/module/formatDate";
 import Modal from "../Modal/Modal";
 import isEqual from "lodash/isEqual";
@@ -23,44 +23,89 @@ import { IoCloseOutline } from "react-icons/io5";
 import ButtonStrong from "../designs/ButtonStrong";
 import ButtonBasic from "../designs/ButtonBasic";
 import { Button } from "@mui/material";
-import { useAddUserProductMutation } from "@/hooks/useUserProductQuery";
+import {
+  useAddUserProductMutation,
+  useEditUserProductMutation,
+} from "@/hooks/useUserProductQuery";
 import { useUserStore } from "@/stores/useUserStore";
 
 interface SelectCompProps {
   isSelectWindowOpened: boolean;
   setIsSelectWindowOpened: (isSelectWindowOpened: boolean) => void;
-  onOpen: () => void;
+  editmode: boolean;
+  editTarget?: GetUserProductResponse;
 }
 
 export default function SelectComp({
   isSelectWindowOpened,
   setIsSelectWindowOpened,
-  onOpen,
+  editmode,
+  editTarget
 }: SelectCompProps) {
   const { user } = useUserStore();
   const { isModalOpen, openModal, closeModal } = useModal();
 
-  const userId = user?.id;
+  const userId = user?.id ?? null;
 
-  const [formData, setFormData] = useState<UserProductFormData>({
-    productId: null,
-    productOptionId: null,
-    purchasedAt: "",
-    purchasePrice: 0,
-    soldAt: "",
-    status: UserProductStatus.ACTIVE,
-    repurchasedCount: 0,
-    condition: UserProductCondition.NEW,
-    memo: "",
+  const [formData, setFormData] = useState<UserProductFormData>(() => {
+    if (editmode && editTarget) {
+      return {
+        productId: editTarget.product.id,
+        productOptionId: editTarget.product.myOption?.id ?? null,
+        purchasedAt: editTarget.purchasedAt ?? "",
+        purchasePrice: editTarget.purchasePrice ?? 0,
+        soldAt: editTarget.soldAt ?? "",
+        status: editTarget.status,
+        repurchasedCount: editTarget.repurchasedCount,
+        condition: editTarget.condition,
+        memo: editTarget.memo ?? "",
+      };
+    }
+    return {
+      productId: null,
+      productOptionId: null,
+      purchasedAt: "",
+      purchasePrice: 0,
+      soldAt: "",
+      status: UserProductStatus.ACTIVE,
+      repurchasedCount: 0,
+      condition: UserProductCondition.NEW,
+      memo: "",
+    };
   });
 
   const [isLoading, setIsLoading] = useState(false);
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(0);
-  const [displayedPrice, setDisplayedPrice] = useState<string>(""); // UI상 보여지는 가격
-  const [isSoldSelected, setIsSoldSelected] = useState(false); // 처분 및 양도 여부
-  const [isMultiplePurchased, setIsMultiplePurchased] = useState(false); // 재구매 여부
-  const [tempMemo, setTempMemo] = useState<string>(""); // ui상 메모
-  const [displayRepurchase, setDisplayRepurchase] = useState(1);
+  const [displayedPrice, setDisplayedPrice] = useState<string>(() => {
+    if (editmode && editTarget?.purchasePrice) {
+      return editTarget.purchasePrice.toLocaleString() + "원";
+    }
+    return "";
+  });
+  const [isSoldSelected, setIsSoldSelected] = useState(() => {
+    if (editmode && editTarget?.status === UserProductStatus.SOLD) {
+      return true;
+    }
+    return false;
+  });
+  const [isMultiplePurchased, setIsMultiplePurchased] = useState(() => {
+    if (editmode && editTarget) {
+      return editTarget.repurchasedCount > 0;
+    }
+    return false;
+  });
+  const [tempMemo, setTempMemo] = useState<string>(() => {
+    if (editmode && editTarget?.memo) {
+      return editTarget.memo;
+    }
+    return "";
+  });
+  const [displayRepurchase, setDisplayRepurchase] = useState(() => {
+    if (editmode && editTarget) {
+      return editTarget.repurchasedCount + 1;
+    }
+    return 1;
+  });
 
   const initialForm = {
     productId: 0,
@@ -73,18 +118,58 @@ export default function SelectComp({
     condition: UserProductCondition.NEW,
     memo: "",
   };
+
+  // 제품 추가 뮤테이션 함수
   const { mutate: addUserProductMutationFn } =
     useAddUserProductMutation(userId);
-  if (!userId) {
-    return null; // 또는 fallback UI
-  }
-  useEffect(() => {
-    console.log("작성된 폼 데이터", formData);
-  }, [formData]);
+
+  // 제품 수정 뮤테이션 함수
+  const { mutate: editUserProductMutationFn } =
+    useEditUserProductMutation(userId);
 
   // 전체 페이지
   const MAX_PAGE = 6;
   const MAX_MEMO_LENGTH = 200;
+
+  // Reset form when editTarget changes
+  useEffect(() => {
+    if (editmode && editTarget) {
+      setFormData({
+        productId: editTarget.product.id,
+        productOptionId: editTarget.product.myOption?.id ?? null,
+        purchasedAt: editTarget.purchasedAt ?? "",
+        purchasePrice: editTarget.purchasePrice ?? 0,
+        soldAt: editTarget.soldAt ?? "",
+        status: editTarget.status,
+        repurchasedCount: editTarget.repurchasedCount,
+        condition: editTarget.condition,
+        memo: editTarget.memo ?? "",
+      });
+      setDisplayedPrice(editTarget.purchasePrice ? editTarget.purchasePrice.toLocaleString() + "원" : "");
+      setTempMemo(editTarget.memo ?? "");
+      setDisplayRepurchase(editTarget.repurchasedCount + 1);
+      setIsSoldSelected(editTarget.status === UserProductStatus.SOLD);
+      setIsMultiplePurchased(editTarget.repurchasedCount > 0);
+    } else {
+      // Reset to initial state when adding new product
+      setFormData({
+        productId: null,
+        productOptionId: null,
+        purchasedAt: "",
+        purchasePrice: 0,
+        soldAt: "",
+        status: UserProductStatus.ACTIVE,
+        repurchasedCount: 0,
+        condition: UserProductCondition.NEW,
+        memo: "",
+      });
+      setDisplayedPrice("");
+      setTempMemo("");
+      setDisplayRepurchase(1);
+      setIsSoldSelected(false);
+      setIsMultiplePurchased(false);
+    }
+  }, [editmode, editTarget]);
 
   // 보유제품 추가 팝업 닫기
   const handleCloseSelectWindow = () => {
@@ -94,10 +179,6 @@ export default function SelectComp({
       openModal();
     }
   };
-  
-  if (!userId) {
-    return null; // 또는 fallback UI
-  }
 
   // 보유 제품 작성 중 이탈 시, 모달 확인 로직
   const handleResetForm = () => {
@@ -161,14 +242,18 @@ export default function SelectComp({
       return;
     }
 
-    addUserProductMutationFn(formData as CreateUserProductReqDto, {
-      onSuccess: () => {
-        setIsSelectWindowOpened(false);
-      },
-      onError: () => {
-        console.error("유저 보유 목록 생성 실패");
-      },
-    });
+    if (!editmode) {
+      addUserProductMutationFn(formData as CreateUserProductReqDto, {
+        onSuccess: () => {
+          setIsSelectWindowOpened(false);
+        },
+        onError: () => {
+          console.error("유저 보유 목록 생성 실패");
+        },
+      });
+    } else {
+      editUserProductMutationFn(formData);
+    }
   };
 
   const handlePriceChange = (value: string) => {
@@ -374,7 +459,7 @@ export default function SelectComp({
                 <SelectMultiplePurchased
                   isMultiplePurchased={isMultiplePurchased}
                   setIsMultiplePurchased={setIsMultiplePurchased}
-                  handleConditionSelect={handleConditionSelect}
+                  handleConditionSelect={(e) => handleConditionSelect(e.target.value as UserProductCondition)}
                   value={displayRepurchase}
                   handleMultiplePurchased={handleMultiplePurchased}
                   handleMultiplePurchasedBlur={handleMultiplePurchasedBlur}
@@ -396,8 +481,8 @@ export default function SelectComp({
                     <Button
                       size="medium"
                       variant="outlined"
-                      loading={isLoading}
-                      onClick={handleSubmitLoading}
+                      disabled={isLoading}
+                      onClick={handleSubmit}
                       sx={{
                         width: "60px",
                       }}

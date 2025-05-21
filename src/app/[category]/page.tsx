@@ -3,11 +3,11 @@
 import { use } from "react";
 import { useUserStore } from "@/stores/useUserStore";
 import { useProductLoadQuery } from "@/hooks/useProductQuery";
+import { useRouterQuery } from "@/hooks/useRouterQuery";
 import { ProductCategoryEnum } from "@/types/productCategory";
 import SearchCard from "@/components/Search/SearchCard";
 import LoadingScreen from "@/components/LoadingScreen";
 import ProductSearchBar from "@/components/ProductSearchBar";
-import { useRouterQuery } from "@/hooks/useRouterQuery";
 
 export default function SearchPage({
   params,

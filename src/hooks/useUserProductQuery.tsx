@@ -64,10 +64,9 @@ export const useEditUserProductMutation = (userId: number | null) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => {
-      return editUserProduct(id);
+    mutationFn: (userProduct: CreateUserProductReqDto) => {
+      return editUserProduct(userProduct);
     },
-
     onSuccess: () => {
       if (userId !== null) {
         queryClient.invalidateQueries({
@@ -76,7 +75,6 @@ export const useEditUserProductMutation = (userId: number | null) => {
         });
       }
     },
-
     onError: (error) => {
       console.error("유저 제품 수정 실패:", error);
     },

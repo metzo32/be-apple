@@ -9,40 +9,32 @@ import {
 } from "@/types/productTypeGurards";
 import Link from "next/link";
 import ButtonBasic from "../designs/ButtonBasic";
-import { useMutation } from "@tanstack/react-query";
+import { useEditUserProductMutation } from "@/hooks/useUserProductQuery";
 
 interface UserProductCardProps {
   userProduct: GetUserProductResponse;
   onDelete: (id: number) => void;
   userId: number | null;
+  onEdit: () => void
 }
 
 export default function UserProductCard({
   userProduct,
   onDelete,
   userId,
+  onEdit
 }: UserProductCardProps) {
   const { isModalOpen, openModal, closeModal } = useModal();
 
-  const { mutate: editProductProductMutationFn } = useMutation({
-    mutationFn: () => {
-      return;
-    },
-    onSuccess: () => {
-      return;
-    },
-    onError: () => {
-      return;
-    },
-  });
+  const { mutate: editUserProductMutationFn } =
+    useEditUserProductMutation(userId);
 
-  const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    console.log("수정하기");
-    editProductProductMutationFn()
-  };
+    const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+    
+      onEdit(); 
+    };
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

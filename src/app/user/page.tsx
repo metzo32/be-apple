@@ -42,7 +42,7 @@ export default function UserPage() {
         </div>
       </section>
 
-      <UserInfo />
+      <UserInfo/>
 
       <UserProduct userId={userId}/>
 
