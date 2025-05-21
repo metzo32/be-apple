@@ -40,11 +40,13 @@ export const useRecommendStep01 = () => {
         productCategory,
       });
     },
-    onSuccess: async () => {
+    onSuccess: async (data) => {
+      console.log("1단계 생성 성공");
       // queryClient.invalidateQueries({
       //   refetchType: "all",
       //   queryKey: ["createRecommend"],
       // });
+      queryClient.setQueryData(["recommendStep01Tags"], data.tags);
     },
     onError: (error) => {
       console.error("1단계 추천 생성에 실패했습니다.", error);
@@ -65,11 +67,13 @@ export const useRecommendStep02 = () => {
     }) => {
       return postRecommend02(productRecommendationId, { step: "STEP_2", tags });
     },
-    onSuccess: async () => {
+    onSuccess: async (data) => {
       queryClient.invalidateQueries({
-        refetchType: "all",
         queryKey: ["createRecommend"],
+        refetchType: "all",
       });
+      queryClient.setQueryData(["recommendStep02MinPrice"], data.minPrice);
+      queryClient.setQueryData(["recommendStep02MaxPrice"], data.maxPrice);
     },
     onError: (error) => {
       console.error("2단계 추천 생성에 실패했습니다.", error);
@@ -97,10 +101,10 @@ export const useRecommendStep03 = () => {
       });
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({
-        refetchType: "all",
-        queryKey: ["createRecommend"],
-      });
+      // queryClient.invalidateQueries({
+      //   refetchType: "all",
+      //   queryKey: ["createRecommend"],
+      // });
     },
     onError: (error) => {
       console.error("3단계 추천 생성에 실패했습니다.", error);
@@ -125,10 +129,10 @@ export const useRecommendStep04 = () => {
       });
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({
-        refetchType: "all",
-        queryKey: ["createRecommend"],
-      });
+      // queryClient.invalidateQueries({
+      //   refetchType: "all",
+      //   queryKey: ["createRecommend"],
+      // });
     },
     onError: (error) => {
       console.error("4단계 추천 생성에 실패했습니다.", error);
@@ -147,13 +151,16 @@ export const useRecommendStep05 = () => {
       productRecommendationId: number;
       specs: { type: string; value: string }[];
     }) => {
-      return postRecommend05(productRecommendationId, { step: "STEP_5", specs });
+      return postRecommend05(productRecommendationId, {
+        step: "STEP_5",
+        specs,
+      });
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({
-        refetchType: "all",
-        queryKey: ["createRecommend"],
-      });
+      // queryClient.invalidateQueries({
+      //   refetchType: "all",
+      //   queryKey: ["createRecommend"],
+      // });
     },
     onError: (error) => {
       console.error("5단계 추천 생성에 실패했습니다.", error);

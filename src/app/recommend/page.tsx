@@ -3,8 +3,8 @@
 import useModal from "@/hooks/useModal";
 import { useUserStore } from "@/stores/useUserStore";
 import { useEffect, useState } from "react";
-import Modal from "@/components/Modal/Modal";
 import { useRouter } from "next/navigation";
+import Modal from "@/components/Modal/Modal";
 import {
   useRecommendCreateQuery,
   useRecommendStep01,
@@ -18,6 +18,7 @@ import {
   ProductCategoryEnum,
   ProductCategoryLabels,
 } from "@/types/productCategory";
+import { useQuery } from "@tanstack/react-query";
 
 export default function RecommendPage() {
   const { user } = useUserStore();
@@ -33,17 +34,34 @@ export default function RecommendPage() {
 
   const MAX_STEP = 5;
 
-  // 로그인 여부 체크
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!user) {
-        openModal();
-      } else {
-        return;
-      }
-    }, 2000);
-    clearTimeout(timer);
-  }, [user]);
+  const { data: tags = [] } = useQuery<string[]>({
+    queryKey: ["recommendStep01Tags"],
+    queryFn: () => Promise.resolve([]), // queryFn 누락 오류 방지용 기본값
+    enabled: false,
+  });
+
+  const { data: minPrice = 0 } = useQuery<number>({
+    queryKey: ["recommendStep02MinPrice"],
+    queryFn: () => Promise.resolve(0), // queryFn 누락 오류 방지용 기본값
+    enabled: false,
+  });
+
+  const { data: maxPrice = 9999999 } = useQuery<number>({
+    queryKey: ["recommendStep02MaxPrice"],
+    queryFn: () => Promise.resolve(9999999), // queryFn 누락 오류 방지용 기본값
+    enabled: false,
+  });
+  
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    if (!user) {
+      openModal();
+    }
+  }, 500);
+
+  return () => clearTimeout(timer); 
+}, []);
 
   const handleRoute = () => {
     router.push("/login");
@@ -60,7 +78,6 @@ export default function RecommendPage() {
 
   const { data: productRecommendationId } = useRecommendCreateQuery(userId);
 
-  if (!user) return;
 
   const handleStep01 = (
     productRecommendationId: number,
@@ -70,36 +87,65 @@ export default function RecommendPage() {
       productRecommendationId,
       productCategory,
     });
+    console.log(productRecommendationId);
+    setStep(step + 1);
   };
 
-  const handleStep02 = () => {
-    recommendMutationStep02.mutate(tags);
+  const handleStep02 = (productRecommendationId: number, tags: string[]) => {
+    recommendMutationStep02.mutate({
+      productRecommendationId,
+      tags,
+    });
+    console.log(productRecommendationId);
+    setStep(step + 1);
   };
 
-  const handleStep03 = () => {
-    recommendMutationStep03.mutate();
+  const handleStep03 = (
+    productRecommendationId: number,
+    minPrice: number,
+    maxPrice: number
+  ) => {
+    recommendMutationStep03.mutate({
+      productRecommendationId,
+      minPrice,
+      maxPrice,
+    });
+    setStep(step + 1);
   };
 
-  const handleStep04 = () => {
-    recommendMutationStep04.mutate();
+  const handleStep04 = (
+    productRecommendationId: number,
+    minReleasedDate: string
+  ) => {
+    recommendMutationStep04.mutate({
+      productRecommendationId,
+      minReleasedDate,
+    });
+    setStep(step + 1);
   };
 
-  const handleStep05 = () => {
-    recommendMutationStep05.mutate();
+  const handleStep05 = (
+    productRecommendationId: number,
+    specs: { type: string; value: string }[]
+  ) => {
+    recommendMutationStep05.mutate({
+      productRecommendationId,
+      specs,
+    });
   };
 
   const categories = Object.values(ProductCategoryEnum);
 
   return (
     <>
-      {!user || isModalOpen ? (
+      {!userId ? (
         <Modal
           isModalOpen={isModalOpen}
           onClose={closeModal}
           onConfirm={handleRoute}
           onCancel={closeModal}
           title={"이런!"}
-          content={"로그인해야 이용 가능한 서비스입니다."}
+          content={"로그인 후 이용 가능한 서비스입니다."}
           confirmBtnText={"로그인하러 가기"}
           hideCancel={true}
         />
@@ -126,7 +172,7 @@ export default function RecommendPage() {
                   ))}
                 </ul>
 
-                {/* <ButtonStrong text="다음" onClick={handleStep01} /> */}
+                <ButtonStrong text="다음" onClick={() => setStep(step + 1)} />
               </div>
             )}
 
@@ -134,13 +180,30 @@ export default function RecommendPage() {
               <div>
                 <h3>용도</h3>
 
-                <ButtonStrong text="다음" onClick={handleStep02} />
+                <ul>
+                  {tags.map((tag) => (
+                    <li
+                      key={tag}
+                      value={tag}
+                      onClick={() =>
+                        handleStep02(productRecommendationId, tags)
+                      }
+                    >
+                      {tag}
+                    </li>
+                  ))}
+                </ul>
+
+                <ButtonStrong text="다음" />
               </div>
             )}
 
             {step === 3 && (
               <div>
                 <h3>가격대</h3>
+
+                <p>{minPrice}</p>
+                <p>{maxPrice}</p>
 
                 <ButtonStrong text="다음" onClick={handleStep03} />
               </div>

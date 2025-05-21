@@ -23,11 +23,12 @@ export async function postRecommend01(
     nextStep: "STEP_2";
     tags: string[]; // 관련된 태그들을 미리 보내줍니다 10개
   }>(`/product-recommendation/${productRecommendationId}`, args);
+  console.log("1단계 데이터", data);
   return data;
 }
 
 export async function postRecommend02(
-  productId: number,
+  productRecommendationId: number,
   args: { step: "STEP_2"; tags?: string[] }
 ) {
   const { data } = await patch<{
@@ -35,42 +36,45 @@ export async function postRecommend02(
     nextStep: "STEP_3";
     minPrice: number;
     maxPrice: number;
-  }>("/product-recommendation", args);
+  }>(`/product-recommendation/${productRecommendationId}`, args);
+  console.log("2단계 데이터", data);
   return data;
 }
 
 export async function postRecommend03(
-  productId: number,
-  arg: { step: "STEP_3"; minPrice?: number; maxPrice?: number }
+  productRecommendationId: number,
+  args: { step: "STEP_3"; minPrice?: number; maxPrice?: number }
 ) {
   const { data } = await patch<{
     productRecommendationId: number;
     nextStep: "STEP_4";
     minReleasedDate: string | null;
-  }>("/product-recommendation", arg);
-
+  }>(`/product-recommendation/${productRecommendationId}`, args);
+  console.log("3단계 데이터", data);
   return data;
 }
 
 export async function postRecommend04(
-  productId: number,
+  productRecommendationId: number,
   args: { step: "STEP_4"; minReleasedDate?: string }
 ) {
   const { data } = await patch<{
     productRecommendationId: number;
     nextStep: "STEP_5";
     specs: { type: string; value: string }[];
-  }>("/product-recommendation", args);
+  }>(`/product-recommendation/${productRecommendationId}`, args);
+  console.log("4단계 데이터", data);
   return data;
 }
 
 export async function postRecommend05(
-  productId: number,
+  productRecommendationId: number,
   args: { step: "STEP_5"; specs?: { type: string; value: string }[] }
 ) {
   const { data } = await patch<{
     productRecommendationId: number;
     nextStep: null;
-  }>("/product-recommendation", args);
+  }>(`/product-recommendation/${productRecommendationId}`, args);
+  console.log("5단계 데이터", data);
   return data;
 }
