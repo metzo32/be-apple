@@ -363,7 +363,7 @@ export default function SelectComp({
 
       {isSelectWindowOpened ? (
         <div className="overlay flex justify-center items-center">
-          <div className="overflow-hidden w-[300px] h-[500px] md:w-[800px] md:h-[600px] xl:w-[1200px] xl:h-[800px] p-5 pt-10 md:p-12 md:pt-18 xl:p-16 bg-white rounded-xl md:rounded-3xl relative">
+          <div className="overflow-hidden w-[300px] h-[500px] md:w-[800px] md:h-[600px] xl:w-[1200px] xl:h-[800px] p-5 pt-10 md:p-12 md:pt-18 xl:p-16 bg-white relative">
             <button // 창 닫기 버튼
               type="button"
               onClick={handleCloseSelectWindow}

@@ -47,7 +47,7 @@ export default function ReviewCard({ review, productId }: ReviewCardProps) {
           review.userId === Number(currentUserId)
             ? "border-secondaryLight shadow-light"
             : "border-bglight"
-        } rounded-xl flex flex-col gap-3 lg:gap-5 bg-bglight`}
+        } flex flex-col gap-3 lg:gap-5 bg-bglight`}
       >
         <div className="flex justify-between">
           <div className="flex items-center gap-5">
@@ -75,7 +75,7 @@ export default function ReviewCard({ review, productId }: ReviewCardProps) {
             {review.photos.map((photo, index) => (
               <span
                 key={index}
-                className="relative w-full aspect-[3/2] rounded-lg overflow-hidden"
+                className="relative w-full aspect-[3/2] overflow-hidden"
               >
                 <Image
                   src={photo}

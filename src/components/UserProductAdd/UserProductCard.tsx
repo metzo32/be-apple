@@ -9,32 +9,38 @@ import {
 } from "@/types/productTypeGurards";
 import Link from "next/link";
 import ButtonBasic from "../designs/ButtonBasic";
-import { useEditUserProductMutation } from "@/hooks/useUserProductQuery";
+import {
+  useDeleteUserProductMutation,
+  useEditUserProductMutation,
+} from "@/hooks/useUserProductQuery";
 
 interface UserProductCardProps {
   userProduct: GetUserProductResponse;
   onDelete: (id: number) => void;
   userId: number | null;
-  onEdit: () => void
+  onEdit: () => void;
 }
 
 export default function UserProductCard({
   userProduct,
   onDelete,
   userId,
-  onEdit
+  onEdit,
 }: UserProductCardProps) {
   const { isModalOpen, openModal, closeModal } = useModal();
 
   const { mutate: editUserProductMutationFn } =
     useEditUserProductMutation(userId);
 
-    const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
-      e.stopPropagation();
-    
-      onEdit(); 
-    };
+  const { mutate: deleteUserProductMutationFn } =
+    useDeleteUserProductMutation(userId);
+
+  const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    onEdit();
+  };
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -45,7 +51,7 @@ export default function UserProductCard({
       openModal();
     } else {
       // 리뷰가 없는 경우 즉시 삭제
-      onDelete(userProduct.id);
+      deleteUserProductMutationFn(userProduct.id);
     }
   };
 

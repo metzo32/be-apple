@@ -1,5 +1,6 @@
 import {
   createNewRecommend,
+  getRecommendList,
   postRecommend01,
   postRecommend02,
   postRecommend03,
@@ -7,9 +8,35 @@ import {
   postRecommend05,
 } from "@/components/fetch/fetchRecommend";
 import { ProductCategoryEnum } from "@/types/productCategory";
+import { GetProductRecommendationResDto } from "@/types/recommend";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { isNil, isNumber } from "lodash";
 
+// 추천 상세 로드
+export async function getRecommendDetail(productRecommendationId: number) {
+  const response = await fetch(
+    `/product-recommendation/${productRecommendationId}`
+  );
+  if (!response.ok) throw new Error("추천 상세 조회 실패");
+  return response.json();
+}
+
+// 추천 목록 로드
+export const useGetRecommendList = (userId: number | null) => {
+  return useQuery<GetProductRecommendationResDto[]>({
+    queryKey: ["recommendList", userId],
+    queryFn: async () => {
+      if (isNil(userId)) {
+        return Promise.reject(new Error("추천 목록을 받아올 수 없습니다."));
+      }
+      const result = await getRecommendList();
+      return result;
+    },
+    enabled: isNumber(userId),
+  });
+};
+
+// 추천 id 최초 생성
 export const useRecommendCreateQuery = (userId: number | null) => {
   return useQuery({
     queryKey: ["createRecommend", userId],
@@ -41,11 +68,8 @@ export const useRecommendStep01 = () => {
       });
     },
     onSuccess: async (data) => {
-      console.log("1단계 생성 성공");
-      // queryClient.invalidateQueries({
-      //   refetchType: "all",
-      //   queryKey: ["createRecommend"],
-      // });
+      console.log("1단계 생성 성공", data);
+
       queryClient.setQueryData(["recommendStep01Tags"], data.tags);
     },
     onError: (error) => {
@@ -68,10 +92,7 @@ export const useRecommendStep02 = () => {
       return postRecommend02(productRecommendationId, { step: "STEP_2", tags });
     },
     onSuccess: async (data) => {
-      queryClient.invalidateQueries({
-        queryKey: ["createRecommend"],
-        refetchType: "all",
-      });
+      console.log("2단계 생성 성공", data);
       queryClient.setQueryData(["recommendStep02MinPrice"], data.minPrice);
       queryClient.setQueryData(["recommendStep02MaxPrice"], data.maxPrice);
     },
@@ -100,11 +121,11 @@ export const useRecommendStep03 = () => {
         maxPrice,
       });
     },
-    onSuccess: async () => {
-      // queryClient.invalidateQueries({
-      //   refetchType: "all",
-      //   queryKey: ["createRecommend"],
-      // });
+    onSuccess: async (data) => {
+      queryClient.setQueryData(
+        ["recommendStep03MinReleasedDate"],
+        data.minReleasedDate
+      );
     },
     onError: (error) => {
       console.error("3단계 추천 생성에 실패했습니다.", error);
@@ -128,11 +149,8 @@ export const useRecommendStep04 = () => {
         minReleasedDate,
       });
     },
-    onSuccess: async () => {
-      // queryClient.invalidateQueries({
-      //   refetchType: "all",
-      //   queryKey: ["createRecommend"],
-      // });
+    onSuccess: async (data) => {
+      queryClient.setQueryData(["recommendStep04Specs"], data.specs);
     },
     onError: (error) => {
       console.error("4단계 추천 생성에 실패했습니다.", error);
@@ -156,11 +174,8 @@ export const useRecommendStep05 = () => {
         specs,
       });
     },
-    onSuccess: async () => {
-      // queryClient.invalidateQueries({
-      //   refetchType: "all",
-      //   queryKey: ["createRecommend"],
-      // });
+    onSuccess: async (data) => {
+      console.log(data);
     },
     onError: (error) => {
       console.error("5단계 추천 생성에 실패했습니다.", error);

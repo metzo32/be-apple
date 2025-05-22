@@ -104,12 +104,12 @@ select:hover {
 
   h1 {
     @apply font-bold
-      text-2xl
+      text-xl
       lg:text-4xl;
   }
 
   h2 {
-    @applytext-xl md:text-2xl;
+    @apply text-xl md:text-2xl;
   }
 
   h3,
@@ -230,9 +230,9 @@ select:hover {
   }
 
   .user-common-container {
-    @apply bg-white rounded-lg shadow-light
+    @apply bg-white shadow-light
     p-5 
-    md:p-12 md:rounded-2xl;
+    md:p-12;
   }
 
   .user-h2 {

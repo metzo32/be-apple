@@ -11,7 +11,6 @@ import {
   useRecommendStep02,
   useRecommendStep03,
   useRecommendStep04,
-  useRecommendStep05,
 } from "@/hooks/useRecommendQuery";
 import ButtonStrong from "@/components/designs/ButtonStrong";
 import {
@@ -19,18 +18,20 @@ import {
   ProductCategoryLabels,
 } from "@/types/productCategory";
 import { useQuery } from "@tanstack/react-query";
+import { postRecommendComplete } from "@/components/fetch/fetchRecommend";
 
 export default function RecommendPage() {
   const { user } = useUserStore();
   const { isModalOpen, openModal, closeModal } = useModal();
   const [step, setStep] = useState(1);
+  const [completed, setCompleted] = useState(false);
+
   const router = useRouter();
 
   const recommendMutationStep01 = useRecommendStep01();
   const recommendMutationStep02 = useRecommendStep02();
   const recommendMutationStep03 = useRecommendStep03();
   const recommendMutationStep04 = useRecommendStep04();
-  const recommendMutationStep05 = useRecommendStep05();
 
   const MAX_STEP = 5;
 
@@ -51,17 +52,31 @@ export default function RecommendPage() {
     queryFn: () => Promise.resolve(9999999), // queryFn 누락 오류 방지용 기본값
     enabled: false,
   });
-  
 
-useEffect(() => {
-  const timer = setTimeout(() => {
-    if (!user) {
-      openModal();
-    }
-  }, 500);
+  const { data: minReleasedDate = "" } = useQuery<string>({
+    queryKey: ["recommendStep03MinReleasedDate"],
+    queryFn: () => Promise.resolve(""), // queryFn 누락 오류 방지용 기본값
+    enabled: false,
+  });
 
-  return () => clearTimeout(timer); 
-}, []);
+  const { data: specs = [] } = useQuery<{ type: string; value: string }[]>({
+    queryKey: ["recommendStep04specs"],
+    queryFn: () => Promise.resolve([]), // queryFn 누락 오류 방지용 기본값
+    enabled: false,
+  });
+
+  const [userMinPrice, setUserMinPrice] = useState(minPrice);
+  const [userMaxPrice, setUserMaxPrice] = useState(maxPrice);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!user) {
+        openModal();
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [user, openModal]);
 
   const handleRoute = () => {
     router.push("/login");
@@ -76,9 +91,10 @@ useEffect(() => {
 
   const userId: number | null = user?.id ?? null;
 
+  // 추천 Id 생성 (최초 동작)
   const { data: productRecommendationId } = useRecommendCreateQuery(userId);
 
-
+  // 1 -> 2
   const handleStep01 = (
     productRecommendationId: number,
     productCategory: ProductCategoryEnum
@@ -91,6 +107,7 @@ useEffect(() => {
     setStep(step + 1);
   };
 
+  // 2 -> 3
   const handleStep02 = (productRecommendationId: number, tags: string[]) => {
     recommendMutationStep02.mutate({
       productRecommendationId,
@@ -100,6 +117,7 @@ useEffect(() => {
     setStep(step + 1);
   };
 
+  // 3 -> 4
   const handleStep03 = (
     productRecommendationId: number,
     minPrice: number,
@@ -113,6 +131,7 @@ useEffect(() => {
     setStep(step + 1);
   };
 
+  // 4 -> 5
   const handleStep04 = (
     productRecommendationId: number,
     minReleasedDate: string
@@ -124,14 +143,28 @@ useEffect(() => {
     setStep(step + 1);
   };
 
-  const handleStep05 = (
-    productRecommendationId: number,
-    specs: { type: string; value: string }[]
-  ) => {
-    recommendMutationStep05.mutate({
-      productRecommendationId,
-      specs,
-    });
+  // 5 -> 최종
+  // const handleStep05 = (
+  //   productRecommendationId: number,
+  //   specs: { type: string; value: string }[]
+  // ) => {
+  //   recommendMutationStep05.mutate({
+  //     productRecommendationId,
+  //     specs,
+  //   });
+  // };
+
+  const handleStep05 = (productRecommendationId: number) => {
+    postRecommendComplete(productRecommendationId);
+    setCompleted(true);
+  };
+
+  const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserMinPrice(Number(e.target.value));
+  };
+
+  const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserMaxPrice(Number(e.target.value));
   };
 
   const categories = Object.values(ProductCategoryEnum);
@@ -172,7 +205,7 @@ useEffect(() => {
                   ))}
                 </ul>
 
-                <ButtonStrong text="다음" onClick={() => setStep(step + 1)} />
+                {/* <ButtonStrong text="다음" onClick={() => setStep(step + 1)} /> */}
               </div>
             )}
 
@@ -202,26 +235,59 @@ useEffect(() => {
               <div>
                 <h3>가격대</h3>
 
-                <p>{minPrice}</p>
-                <p>{maxPrice}</p>
+                <input
+                  value={userMinPrice}
+                  placeholder={minPrice.toString()}
+                  min={minPrice}
+                  max={maxPrice - 1}
+                  maxLength={7}
+                  onChange={handleMinChange}
+                />
 
-                <ButtonStrong text="다음" onClick={handleStep03} />
+                <input
+                  value={userMaxPrice}
+                  placeholder={maxPrice.toString()}
+                  min={minPrice + 1}
+                  max={maxPrice}
+                  maxLength={7}
+                  onChange={handleMaxChange}
+                />
+
+                <ButtonStrong
+                  text="다음"
+                  onClick={() =>
+                    handleStep03(productRecommendationId, minPrice, maxPrice)
+                  }
+                />
               </div>
             )}
 
             {step === 4 && (
               <div>
                 <h3>최소 출시일</h3>
-
-                <ButtonStrong text="다음" onClick={handleStep04} />
+                {minReleasedDate}
+                <ButtonStrong
+                  text="다음"
+                  onClick={() =>
+                    handleStep04(productRecommendationId, minReleasedDate)
+                  }
+                />
               </div>
             )}
 
             {step === 5 && (
               <div>
                 <h3>상세 스펙</h3>
-
-                <ButtonStrong text="완료" onClick={handleStep05} />
+                {specs?.map((spec, index) => (
+                  <p key={index}>
+                    {spec.type} : {spec.value}
+                  </p>
+                ))}
+                {completed && <div>생성 완료</div>}
+                <ButtonStrong
+                  text="완료"
+                  onClick={() => handleStep05(productRecommendationId)}
+                />
               </div>
             )}
           </div>

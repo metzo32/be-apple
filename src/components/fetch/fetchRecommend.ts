@@ -67,6 +67,7 @@ export async function postRecommend04(
   return data;
 }
 
+// 사용하지 않음
 export async function postRecommend05(
   productRecommendationId: number,
   args: { step: "STEP_5"; specs?: { type: string; value: string }[] }
@@ -77,4 +78,18 @@ export async function postRecommend05(
   }>(`/product-recommendation/${productRecommendationId}`, args);
   console.log("5단계 데이터", data);
   return data;
+}
+
+// 추천 완료
+export async function postRecommendComplete(productRecommendationId: number) {
+  return post(
+    `product-recommendation/${productRecommendationId}/complete`,
+    null
+  );
+}
+
+// 추천 목록 받아오기
+export async function getRecommendList() {
+  const response = await get(`/product-recommendation`);
+  return response.data;
 }

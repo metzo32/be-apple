@@ -1,6 +1,7 @@
 import { fetchReviewMe } from "@/components/fetch/fetchReview";
 import {
   addUserProduct,
+  deleteUserProduct,
   editUserProduct,
   fetchUserProduct,
 } from "@/components/fetch/fetchUserProduct";
@@ -77,6 +78,24 @@ export const useEditUserProductMutation = (userId: number | null) => {
     },
     onError: (error) => {
       console.error("유저 제품 수정 실패:", error);
+    },
+  });
+};
+
+export const useDeleteUserProductMutation = (userId: number | null) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: number) => deleteUserProduct(id),
+    onSuccess: () => {
+      if (userId !== null) {
+        queryClient.invalidateQueries({
+          queryKey: ["loadUserProduct", userId],
+        });
+      }
+    },
+    onError: (error) => {
+      console.error("유저 보유 목록 삭제 실패:", error);
     },
   });
 };

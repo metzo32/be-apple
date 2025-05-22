@@ -23,7 +23,7 @@ export default function ProductSearchBar({
 
   const initialForm = { category: category };
 
-  // searchForm객체를 query string으로 바꿔주는 로직 추가
+  // TODO searchForm객체를 query string으로 바꿔주는 로직 추가
 
   const onChangeSearchName = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -36,13 +36,29 @@ export default function ProductSearchBar({
   };
 
   const onChangeSearchMinPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setSearchForm((prev) => ({ ...prev, minPrice: Number(e.target.value) }));
+    if (!/^\d*$/.test(e.target.value)) return;
+    const value = Number(e.target.value);
+
+    setSearchForm((prev) => {
+      const max = prev.maxPrice ?? Infinity;
+
+      const adjustedMin = value > max ? max : value;
+
+      return { ...prev, minPrice: adjustedMin };
+    });
   };
 
   const onChangeSearchMaxPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setSearchForm((prev) => ({ ...prev, maxPrice: Number(e.target.value) }));
+    if (!/^\d*$/.test(e.target.value)) return;
+    const value = Number(e.target.value);
+
+    setSearchForm((prev) => {
+      const min = prev.minPrice ?? 0;
+
+      const adjustedMax = value < min ? min : value;
+
+      return { ...prev, maxPrice: adjustedMax };
+    });
   };
 
   const handleSortAsc = () => {
@@ -65,47 +81,51 @@ export default function ProductSearchBar({
 
   return (
     <div className="flex flex-col gap-5">
-      <form
-        onSubmit={onSubmit}
-        className="w-full h-[40px] px-3 border-2 border-custombg rounded-full bg-bglight flex justify-end"
-      >
-        <input
-          type="text"
-          value={query.name}
-          onChange={onChangeSearchName}
-          className="w-full h-full text-sm mx-2 mb-2"
-          placeholder="제품명"
-        />
+      <form onSubmit={onSubmit} className="flex flex-col gap-5  px-5 md:p-0">
+        <span className="w-full h-[40px] px-3 border-2 border-custombg rounded-full bg-bglight flex justify-end">
+          <input
+            type="text"
+            value={query.name}
+            onChange={onChangeSearchName}
+            className="w-full h-full text-sm mx-2 mb-2"
+            placeholder="제품명"
+          />
 
-        <input
-          type="text"
-          value={query.tag}
-          onChange={onChangeSearchTags}
-          className="w-full h-full text-sm mx-2 mb-2"
-          placeholder="관련 태그"
-        />
+          <input
+            type="text"
+            value={query.tag}
+            onChange={onChangeSearchTags}
+            className="w-full h-full text-sm mx-2 mb-2"
+            placeholder="관련 태그"
+          />
+          <button className="text-primary">
+            <IoSearchSharp />
+          </button>
+        </span>
 
-        <input
-          type="text"
-          value={query.minPrice}
-          maxLength={7}
-          onChange={onChangeSearchMinPrice}
-          className="w-full h-full text-sm mx-2 mb-2"
-          placeholder="최소가"
-        />
+        <span className="w-full h-[40px] px-3 border-2 border-custombg rounded-full bg-bglight flex justify-end">
+          <input
+            type="text"
+            value={searchForm.minPrice}
+            maxLength={7}
+            onChange={onChangeSearchMinPrice}
+            className="w-full h-full text-sm mx-2 mb-2"
+            placeholder="최소가"
+          />
 
-        <input
-          type="text"
-          value={query.maxPrice}
-          maxLength={7}
-          onChange={onChangeSearchMaxPrice}
-          className="w-full h-full text-sm mx-2 mb-2"
-          placeholder="최대가"
-        />
+          <input
+            type="text"
+            value={searchForm.maxPrice}
+            maxLength={7}
+            onChange={onChangeSearchMaxPrice}
+            className="w-full h-full text-sm mx-2 mb-2"
+            placeholder="최대가"
+          />
 
-        <button className="text-primary">
-          <IoSearchSharp />
-        </button>
+          <button className="text-primary">
+            <IoSearchSharp />
+          </button>
+        </span>
       </form>
 
       <div className="w-full flex justify-center  items-center gap-5 global-px">

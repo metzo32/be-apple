@@ -1,8 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import type { GetWishResponse } from "@/types/wishlist";
 import { IoDocumentOutline } from "react-icons/io5";
 import { GoHeartFill } from "react-icons/go";
@@ -67,7 +67,7 @@ export default function UserWishCard({ wishList, onDelete }: WishCardProps) {
               {isMemoOpen && (
                 <span
                   onClick={() => setIsMemoOpen(!isMemoOpen)}
-                  className="select-none absolute top-full transform translate-y-0 md:translate-y-4 -translate-x-0  md:translate-x-0 z-30 w-[200px] xl:w-[300px] h-[120px] bg-white p-5 rounded-xl border-2 border-secondaryLight shadow-strong"
+                  className="select-none absolute top-full transform translate-y-0 md:translate-y-4 -translate-x-0  md:translate-x-0 z-30 w-[200px] xl:w-[300px] h-[120px] bg-white p-5 border-2 border-secondaryLight shadow-strong"
                 >
                   <p className="text-xs md:text-sm text-mid">{wishList.memo}</p>
                 </span>

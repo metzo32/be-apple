@@ -34,10 +34,10 @@ export const useWishAddMutation = () => {
     mutationFn: (wishData: { memo: string; productId: number }) => {
       return addWish(wishData);
     },
-    onSuccess: async () => {
+    onSuccess: async (userId) => {
       queryClient.invalidateQueries({
         refetchType: "all",
-        queryKey: ["searchList"],
+        queryKey: ["loadWishData", userId],
       });
     },
     onError: (error: any) => {
@@ -47,7 +47,7 @@ export const useWishAddMutation = () => {
 };
 
 // 위시 삭제
-export const useWishDeleteMutation = () => {
+export const useWishDeleteMutation = (userId: number | null) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -55,10 +55,14 @@ export const useWishDeleteMutation = () => {
       return deleteWish(productId);
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries({
-        refetchType: "all",
-        queryKey: ["searchList"],
-      });
+      if (isNumber(userId)) {
+        await queryClient.invalidateQueries({
+          queryKey: ["loadWishData", userId],
+        });
+        await queryClient.refetchQueries({
+          queryKey: ["loadWishData", userId],
+        });
+      }
     },
     onError: (error) => {
       console.error("위시리스트 삭제에 실패했습니다.", error);

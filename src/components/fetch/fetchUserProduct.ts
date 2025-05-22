@@ -29,16 +29,9 @@ export async function deleteUserProduct(
   id: number,
   options?: { force?: boolean; onError?: (error: unknown) => void }
 ) {
-  // GetUserProductResponse의 id
-  try {
-    const response = await deleteCall(`/user-product/${id}`, {
-      force: options?.force,
-    });
+  const response = await deleteCall(`/user-product/${id}`, {
+    force: options?.force,
+  });
 
-    return true;
-  } catch (error) {
-    options?.onError?.(error);
-    console.error("유저 보유 목록 삭제 실패:", error);
-    return false;
-  }
+  return true;
 }

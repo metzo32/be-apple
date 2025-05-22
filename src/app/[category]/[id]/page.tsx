@@ -82,7 +82,7 @@ export default async function DetailPage({ params }: DetailPageProps) {
             {product.options.map((option, index) => (
               <div
                 key={option.id}
-                className="w-[200px] h-[300px] p-5 rounded-xl bg-white shadow-strong flex flex-col gap-3"
+                className="w-[200px] h-[300px] p-5 bg-white shadow-strong flex flex-col gap-3"
               >
                 <h5 className="text-2xl font-bold">옵션 {index + 1}</h5>
                 <p>CPU {option.cpu}</p>
