@@ -10,16 +10,16 @@ import { GoHeartFill } from "react-icons/go";
 interface WishCardProps {
   wishList: GetWishResponse;
   onDelete: () => void;
+  isOpen: boolean;
+  onToggle: (id: number | null) => void;
 }
 
-export default function UserWishCard({ wishList, onDelete }: WishCardProps) {
-  const [isMemoOpen, setIsMemoOpen] = useState(false);
-
-  const handleOpenMemo = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsMemoOpen(!isMemoOpen);
-  };
+export default function UserWishCard({
+  wishList,
+  onDelete,
+  isOpen,
+  onToggle,
+}: WishCardProps) {
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -61,12 +61,11 @@ export default function UserWishCard({ wishList, onDelete }: WishCardProps) {
 
           {wishList.memo.length !== 0 && (
             <>
-              <button onClick={handleOpenMemo} className="user-wishcard-btn">
+              <button onClick={() => onToggle(wishList.id)} className="user-wishcard-btn">
                 <IoDocumentOutline />
               </button>
-              {isMemoOpen && (
+              {isOpen && (
                 <span
-                  onClick={() => setIsMemoOpen(!isMemoOpen)}
                   className="select-none absolute top-full transform translate-y-0 md:translate-y-4 -translate-x-0  md:translate-x-0 z-30 w-[200px] xl:w-[300px] h-[120px] bg-white p-5 border-2 border-secondaryLight shadow-strong"
                 >
                   <p className="text-xs md:text-sm text-mid">{wishList.memo}</p>

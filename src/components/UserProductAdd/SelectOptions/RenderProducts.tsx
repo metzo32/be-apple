@@ -46,9 +46,9 @@ export default function RenderProducts({
   // TODO 로딩처리 추가할것
   // TODO 이미 로드된 정보 캐싱
   return (
-    <div className="h-[500px] overflow-y-scroll">
+    <div className="max-h-[80vh] overflow-y-scroll">
       {/* 카테고리 별 상품 목록 */}
-      <ul className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+      <ul className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 overflow-y-scroll">
         {productsData.map((product) => (
           <div key={product.id} className="relative">
             <li

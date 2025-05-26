@@ -32,9 +32,7 @@ export default function SearchPage({
 
   return (
     <div className="flex flex-col items-center min-w-[320px] w-[100vw] pt-20 pb-64 -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72 bg-white">
-      <span className="w-[280px] md:w-[350px] lg:w-[450px] flex justify-center items-center mb-24">
-        <ProductSearchBar category={typedCategory} />
-      </span>
+      <ProductSearchBar category={typedCategory} />
 
       <div className="grid place-items-center gap-8 md:gap-15 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
         {productsList.map((product) => (

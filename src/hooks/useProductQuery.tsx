@@ -1,6 +1,12 @@
 import { getProduct, getProductDetail } from "@/components/fetch/fetchProduct";
-import { ProductCategoryEnum, ProductQueryString } from "@/types/productCategory";
-import { useQuery } from "@tanstack/react-query";
+import {
+  ProductCategoryEnum,
+  ProductQueryString,
+} from "@/types/productCategory";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouterQuery } from "./useRouterQuery";
+import { isEqual } from "lodash";
+import { removeEmptyFields } from "@/module/\bremoveEmptyFields";
 
 // 카테고리별 프로덕트 전체 목록 조회
 export const useProductLoadQuery = (
@@ -13,6 +19,46 @@ export const useProductLoadQuery = (
       const response = await getProduct(category, query);
 
       return response;
+    },
+  });
+};
+
+const validateRange = (min: number, max: number): boolean => {
+  if (max === 0) return true;
+  if (min >= max) {
+    alert("최대값은 최소값보다 커야합니다.");
+    return false;
+  }
+  return true;
+};
+
+export const useSearchMutation = (category: ProductCategoryEnum) => {
+  const { push } = useRouterQuery();
+  const initialForm: ProductQueryString = { category };
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (searchForm: ProductQueryString) => {
+      if (searchForm.name && searchForm.name.length < 1) return;
+
+      if (searchForm.minPrice != null && searchForm.maxPrice != null) {
+        const isValid = validateRange(searchForm.minPrice, searchForm.maxPrice);
+        if (!isValid) return;
+      }
+
+      if (isEqual(initialForm, searchForm)) return;
+
+      const filtered = removeEmptyFields(searchForm);
+      push(`/${category}`, filtered);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["loadProducts"],
+      });
+    
+    },
+    onError: (error) => {
+      console.error("검색 필터링에 실패했습니다.", error);
     },
   });
 };
@@ -30,24 +76,3 @@ export const useProductOptionsQuery = (
     enabled: options?.enabled,
   });
 };
-
-// TODO 옵션 찾는데 전체 데이터 조회를 초기화 하는게 맞는지 생각해보자
-// export const useProductOptionsLoadMutation = () => {
-//   const queryClient = useQueryClient();
-
-//   return useMutation({
-//     mutationFn: (productId: number) => {
-//       const options = getProductDetail(productId);
-//       return options;
-//     },
-//     onSuccess: async () => {
-//       queryClient.invalidateQueries({
-//         refetchType: "all",
-//         queryKey: ["loadProducts"],
-//       });
-//     },
-//     onError: (error: any) => {
-//         console.error("옵션 로드 실패:", error || error.message);
-//       },
-//   });
-// };
