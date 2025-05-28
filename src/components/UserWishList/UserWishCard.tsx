@@ -20,6 +20,7 @@ export default function UserWishCard({
   isOpen,
   onToggle,
 }: WishCardProps) {
+  
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

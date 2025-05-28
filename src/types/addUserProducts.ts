@@ -4,8 +4,8 @@ export interface ProductSelectInfoProps {
 }
 
 export interface UserProductFormData {
-  productId: number | null;
-  productOptionId: number | null;
+  productId: number | undefined;
+  productOptionId: number | undefined;
   purchasedAt: string;
   purchasePrice: number;
   soldAt: string;

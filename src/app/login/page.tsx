@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
 import Image from "next/image";
 import { fetchSignIn } from "@/components/fetch/fetchSignIn";
-import ButtonBasic from "@/components/designs/ButtonBasic";
+import { ButtonBasic } from "@/components/designs/ButtonBasic";
 import ButtonStrong from "@/components/designs/ButtonStrong";
 import LoadingScreen from "@/components/LoadingScreen";
 import { GoogleButton, KakaoButton } from "@/components/SocialLoginButton";
@@ -86,7 +86,7 @@ export default function LoginPage() {
             handleChange={handleChange}
             required={true}
           />
-          
+
           <CustomTextField
             id="password"
             name="password"
@@ -96,7 +96,7 @@ export default function LoginPage() {
             required={true}
             handleChange={handleChange}
           />
-          
+
           <div className="flex items-center justify-center">
             <div className="flex items-center gap-2 md:gap-1">
               <input

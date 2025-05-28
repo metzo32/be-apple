@@ -18,13 +18,21 @@ import {
   ProductCategoryLabels,
 } from "@/types/productCategory";
 import { useQuery } from "@tanstack/react-query";
-import { postRecommendComplete } from "@/components/fetch/fetchRecommend";
+import {
+  getRecommendList,
+  postRecommendComplete,
+} from "@/components/fetch/fetchRecommend";
+import { ButtonBasicLarge } from "@/components/designs/ButtonBasic";
+import RecommendBox from "@/components/designs/RecommendBox";
+import { GetProductRecommendationResDto } from "@/types/recommend";
 
 export default function RecommendPage() {
   const { user } = useUserStore();
   const { isModalOpen, openModal, closeModal } = useModal();
   const [step, setStep] = useState(1);
   const [completed, setCompleted] = useState(false);
+  const [recommendedItem, setRecommendedItem] =
+    useState<GetProductRecommendationResDto | null>(null);
 
   const router = useRouter();
 
@@ -89,6 +97,13 @@ export default function RecommendPage() {
     setStep(step + 1);
   };
 
+  const handePrevStep = () => {
+    if (step <= 1) {
+      return;
+    }
+    setStep(step - 1);
+  };
+
   const userId: number | null = user?.id ?? null;
 
   // 추천 Id 생성 (최초 동작)
@@ -143,20 +158,13 @@ export default function RecommendPage() {
     setStep(step + 1);
   };
 
-  // 5 -> 최종
-  // const handleStep05 = (
-  //   productRecommendationId: number,
-  //   specs: { type: string; value: string }[]
-  // ) => {
-  //   recommendMutationStep05.mutate({
-  //     productRecommendationId,
-  //     specs,
-  //   });
-  // };
+  const handleStep05 = async (productRecommendationId: number) => {
+    await postRecommendComplete(productRecommendationId);
+    // setCompleted(true);
 
-  const handleStep05 = (productRecommendationId: number) => {
-    postRecommendComplete(productRecommendationId);
-    setCompleted(true);
+    const data = await getRecommendList(productRecommendationId);
+
+    setRecommendedItem(data);
   };
 
   const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -184,114 +192,111 @@ export default function RecommendPage() {
         />
       ) : (
         <div className="mt-10 flex flex-col gap-10">
-          <h1>추천 페이지</h1>
-          <div className="min-h-[500px] bg-white rounded-3xl p-10">
-            {step === 1 && (
-              <div className="flex flex-col gap-5">
-                <h3>알맞은 제품을 추천해드려요.</h3>
-                <h3>카테고리</h3>
-                <ul>
-                  {categories.map((category) => (
-                    <li
-                      key={category}
-                      value={ProductCategoryLabels[category]}
-                      onClick={() =>
-                        handleStep01(productRecommendationId, category)
-                      }
-                      className="cursor-pointer"
-                    >
-                      {ProductCategoryLabels[category]}
-                    </li>
+          <div className="md:min-h-[500px] bg-white p-10 md:p-18 my-18">
+            <h1 className="text-2xl">알맞은 제품을 추천해드려요.</h1>
+            <div className="h-[400px] flex items-center justify-center">
+              {step === 1 && (
+                <RecommendBox title="카테고리">
+                  <ul className="w-full flex flex-col justify-between md:flex-row">
+                    {categories.map((category) => (
+                      <li
+                        key={category}
+                        value={ProductCategoryLabels[category]}
+                        onClick={() =>
+                          handleStep01(productRecommendationId, category)
+                        }
+                      >
+                        <ButtonBasicLarge
+                          text={ProductCategoryLabels[category]}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </RecommendBox>
+              )}
+
+              {step === 2 && (
+                <RecommendBox title="사용 목적">
+                  <ul className="w-full flex flex-col justify-between md:flex-row">
+                    {tags.map((tag) => (
+                      <li
+                        key={tag}
+                        value={tag}
+                        onClick={() =>
+                          handleStep02(productRecommendationId, tags)
+                        }
+                      >
+                        <ButtonBasicLarge text={tag} />
+                      </li>
+                    ))}
+                  </ul>
+
+                  <ButtonStrong text="건너뛰기" />
+                </RecommendBox>
+              )}
+
+              {step === 3 && (
+                <RecommendBox title="가격대">
+                  <input
+                    value={userMinPrice}
+                    placeholder={minPrice.toString()}
+                    min={minPrice}
+                    max={maxPrice - 1}
+                    maxLength={7}
+                    onChange={handleMinChange}
+                  />
+
+                  <input
+                    value={userMaxPrice}
+                    placeholder={maxPrice.toString()}
+                    min={minPrice + 1}
+                    max={maxPrice}
+                    maxLength={7}
+                    onChange={handleMaxChange}
+                  />
+
+                  <ButtonStrong
+                    text="다음"
+                    onClick={() =>
+                      handleStep03(productRecommendationId, minPrice, maxPrice)
+                    }
+                  />
+                </RecommendBox>
+              )}
+
+              {step === 4 && (
+                <RecommendBox title="최소 출시일">
+                  {minReleasedDate}
+                  <ButtonStrong
+                    text="다음"
+                    onClick={() =>
+                      handleStep04(productRecommendationId, minReleasedDate)
+                    }
+                  />
+                </RecommendBox>
+              )}
+
+              {step === 5 && (
+                <RecommendBox title="기타 상세 스펙">
+                  {specs?.map((spec, index) => (
+                    <p key={index}>
+                      {spec.type} : {spec.value}
+                    </p>
                   ))}
-                </ul>
+                  {completed && <div>생성 완료</div>}
 
-                {/* <ButtonStrong text="다음" onClick={() => setStep(step + 1)} /> */}
-              </div>
-            )}
+                  {/* <div>{recommendedItem.toString()}</div> */}
 
-            {step === 2 && (
-              <div>
-                <h3>용도</h3>
-
-                <ul>
-                  {tags.map((tag) => (
-                    <li
-                      key={tag}
-                      value={tag}
-                      onClick={() =>
-                        handleStep02(productRecommendationId, tags)
-                      }
-                    >
-                      {tag}
-                    </li>
-                  ))}
-                </ul>
-
-                <ButtonStrong text="다음" />
-              </div>
-            )}
-
-            {step === 3 && (
-              <div>
-                <h3>가격대</h3>
-
-                <input
-                  value={userMinPrice}
-                  placeholder={minPrice.toString()}
-                  min={minPrice}
-                  max={maxPrice - 1}
-                  maxLength={7}
-                  onChange={handleMinChange}
-                />
-
-                <input
-                  value={userMaxPrice}
-                  placeholder={maxPrice.toString()}
-                  min={minPrice + 1}
-                  max={maxPrice}
-                  maxLength={7}
-                  onChange={handleMaxChange}
-                />
-
-                <ButtonStrong
-                  text="다음"
-                  onClick={() =>
-                    handleStep03(productRecommendationId, minPrice, maxPrice)
-                  }
-                />
-              </div>
-            )}
-
-            {step === 4 && (
-              <div>
-                <h3>최소 출시일</h3>
-                {minReleasedDate}
-                <ButtonStrong
-                  text="다음"
-                  onClick={() =>
-                    handleStep04(productRecommendationId, minReleasedDate)
-                  }
-                />
-              </div>
-            )}
-
-            {step === 5 && (
-              <div>
-                <h3>상세 스펙</h3>
-                {specs?.map((spec, index) => (
-                  <p key={index}>
-                    {spec.type} : {spec.value}
-                  </p>
-                ))}
-                {completed && <div>생성 완료</div>}
-                <ButtonStrong
-                  text="완료"
-                  onClick={() => handleStep05(productRecommendationId)}
-                />
-              </div>
-            )}
+                  <ButtonStrong
+                    text="완료"
+                    onClick={() => handleStep05(productRecommendationId)}
+                  />
+                </RecommendBox>
+              )}
+            </div>
           </div>
           <button onClick={handleNextStep}>다음 {step}번 페이지</button>
+          <button onClick={handePrevStep}>이전 {step - 1}번 페이지</button>
           <button onClick={() => setStep(1)}>처음으로</button>
         </div>
       )}

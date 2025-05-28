@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
 import Image from "next/image";
 import ButtonStrong from "./designs/ButtonStrong";
-import ButtonBasic from "./designs/ButtonBasic";
+import { ButtonBasic } from "./designs/ButtonBasic";
 import { basicDeviceData } from "../../public/fakeData/basicDeviceData";
 import { IoMdPerson } from "react-icons/io";
 

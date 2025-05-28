@@ -8,29 +8,25 @@ import {
   isMacProduct,
 } from "@/types/productTypeGurards";
 import Link from "next/link";
-import ButtonBasic from "../designs/ButtonBasic";
+import { ButtonBasic } from "../designs/ButtonBasic";
 import {
   useDeleteUserProductMutation,
-  useEditUserProductMutation,
 } from "@/hooks/useUserProductQuery";
 
 interface UserProductCardProps {
   userProduct: GetUserProductResponse;
   onDelete: (id: number) => void;
   userId: number | null;
-  onEdit: () => void;
+  onEditSubmit?: (userProduct: GetUserProductResponse) => void;
 }
 
 export default function UserProductCard({
   userProduct,
   onDelete,
   userId,
-  onEdit,
+  onEditSubmit,
 }: UserProductCardProps) {
   const { isModalOpen, openModal, closeModal } = useModal();
-
-  const { mutate: editUserProductMutationFn } =
-    useEditUserProductMutation(userId);
 
   const { mutate: deleteUserProductMutationFn } =
     useDeleteUserProductMutation(userId);
@@ -39,7 +35,9 @@ export default function UserProductCard({
     e.preventDefault();
     e.stopPropagation();
 
-    onEdit();
+    if (onEditSubmit) {
+      onEditSubmit(userProduct);
+    }
   };
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {

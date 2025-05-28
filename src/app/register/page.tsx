@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { fetchSignUp } from "@/components/fetch/fetchSignUp";
-import ButtonBasic from "@/components/designs/ButtonBasic";
+import { ButtonBasic } from "@/components/designs/ButtonBasic";
 import ButtonStrong from "@/components/designs/ButtonStrong";
 import { GoogleButton, KakaoButton } from "@/components/SocialLoginButton";
 import CustomTextField from "@/components/designs/CustomTextField";
@@ -44,7 +44,7 @@ export default function RegisterPage() {
   return (
     <section className="py-18 md:py-32 flex flex-col items-center justify-center">
       <form
-       className="w-[260px] h-[420px] md:w-[400px] md:h-[600px] py-10 px-10 md:py-12 md:px-16 shadow-strong flex flex-col gap-10 md:gap-16 items-center justify-center bg-white rounded-2xl"
+        className="w-[260px] h-[420px] md:w-[400px] md:h-[600px] py-10 px-10 md:py-12 md:px-16 shadow-strong flex flex-col gap-10 md:gap-16 items-center justify-center bg-white rounded-2xl"
         onSubmit={handleSubmit}
       >
         <div className="w-full flex flex-col gap-3 md:gap-5">

@@ -15,17 +15,7 @@ export interface CreateUserProductReqDto {
 }
 
 // 유저 프로덕트 수정 요청 타입
-// export interface UpdateUserProductReqDto {
-//   productId: number;
-//   productOptionId: number;
-//   purchasedAt: string;
-//   purchasePrice: number;
-//   soldAt: string;
-//   status: string;
-//   repurchasedCount: number;
-//   condition: string;
-//   memo: string;
-// }
+export type UpdateUserProductReqDto = Partial<CreateUserProductReqDto>
 
 export enum UserProductStatus {
   /**

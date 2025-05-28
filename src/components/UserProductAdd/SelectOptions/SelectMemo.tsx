@@ -3,14 +3,12 @@ import OptionTitle from "./OptionTitleForm";
 interface SelectMemoProps {
   tempMemo: string;
   handleMemoChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  handleMemoBlur: () => void;
   maxLength: number;
 }
 
 export default function SelectMemo({
   tempMemo,
   handleMemoChange,
-  handleMemoBlur,
   maxLength,
 }: SelectMemoProps) {
   return (
@@ -19,7 +17,6 @@ export default function SelectMemo({
         id="memo"
         value={tempMemo}
         onChange={handleMemoChange}
-        onBlur={handleMemoBlur}
         maxLength={maxLength}
         placeholder="작성한 메모는 나에게만 보여요."
         className="w-full h-[150px] p-5 border-2 border-bglight text-base rounded-lg resize-none"

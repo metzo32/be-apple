@@ -1,24 +1,35 @@
 import { useState } from "react";
 import { useUserProductQuery } from "@/hooks/useUserProductQuery";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { GetUserProductResponse } from "@/types/userProduct";
+import { GetUserProductResponse, UserProductCondition, UserProductStatus } from "@/types/userProduct";
 import { ProductCategoryLabels } from "@/types/productCategory";
 import { deleteUserProduct } from "../fetch/fetchUserProduct";
 import UserProductCard from "../UserProductAdd/UserProductCard";
 import SummaryCard from "./SummaryCard";
 import ButtonStrong from "../designs/ButtonStrong";
 import SelectComp from "../UserProductAdd/SelectComp";
+import { UserProductFormData } from "@/types/addUserProducts";
 
 interface UserProduct {
   userId: number | null;
 }
 
+export const initialUserProductForm: UserProductFormData = {
+  productId: undefined,
+  productOptionId: undefined,
+  purchasedAt: "",
+  purchasePrice: 0,
+  soldAt: "",
+  status: UserProductStatus.ACTIVE,
+  repurchasedCount: 0,
+  condition: UserProductCondition.NEW,
+  memo: "",
+}
+
 export default function UserProduct({ userId }: UserProduct) {
-  const [editmode, setEditmode] = useState<boolean>(false);
   const [selectOpen, setSelectOpen] = useState(false);
-  const [editTarget, setEditTarget] = useState<GetUserProductResponse | null>(
-    null
-  );
+  const [formData, setFormData] = useState<UserProductFormData>(initialUserProductForm)
+  const [userProductIdToUpdate, setUserProductIdToUpdate] = useState<number | null>(null)
 
   const queryClient = useQueryClient();
 
@@ -61,9 +72,25 @@ export default function UserProduct({ userId }: UserProduct) {
   };
 
   const handleEdit = (userProduct: GetUserProductResponse) => {
-    setEditTarget(userProduct);
-    setEditmode(true);
+    setUserProductIdToUpdate(userProduct.id)
+    setFormData({
+      productId: userProduct.product.id,
+      productOptionId: userProduct.product.myOption?.id,
+      purchasedAt: userProduct.purchasedAt ?? "",
+      purchasePrice: userProduct.purchasePrice ?? 0,
+      soldAt: userProduct.soldAt ?? "",
+      status: userProduct.status,
+      repurchasedCount: userProduct.repurchasedCount,
+      condition: userProduct.condition,
+      memo: userProduct.memo ?? "",
+    })
     setSelectOpen(true);
+  };
+
+  const handleCloseSelect = () => {
+    setSelectOpen(false);
+    setUserProductIdToUpdate(null)
+    setFormData(initialUserProductForm)
   };
 
   return (
@@ -101,7 +128,7 @@ export default function UserProduct({ userId }: UserProduct) {
                     userProduct={userProduct}
                     onDelete={() => deleteUserProductMutaionFn(userProduct)}
                     userId={userId}
-                    onEdit={() => handleEdit(userProduct)}
+                    onEditSubmit={handleEdit}
                   />
                 </div>
               ))}
@@ -116,9 +143,10 @@ export default function UserProduct({ userId }: UserProduct) {
 
       <SelectComp
         isSelectWindowOpened={selectOpen}
-        setIsSelectWindowOpened={setSelectOpen}
-        editmode={editmode}
-        editTarget={editTarget ?? undefined}
+        setIsSelectWindowOpened={handleCloseSelect}
+        userProductIdToUpdate={userProductIdToUpdate}
+        formData={formData}
+        setFormData={setFormData}
       />
     </>
   );

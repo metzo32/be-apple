@@ -1,5 +1,5 @@
 import ButtonStrong from "../designs/ButtonStrong";
-import ButtonBasic from "../designs/ButtonBasic";
+import { ButtonBasic } from "../designs/ButtonBasic";
 
 interface ModalProps {
   isModalOpen: boolean;

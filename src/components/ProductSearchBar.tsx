@@ -8,6 +8,7 @@ import {
 import { IoSearchSharp } from "react-icons/io5";
 import { ButtonMedium } from "./designs/ButtonStrong";
 import { useSearchMutation } from "@/hooks/useProductQuery";
+import { useSearchParams } from "next/navigation";
 
 export default function ProductSearchBar({
   category,
@@ -17,10 +18,8 @@ export default function ProductSearchBar({
   const [searchForm, setSearchForm] = useState<ProductQueryString>({
     category: category,
   });
+  const searchParams = useSearchParams();
 
-  useEffect(() => {
-    console.log("현재 검색 데이터", searchForm);
-  }, [searchForm]);
 
   const searchMutationFn = useSearchMutation(category);
 
@@ -35,7 +34,9 @@ export default function ProductSearchBar({
   // };
 
   const onChangeSearchName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchForm((prev) => ({ ...prev, name: e.target.value }));
+    const searcedName = e.target.value.trim()
+
+    setSearchForm((prev) => ({ ...prev, name: searcedName }));
   };
 
   const onChangeSearchTags = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,14 +76,18 @@ export default function ProductSearchBar({
     searchMutationFn.mutate(searchForm);
   };
 
+  const handleResetForm = () => {
+    setSearchForm(initial)
+  }
+
   return (
     <span className="w-[280px] md:w-[350px] lg:w-[450px] flex justify-center items-center mb-24">
       <div className="w-full flex flex-col gap-5">
-        <form onSubmit={onSubmit} className="flex flex-col gap-5 px-5 md:p-0">
+        <form onChange={onSubmit} className="flex flex-col gap-5 px-5 md:p-0">
           <span className="w-full h-[40px] px-3 border-2 border-custombg rounded-full bg-bglight flex justify-end">
             <input
               type="text"
-              value={searchForm.name ?? ""}
+              value={searchParams.get("name") ?? undefined}
               onChange={onChangeSearchName}
               className="w-full h-full text-sm mx-2 mb-2"
               placeholder="제품명"
@@ -131,7 +136,7 @@ export default function ProductSearchBar({
             <ButtonMedium text="최신순" />
             <ButtonMedium text="가격순" />
             <ButtonMedium text="리뷰 많은 순" />
-            <ButtonMedium text="초기화" />
+            <ButtonMedium text="초기화" onClick={handleResetForm}/>
           </div>
         </form>
       </div>

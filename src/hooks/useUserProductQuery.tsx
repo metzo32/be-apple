@@ -9,6 +9,7 @@ import { Review } from "@/types/Review";
 import {
   CreateUserProductReqDto,
   GetUserProductResponse,
+  UpdateUserProductReqDto,
 } from "@/types/userProduct";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { isNil, isNumber } from "lodash";
@@ -65,8 +66,14 @@ export const useEditUserProductMutation = (userId: number | null) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (userProduct: CreateUserProductReqDto) => {
-      return editUserProduct(userProduct);
+    mutationFn: ({
+      userProduct,
+      userProductId,
+    }: {
+      userProduct: UpdateUserProductReqDto;
+      userProductId: number;
+    }) => {
+      return editUserProduct(userProduct, userProductId);
     },
     onSuccess: () => {
       if (userId !== null) {

@@ -29,7 +29,7 @@ export const useGetRecommendList = (userId: number | null) => {
       if (isNil(userId)) {
         return Promise.reject(new Error("추천 목록을 받아올 수 없습니다."));
       }
-      const result = await getRecommendList();
+      const result = await getRecommendList(userId);
       return result;
     },
     enabled: isNumber(userId),

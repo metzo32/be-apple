@@ -9,7 +9,7 @@ import ReviewCard from "./ReviewCard";
 import WriteReview from "./WriteReview";
 import { Button } from "@mui/material";
 import ButtonStrong from "../designs/ButtonStrong";
-import ButtonBasic from "../designs/ButtonBasic";
+import { ButtonBasic } from "../designs/ButtonBasic";
 import { FaStar } from "react-icons/fa6";
 
 interface ReviewClientProps {

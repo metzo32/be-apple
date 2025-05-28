@@ -1,72 +1,68 @@
-import { FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
 import OptionTitle from "./OptionTitleForm";
+import { FaCheck } from "react-icons/fa6";
 
 interface SelectMultiplePurchasedProps {
   isMultiplePurchased: boolean;
-  setIsMultiplePurchased: (value: boolean) => void;
   handleConditionSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value: number | string;
+  handleRepurchasedCountChange: (count: number) => void
   handleMultiplePurchased: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleMultiplePurchasedBlur: () => void;
 }
 
 export default function SelectMultiplePurchased({
   isMultiplePurchased,
-  setIsMultiplePurchased,
   handleConditionSelect,
   value,
+  handleRepurchasedCountChange,
   handleMultiplePurchased,
   handleMultiplePurchasedBlur,
 }: SelectMultiplePurchasedProps) {
   return (
     <OptionTitle title="이 제품을 재구매한 적 있나요?">
-      <RadioGroup
-        aria-labelledby="status-radio-buttons-group-label"
-        value={isMultiplePurchased ? "true" : "false"}
-        name="radio-buttons-group"
-        onChange={handleConditionSelect}
-        sx={{
-          width: "500px",
-          display: "grid",
-          gridTemplateColumns: "repeat(5, 1fr)",
-          gridColumnGap: "180px",
-        }}
-      >
-        <FormControlLabel
-          value="false"
-          control={<Radio />}
-          label={"아니요"}
-          onClick={() => setIsMultiplePurchased(false)} // TODO formData의 repurchaseCount를 0으로 업데이트
-          sx={{
-            width: "50px",
+      <ul className="h-[30px] flex flex-col xl:flex-row gap-3 xl:gap-26 text-sm md:text-base items-center">
+        <li
+          className={`cursor-pointer select-none flex items-center gap-3 hover:text-mid ${
+            !isMultiplePurchased ? "text-green-600" : ""
+          }`}
+          onClick={() => {
+            handleRepurchasedCountChange(0)
           }}
-        />
-        <FormControlLabel
-          value="true"
-          control={<Radio />}
-          label={"재구매했어요"}
-          onClick={() => setIsMultiplePurchased(true)}
-          sx={{
-            width: "50px",
-          }}
-        />
-      </RadioGroup>
+        >
+          <span className="w-[20px] aspect-square">
+            {!isMultiplePurchased && <FaCheck className="text-green-500" />}
+          </span>
+          아니요
+        </li>
 
-      {isMultiplePurchased && (
-        <div className="flex items-center gap-3 absolute bottom-0 right-0 transform translate-y-[120%]">
-          <h4>총</h4>
-          <TextField
-            value={value}
-            variant="outlined"
-            onChange={handleMultiplePurchased}
-            onBlur={handleMultiplePurchasedBlur}
-            sx={{
-              width: "100px",
-            }}
-          />
-          <h4>회</h4>
-        </div>
-      )}
+        <li
+          className={`cursor-pointer select-none flex items-center gap-3 hover:text-mid ${
+            isMultiplePurchased ? "text-green-600" : ""
+          }`}
+          onClick={() => {
+            handleRepurchasedCountChange(1)
+          }}
+        >
+          <span className="w-[20px] aspect-square">
+            {isMultiplePurchased && <FaCheck className="text-green-500" />}
+          </span>
+          재구매했어요
+        </li>
+
+        {isMultiplePurchased && (
+          <li className="flex items-center gap-2">
+            <span className="text-sm">총</span>
+            <input
+              type="number"
+              value={value}
+              onChange={handleMultiplePurchased}
+              onBlur={handleMultiplePurchasedBlur}
+              className="border border-gray-300 rounded px-3 py-1 w-[80px] text-sm focus:outline-none focus:ring-2 focus:ring-green-300"
+            />
+            <span className="text-sm">회</span>
+          </li>
+        )}
+      </ul>
     </OptionTitle>
   );
 }

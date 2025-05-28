@@ -89,7 +89,9 @@ export async function postRecommendComplete(productRecommendationId: number) {
 }
 
 // 추천 목록 받아오기
-export async function getRecommendList() {
-  const response = await get(`/product-recommendation`);
+export async function getRecommendList(recommendId: number) {
+  const response = await get(`/product-recommendation/${recommendId}`);
+  console.log("추천된 목록", response.data)
   return response.data;
 }
+

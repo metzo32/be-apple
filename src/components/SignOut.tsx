@@ -5,7 +5,7 @@ import { useUserStore } from "@/stores/useUserStore";
 import { fetchSignOut } from "./fetch/fetchSignOut";
 import useModal from "@/hooks/useModal";
 import Modal from "./Modal/Modal";
-import ButtonBasic from "./designs/ButtonBasic";
+import { ButtonBasic } from "./designs/ButtonBasic";
 
 interface SignOutProps {
   setIsSigningOut: (value: boolean) => void;
