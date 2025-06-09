@@ -3,21 +3,20 @@ import { FaCheck } from "react-icons/fa6";
 
 interface SelectMultiplePurchasedProps {
   isMultiplePurchased: boolean;
-  handleConditionSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value: number | string;
-  handleRepurchasedCountChange: (count: number) => void
+  handleRepurchasedCountChange: (count: number) => void;
   handleMultiplePurchased: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleMultiplePurchasedBlur: () => void;
 }
 
 export default function SelectMultiplePurchased({
   isMultiplePurchased,
-  handleConditionSelect,
   value,
   handleRepurchasedCountChange,
   handleMultiplePurchased,
   handleMultiplePurchasedBlur,
 }: SelectMultiplePurchasedProps) {
+
   return (
     <OptionTitle title="이 제품을 재구매한 적 있나요?">
       <ul className="h-[30px] flex flex-col xl:flex-row gap-3 xl:gap-26 text-sm md:text-base items-center">
@@ -54,6 +53,7 @@ export default function SelectMultiplePurchased({
             <span className="text-sm">총</span>
             <input
               type="number"
+              min={1}
               value={value}
               onChange={handleMultiplePurchased}
               onBlur={handleMultiplePurchasedBlur}

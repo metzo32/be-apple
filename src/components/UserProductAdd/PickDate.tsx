@@ -1,30 +1,29 @@
 "use client";
 
-import { useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 
-interface PickDatePrps {
-  pickedDate: Date | null;
-  changeDate: (newValue: Date) => void;
+interface PickDateProps {
+  pickedDate: Date | null; // 선택된 날짜
+  changeDate: (newValue: Date) => void; // 변경 시 상위 컴포넌트에 알림
   minDate?: Date;
 }
 
-export default function PickDate({ pickedDate, changeDate, minDate }: PickDatePrps) {
-  const [value, setValue] = useState<Date | null>(pickedDate); 
-
+export default function PickDate({
+  pickedDate,
+  changeDate,
+  minDate,
+}: PickDateProps) {
   const handleChange = (newValue: Date | null) => {
-    setValue(newValue);
-    if (newValue) {
-      changeDate(newValue);
-    }
+    if (newValue) changeDate(newValue);
   };
+
   // new Date("April 11, 1976")
   return (
     <DemoContainer components={["DatePicker"]}>
       <DatePicker
         minDate={minDate}
-        maxDate={new Date()}
+        maxDate={new Date()} // 오늘 날짜
         value={pickedDate}
         onChange={handleChange}
       />

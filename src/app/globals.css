@@ -120,14 +120,18 @@ select:hover {
       md:text-base;
   }
 
+  input {
+    @apply text-xs md:text-sm;
+  }
+
   label {
     @apply w-20 text-end
     cursor-pointer
     select-none
-      break-keep
-      whitespace-nowrap
-      text-sm
-      lg:w-30 lg:text-xl;
+    break-keep
+    whitespace-nowrap
+    text-sm
+    lg:w-30 lg:text-xl;
   }
 
   p {
@@ -152,18 +156,25 @@ select:hover {
     2xl:px-72;
   }
 
+  .searchBar-px {
+    @apply min-w-[320px]
+    px-5
+    md:px-20 
+    xl:px-50 
+    2xl:px-80;
+  }
+
   .button-light {
     @apply text-mid
     text-[16px] max-md:text-[12px]
     p-0    
     hover:bg-clip-text hover:text-transparent
-    hover:bg-gradient-to-r hover:from-[#476CF6] hover:to-[#C467F3]
+    hover:bg-gradient-to-r hover:from-[#476CF6] hover:to-[#C467F3];
   }
 
   .button-light.selected {
-    @apply
-    bg-clip-text text-transparent
-    bg-gradient-to-r from-[#476CF6] to-[#C467F3]
+    @apply bg-clip-text text-transparent
+    bg-gradient-to-r from-[#476CF6] to-[#C467F3];
   }
 
   .register-label {

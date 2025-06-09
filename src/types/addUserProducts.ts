@@ -6,9 +6,9 @@ export interface ProductSelectInfoProps {
 export interface UserProductFormData {
   productId: number | undefined;
   productOptionId: number | undefined;
-  purchasedAt: string;
+  purchasedAt: string | undefined;
   purchasePrice: number;
-  soldAt: string;
+  soldAt: string | undefined;
   status: string;
   repurchasedCount: number;
   condition: string;

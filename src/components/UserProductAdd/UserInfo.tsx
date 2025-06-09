@@ -1,16 +1,8 @@
-import ButtonStrong from "../designs/ButtonStrong";
-import Link from "next/link";
-import { useGetRecommendList } from "@/hooks/useRecommendQuery";
-
 interface UserInfoProps {
   userId: number | null;
 }
 
 export default function UserInfo({ userId }: UserInfoProps) {
-  const { data: recommendList } = useGetRecommendList(userId);
-  // if (!recommendList) return null;
-
-  console.log("추천 목록", recommendList);
 
   return (
     <section className="userSection">

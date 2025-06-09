@@ -1,6 +1,6 @@
 import {
   createNewRecommend,
-  getRecommendList,
+  getRecommendDetailItem,
   postRecommend01,
   postRecommend02,
   postRecommend03,
@@ -13,26 +13,19 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { isNil, isNumber } from "lodash";
 
 // 추천 상세 로드
-export async function getRecommendDetail(productRecommendationId: number) {
-  const response = await fetch(
-    `/product-recommendation/${productRecommendationId}`
-  );
-  if (!response.ok) throw new Error("추천 상세 조회 실패");
-  return response.json();
-}
-
-// 추천 목록 로드
-export const useGetRecommendList = (userId: number | null) => {
-  return useQuery<GetProductRecommendationResDto[]>({
-    queryKey: ["recommendList", userId],
+export const useGetRecommendDetail = (recommendId: number | null) => {
+  return useQuery<GetProductRecommendationResDto>({
+    queryKey: ["recommendList", recommendId],
     queryFn: async () => {
-      if (isNil(userId)) {
-        return Promise.reject(new Error("추천 목록을 받아올 수 없습니다."));
+      if (isNil(recommendId)) {
+        return Promise.reject(new Error("추천 ID가 유효하지 않습니다."));
       }
-      const result = await getRecommendList(userId);
+
+      const result = await getRecommendDetailItem(recommendId);
+      console.log("추천 결과", result);
       return result;
     },
-    enabled: isNumber(userId),
+    enabled: isNumber(recommendId),
   });
 };
 
@@ -47,6 +40,7 @@ export const useRecommendCreateQuery = (userId: number | null) => {
       const productRecommendationId = await createNewRecommend();
       return productRecommendationId;
     },
+
     enabled: isNumber(userId),
   });
 };
@@ -142,7 +136,7 @@ export const useRecommendStep04 = () => {
       minReleasedDate,
     }: {
       productRecommendationId: number;
-      minReleasedDate: string;
+      minReleasedDate: string | null;
     }) => {
       return postRecommend04(productRecommendationId, {
         step: "STEP_4",

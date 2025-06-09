@@ -13,21 +13,21 @@ export default function SearchCard({ userId, product }: SearchCardProps) {
 
   const originalName = product.name;
   const idx = originalName.indexOf("(");
-  const resultName = originalName.slice(0, idx)
+  const resultName = originalName.slice(0, idx - 1)
 
   return (
     <div className=" h-[80px] lg:h-[150px] shrink-0 overflow-hidden flex gap-0 lg:gap-0 items-start relative">
       <Link
         href={`/${product.category}/${product.id}`} // product의 Id
-        className="w-[130px] lg:w-[260px] h-[75px] lg:h-[150px] "
+        className="w-[130px] lg:w-[260px] h-[75px] lg:h-[150px] relative"
       >
         {/* TODO 이미지 대체 */}
-        <img
-          // src={product.photos[0]}
-          src="/assets/images/macbook_m3_air_example.png"
+        <Image
+          src={product.photos[0]}
+          // src="/assets/images/macbook_m3_air_example.png"
           alt={product.name}
           className="object-cover"
-          // fill
+          fill
         />
       </Link>
 

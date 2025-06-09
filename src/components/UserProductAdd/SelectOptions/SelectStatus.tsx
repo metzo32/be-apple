@@ -4,7 +4,7 @@ import {
 } from "@/types/userProduct";
 import PickDate from "../PickDate";
 import { FaCheck } from "react-icons/fa6";
-import { formateStringToDate } from "@/module/formatDate";
+import { formatStringToDate } from "@/module/formatDate";
 import OptionTitle from "./OptionTitleForm";
 
 interface SelectStatusProps {
@@ -21,7 +21,7 @@ export default function SelectStatus({
   const currentStatus = Object.values(UserProductStatus);
 
   const minDate = purchasedDate
-    ? formateStringToDate(purchasedDate)
+    ? formatStringToDate(purchasedDate)
     : new Date();
 
   return (
@@ -45,7 +45,7 @@ export default function SelectStatus({
         ))}
       </ul>
 
-      {/* <div className="w-full flex justify-end">
+      <div className="w-full flex justify-end">
         {selectedStatus === "SOLD" && (
           <div className="absolute bottom-0 right-0 transform translate-y-full">
             <h4>판매 시기</h4>
@@ -56,7 +56,7 @@ export default function SelectStatus({
             />
           </div>
         )}
-      </div> */}
+      </div>
     </OptionTitle>
   );
 }

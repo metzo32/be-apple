@@ -1,8 +1,6 @@
 import { get, post, deleteCall, patch } from "@/api/api";
 import { ProductCategoryEnum } from "@/types/productCategory";
 
-// 상품 추천 목록 조회
-
 // 상품 추천 생성 (상품 추천 시작)
 // TODO 임시로 "t" 설정해둔 것 수정하기
 export async function createNewRecommend() {
@@ -56,7 +54,7 @@ export async function postRecommend03(
 
 export async function postRecommend04(
   productRecommendationId: number,
-  args: { step: "STEP_4"; minReleasedDate?: string }
+  args: { step: "STEP_4"; minReleasedDate: string | null}
 ) {
   const { data } = await patch<{
     productRecommendationId: number;
@@ -89,9 +87,8 @@ export async function postRecommendComplete(productRecommendationId: number) {
 }
 
 // 추천 목록 받아오기
-export async function getRecommendList(recommendId: number) {
+export async function getRecommendDetailItem(recommendId: number) {
   const response = await get(`/product-recommendation/${recommendId}`);
-  console.log("추천된 목록", response.data)
+  console.log("추천된 목록", response.data);
   return response.data;
 }
-

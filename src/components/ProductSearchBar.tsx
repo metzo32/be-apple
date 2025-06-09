@@ -1,145 +1,140 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useSearchMutation } from "@/hooks/useProductQuery";
 import {
   ProductCategoryEnum,
   ProductQueryString,
 } from "@/types/productCategory";
 import { IoSearchSharp } from "react-icons/io5";
-import { ButtonMedium } from "./designs/ButtonStrong";
-import { useSearchMutation } from "@/hooks/useProductQuery";
-import { useSearchParams } from "next/navigation";
 
 export default function ProductSearchBar({
   category,
 }: {
   category: ProductCategoryEnum;
 }) {
-  const [searchForm, setSearchForm] = useState<ProductQueryString>({
-    category: category,
-  });
   const searchParams = useSearchParams();
-
-
   const searchMutationFn = useSearchMutation(category);
 
-  // TODO 값이 null일때 쿼리파라미터에 전달하지 않는 로직 추가
-  // const removeKeys = (obj: ProductQueryString) => {
-  //   for (const key in obj) {
-  //     if (obj[key] === null) {
-  //       delete obj[key];
-  //     }
-  //   }
-  //   return obj;
-  // };
+  const [searchForm, setSearchForm] = useState<ProductQueryString>({
+    category,
+    name: searchParams.get("name") || "",
+    tag: searchParams.get("tag") || "",
+    minPrice: searchParams.get("minPrice")
+      ? Number(searchParams.get("minPrice"))
+      : undefined,
+    maxPrice: searchParams.get("maxPrice")
+      ? Number(searchParams.get("maxPrice"))
+      : undefined,
+  });
 
-  const onChangeSearchName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searcedName = e.target.value.trim()
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
 
-    setSearchForm((prev) => ({ ...prev, name: searcedName }));
-  };
-
-  const onChangeSearchTags = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchForm((prev) => ({ ...prev, tag: e.target.value }));
-  };
-
-  const onChangeSearchMinPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!/^\d*$/.test(e.target.value)) return;
     setSearchForm((prev) => ({
       ...prev,
-      minPrice: Number(e.target.value),
+      [name]:
+        name === "minPrice" || name === "maxPrice"
+          ? Number(value) || undefined
+          : value,
     }));
   };
 
-  const onChangeSearchMaxPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!/^\d*$/.test(e.target.value)) return;
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    if (!/^\d*$/.test(value)) return;
+
     setSearchForm((prev) => ({
       ...prev,
-      maxPrice: Number(e.target.value),
+      [name]:
+        name === "minPrice" || name === "maxPrice"
+          ? Number(value) || undefined
+          : value,
     }));
   };
 
-  // const handleSortAsc = () => {
-  //   const updated = { ...searchForm, order: "asc" };
-  //   setSearchForm(updated);
-  //   searchMutation.mutate(updated);
-  // };
-
-  // const handleSortDesc = () => {
-  //   const updated = { ...searchForm, order: "desc" };
-  //   setSearchForm(updated);
-  //   searchMutation.mutate(updated);
-  // };
-
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+    if (
+      searchForm.minPrice &&
+      searchForm.maxPrice &&
+      searchForm.minPrice >= searchForm.maxPrice
+    ) {
+      alert("최대값은 최소값보다 커야합니다.");
+      setSearchForm((prev) => ({
+        ...prev,
+        maxPrice: undefined
+      }))
+    }
     searchMutationFn.mutate(searchForm);
   };
 
-  const handleResetForm = () => {
-    setSearchForm(initial)
-  }
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSubmit();
+    }
+  };
 
   return (
-    <span className="w-[280px] md:w-[350px] lg:w-[450px] flex justify-center items-center mb-24">
-      <div className="w-full flex flex-col gap-5">
-        <form onChange={onSubmit} className="flex flex-col gap-5 px-5 md:p-0">
-          <span className="w-full h-[40px] px-3 border-2 border-custombg rounded-full bg-bglight flex justify-end">
-            <input
-              type="text"
-              value={searchParams.get("name") ?? undefined}
-              onChange={onChangeSearchName}
-              className="w-full h-full text-sm mx-2 mb-2"
-              placeholder="제품명"
-            />
+    <div className="global-px w-[320px] md:w-full flex items-center mb-24">
+      <div className="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-5 ">
+        <span className="w-full h-[30px] md:h-[40px] px-3 border-2 border-custombg rounded-full bg-bglight flex justify-end">
+          <input
+            type="text"
+            name="name"
+            value={searchForm.name?.trim() ?? ""}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            placeholder="제품명"
+            className="w-full h-full m-0 md:mx-2 md:mb-2"
+          />
+        </span>
 
-            <input
-              type="text"
-              value={searchForm.tag ?? ""}
-              onChange={onChangeSearchTags}
-              className="w-full h-full text-sm mx-2 mb-2"
-              placeholder="관련 태그"
-            />
+        <span className="w-full h-[30px] md:h-[40px] px-3 border-2 border-custombg rounded-full bg-bglight flex justify-end">
+          <input
+            type="text"
+            name="tag"
+            value={searchForm.tag?.trim() ?? ""}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            placeholder="태그"
+            className="w-full h-full m-0 md:mx-2 md:mb-2"
+          />
+        </span>
 
-            <button className="text-primary">
-              <IoSearchSharp />
-            </button>
-          </span>
+        <span className="w-full h-[30px] md:h-[40px] px-3 border-2 border-custombg rounded-full bg-bglight flex justify-end">
+          <input
+            type="text"
+            name="minPrice"
+            value={searchForm.minPrice ?? ""}
+            onChange={handlePriceChange}
+            maxLength={8}
+            onKeyDown={handleKeyDown}
+            placeholder="최저가"
+            className="w-full h-full m-0 md:mx-2 md:mb-2"
+          />
+        </span>
 
-          <span className="w-full h-[40px] px-3 border-2 border-custombg rounded-full bg-bglight flex justify-end">
-            <input
-              type="text"
-              value={searchForm.minPrice ?? ""}
-              maxLength={7}
-              onChange={onChangeSearchMinPrice}
-              className="w-full h-full text-sm mx-2 mb-2"
-              placeholder="최소가"
-            />
-
-            <input
-              type="text"
-              value={searchForm.maxPrice ?? ""}
-              maxLength={7}
-              onChange={onChangeSearchMaxPrice}
-              className="w-full h-full text-sm mx-2 mb-2"
-              placeholder="최대가"
-            />
-
-            <button className="text-primary">
-              <IoSearchSharp />
-            </button>
-          </span>
-
-          <div className="w-full flex flex-wrap gap-3 md:gap-5">
-            <ButtonMedium text="오름차순" />
-            <ButtonMedium text="내림차순" />
-            <ButtonMedium text="최신순" />
-            <ButtonMedium text="가격순" />
-            <ButtonMedium text="리뷰 많은 순" />
-            <ButtonMedium text="초기화" onClick={handleResetForm}/>
-          </div>
-        </form>
+        <span className="w-full h-[30px] md:h-[40px] px-3 border-2 border-custombg rounded-full bg-bglight flex justify-end">
+          <input
+            type="text"
+            name="maxPrice"
+            value={searchForm.maxPrice ?? ""}
+            onChange={handlePriceChange}
+            maxLength={8}
+            onKeyDown={handleKeyDown}
+            placeholder="최고가"
+            className="w-full h-full m-0 md:mx-2 md:mb-2"
+          />
+        </span>
       </div>
-    </span>
+      <button
+        onClick={handleSubmit}
+        className="text-primary w-[20px] aspect-square md:w-[40px] flex justify-center items-center"
+      >
+        <IoSearchSharp className="mr-1" />
+      </button>
+    </div>
   );
 }

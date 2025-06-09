@@ -7,8 +7,8 @@ interface RecommendBoxProps {
 
 export default function RecommendBox({ children, title }: RecommendBoxProps) {
   return (
-    <div className="w-full border border-secondary p-10 relative rounded-md">
-      <h3 className="px-3 text-xl bg-white absolute top-0 left-0 transform translate-x-[10px] -translate-y-1/2">
+    <div className="w-full min-h-[120px] border border-secondary p-5 md:p-10 relative rounded-md">
+      <h3 className="px-3 text-base md:text-xl bg-white absolute top-0 left-0 transform translate-x-[10px] -translate-y-1/2">
         {title}
       </h3>
       {children}

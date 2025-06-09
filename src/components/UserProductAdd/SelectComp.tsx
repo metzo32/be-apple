@@ -35,7 +35,7 @@ interface SelectCompProps {
   setIsSelectWindowOpened: (isSelectWindowOpened: boolean) => void;
   userProductIdToUpdate: number | null;
   formData: UserProductFormData;
-  setFormData: Dispatch<SetStateAction<UserProductFormData>>
+  setFormData: Dispatch<SetStateAction<UserProductFormData>>;
 }
 
 export default function SelectComp({
@@ -48,7 +48,7 @@ export default function SelectComp({
   const { user } = useUserStore();
   const { isModalOpen, openModal, closeModal } = useModal();
 
-  const editMode = !!userProductIdToUpdate
+  const editMode = !!userProductIdToUpdate;
 
   const userId = user?.id ?? null;
 
@@ -60,7 +60,7 @@ export default function SelectComp({
     handlePrevPage,
     handleNextPage,
     initializePageNumber,
-  } = useUserProductModalPage()
+  } = useUserProductModalPage();
 
   // 제품 추가 뮤테이션 함수
   const { mutate: addUserProductMutationFn } =
@@ -84,25 +84,24 @@ export default function SelectComp({
   // 보유 제품 작성 중 이탈 시, 모달 확인 로직
   const handleResetForm = () => {
     setFormData(initialUserProductForm);
-    initializePageNumber()
+    initializePageNumber();
     setIsLoading(false);
     closeModal();
     setIsSelectWindowOpened(false);
   };
 
+  // 타입 검증
   const isValidDto = (
-    // 타입 검증
     formData: UserProductFormData
   ): formData is CreateUserProductReqDto => {
     return !!formData.productId && !!formData.productOptionId;
   };
 
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // 수정 로직
     if (editMode) {
-      // 수정 로직
       setTimeout(() => {
         editUserProductMutationFn(
           { userProduct: formData, userProductId: userProductIdToUpdate },
@@ -115,12 +114,12 @@ export default function SelectComp({
             },
           }
         );
-      }, 2000)
+      }, 2000);
       return;
     }
 
+    // 생성 로직
     if (isValidDto(formData)) {
-      // 생성 로직
       setTimeout(() => {
         addUserProductMutationFn(formData, {
           onSuccess: () => {
@@ -130,20 +129,20 @@ export default function SelectComp({
             console.error("유저 보유 목록 생성 실패");
           },
         });
-      }, 2000)
+      }, 2000);
       return;
     }
 
-    return alert('유효하지 않습니다.')
+    return alert("유효하지 않습니다.");
   };
 
+  // 구매가 작성
   const handlePriceChange = (value: string) => {
     if (value.length > 9) {
       return;
     }
-    // TODO:
-    // const numberPrice = Number(value.replace(/[^0-9]/g, ""));
-    setFormData((prev) => ({ ...prev, purchasePrice: Number(value) }));
+    const numberPrice = value.replace(/[^0-9]/g, "");
+    setFormData((prev) => ({ ...prev, purchasePrice: Number(numberPrice) }));
   };
 
   // 보유상태 선택
@@ -166,10 +165,11 @@ export default function SelectComp({
 
   // 구매일 선택
   const handlePurchasedDateChange = (date: Date) => {
+    if (!date) return;
     if (formData.purchasedAt === formatDate(String(date))) return;
     setFormData({
       ...formData,
-      purchasedAt: formatDate(String(date)),
+      purchasedAt: formatDate(String(date)) ?? undefined,
     });
   };
 
@@ -178,15 +178,15 @@ export default function SelectComp({
     if (formData.soldAt === formatDate(String(date))) return;
     setFormData({
       ...formData,
-      soldAt: formatDate(String(date)),
+      soldAt: formatDate(String(date)) ?? undefined,
     });
   };
 
   const handleMemoChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
-      memo: e.target.value
-    })
+      memo: e.target.value,
+    });
   };
 
   // 함수 시그니처....
@@ -195,8 +195,8 @@ export default function SelectComp({
 
     setFormData({
       ...formData,
-      repurchasedCount: purchaseCount
-    })
+      repurchasedCount: purchaseCount,
+    });
   };
 
   const handleMultiplePurchasedBlur = () => {
@@ -221,7 +221,7 @@ export default function SelectComp({
   };
 
   // 1회 이상 재구매 여부
-  const isMultiplePurchased = formData.repurchasedCount > 1
+  const isMultiplePurchased = formData.repurchasedCount > 0;
 
   return (
     <>
@@ -274,7 +274,11 @@ export default function SelectComp({
                   {currentPageNumber !== MAX_PAGE && (
                     <ButtonStrong
                       type="button"
-                      onClick={() => handleNextPage((!formData.productId || !formData.productOptionId))}
+                      onClick={() =>
+                        handleNextPage(
+                          !formData.productId || !formData.productOptionId
+                        )
+                      }
                       text="다음"
                     />
                   )}
@@ -304,15 +308,17 @@ export default function SelectComp({
 
               {currentPageNumber === 1 && ( // 구매가
                 <SelectPurchasedPrice
-                  displayedPrice={formData.purchasePrice.toLocaleString() + '원'}
+                  displayedPrice={
+                    formData.purchasePrice.toLocaleString() + "원"
+                  }
                   onChange={handlePriceChange}
                 />
               )}
 
               {currentPageNumber === 2 && ( // 구매 시기
                 <SelectPurchasedDate
-                  pickedDate={new Date(formData.purchasedAt)}
-                  onChange={handlePurchasedDateChange}
+                  pickedDate={formData.purchasedAt ? new Date(formData.purchasedAt) : null}
+                  onChangePurchasedDate={handlePurchasedDateChange}
                 />
               )}
 
@@ -337,14 +343,9 @@ export default function SelectComp({
                   handleRepurchasedCountChange={(repurchasedCount) => {
                     setFormData({
                       ...formData,
-                      repurchasedCount
-                    })
+                      repurchasedCount,
+                    });
                   }}
-                  handleConditionSelect={(e) =>
-                    handleConditionSelect(
-                      e.target.value as UserProductCondition
-                    )
-                  }
                   value={formData.repurchasedCount}
                   handleMultiplePurchased={handleMultiplePurchased}
                   handleMultiplePurchasedBlur={handleMultiplePurchasedBlur}
@@ -366,7 +367,6 @@ export default function SelectComp({
                       size="medium"
                       variant="outlined"
                       disabled={isLoading}
-                      // onClick={handleSubmit}
                       sx={{
                         width: "60px",
                       }}

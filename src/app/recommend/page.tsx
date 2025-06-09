@@ -18,21 +18,17 @@ import {
   ProductCategoryLabels,
 } from "@/types/productCategory";
 import { useQuery } from "@tanstack/react-query";
-import {
-  getRecommendList,
-  postRecommendComplete,
-} from "@/components/fetch/fetchRecommend";
+import { postRecommendComplete } from "@/components/fetch/fetchRecommend";
 import { ButtonBasicLarge } from "@/components/designs/ButtonBasic";
 import RecommendBox from "@/components/designs/RecommendBox";
-import { GetProductRecommendationResDto } from "@/types/recommend";
+import PickDate from "@/components/UserProductAdd/PickDate";
+import { formatDate } from "@/module/formatDate";
 
 export default function RecommendPage() {
   const { user } = useUserStore();
   const { isModalOpen, openModal, closeModal } = useModal();
   const [step, setStep] = useState(1);
   const [completed, setCompleted] = useState(false);
-  const [recommendedItem, setRecommendedItem] =
-    useState<GetProductRecommendationResDto | null>(null);
 
   const router = useRouter();
 
@@ -49,13 +45,13 @@ export default function RecommendPage() {
     enabled: false,
   });
 
-  const { data: minPrice = 0 } = useQuery<number>({
+  const { data: minPrice = null } = useQuery<number>({
     queryKey: ["recommendStep02MinPrice"],
     queryFn: () => Promise.resolve(0), // queryFn 누락 오류 방지용 기본값
     enabled: false,
   });
 
-  const { data: maxPrice = 9999999 } = useQuery<number>({
+  const { data: maxPrice = null } = useQuery<number>({
     queryKey: ["recommendStep02MaxPrice"],
     queryFn: () => Promise.resolve(9999999), // queryFn 누락 오류 방지용 기본값
     enabled: false,
@@ -73,9 +69,12 @@ export default function RecommendPage() {
     enabled: false,
   });
 
-  const [userMinPrice, setUserMinPrice] = useState(minPrice);
-  const [userMaxPrice, setUserMaxPrice] = useState(maxPrice);
+  const [userMinPrice, setUserMinPrice] = useState<number | null>(null);
+  const [userMaxPrice, setUserMaxPrice] = useState<number | null>(null);
+  const [selectedMinReleasedDate, setSelectedMinReleasedDate] =
+    useState<Date | null>(null);
 
+  // 로그인 여부 체크
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!user) {
@@ -146,6 +145,10 @@ export default function RecommendPage() {
     setStep(step + 1);
   };
 
+  const handleMinDateChange = (date: Date) => {
+    setSelectedMinReleasedDate(date);
+  };
+
   // 4 -> 5
   const handleStep04 = (
     productRecommendationId: number,
@@ -160,11 +163,8 @@ export default function RecommendPage() {
 
   const handleStep05 = async (productRecommendationId: number) => {
     await postRecommendComplete(productRecommendationId);
-    // setCompleted(true);
-
-    const data = await getRecommendList(productRecommendationId);
-
-    setRecommendedItem(data);
+    setCompleted(true);
+    router.push(`/recommend/${productRecommendationId}`);
   };
 
   const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -191,10 +191,10 @@ export default function RecommendPage() {
           hideCancel={true}
         />
       ) : (
-        <div className="mt-10 flex flex-col gap-10">
-          <div className="md:min-h-[500px] bg-white p-10 md:p-18 my-18">
-            <h1 className="text-2xl">알맞은 제품을 추천해드려요.</h1>
-            <div className="h-[400px] flex items-center justify-center">
+        <div className="mt-0 md:mt-10 flex flex-col gap-10">
+          <div className="w-full md:min-h-[500px] bg-white p-5 md:p-18 my-18">
+            <h1 className="text-lg md:text-2xl">알맞은 제품을 추천해드려요.</h1>
+            <div className="h-[300px] md:h-[400px] flex items-center justify-center">
               {step === 1 && (
                 <RecommendBox title="카테고리">
                   <ul className="w-full flex flex-col justify-between md:flex-row">
@@ -230,49 +230,61 @@ export default function RecommendPage() {
                       </li>
                     ))}
                   </ul>
-
-                  <ButtonStrong text="건너뛰기" />
                 </RecommendBox>
               )}
 
               {step === 3 && (
                 <RecommendBox title="가격대">
-                  <input
-                    value={userMinPrice}
-                    placeholder={minPrice.toString()}
-                    min={minPrice}
-                    max={maxPrice - 1}
-                    maxLength={7}
-                    onChange={handleMinChange}
-                  />
+                  <div className="w-full flex items-start lg:items-center gap-5 flex-col lg:flex-row">
+                    <input
+                      value={userMinPrice ?? ""}
+                      placeholder={"최저가"}
+                      maxLength={7}
+                      onChange={handleMinChange}
+                      className="border border-secondary rounded-sm p-2 lg:p-3"
+                    />
 
-                  <input
-                    value={userMaxPrice}
-                    placeholder={maxPrice.toString()}
-                    min={minPrice + 1}
-                    max={maxPrice}
-                    maxLength={7}
-                    onChange={handleMaxChange}
-                  />
+                    <input
+                      value={userMaxPrice ?? ""}
+                      placeholder={"최대가"}
+                      maxLength={7}
+                      onChange={handleMaxChange}
+                      className="border border-secondary rounded-sm p-2 lg:p-3"
+                    />
 
-                  <ButtonStrong
-                    text="다음"
-                    onClick={() =>
-                      handleStep03(productRecommendationId, minPrice, maxPrice)
-                    }
-                  />
+                    <ButtonStrong
+                      text="다음"
+                      onClick={() =>
+                        handleStep03(
+                          productRecommendationId,
+                          userMinPrice ?? 0,
+                          userMaxPrice ?? 9999999
+                        )
+                      }
+                    />
+                  </div>
                 </RecommendBox>
               )}
 
               {step === 4 && (
                 <RecommendBox title="최소 출시일">
-                  {minReleasedDate}
-                  <ButtonStrong
-                    text="다음"
-                    onClick={() =>
-                      handleStep04(productRecommendationId, minReleasedDate)
-                    }
-                  />
+                  <div className="flex flex-col gap-5 items-start">
+                    <PickDate
+                      pickedDate={selectedMinReleasedDate}
+                      changeDate={handleMinDateChange}
+                    />
+
+                    <ButtonStrong
+                      text="다음"
+                      onClick={() => {
+                        const formatted = formatDate(
+                          selectedMinReleasedDate,
+                          "yyyy-MM-dd"
+                        );
+                        handleStep04(productRecommendationId, formatted ?? "");
+                      }}
+                    />
+                  </div>
                 </RecommendBox>
               )}
 
@@ -295,9 +307,9 @@ export default function RecommendPage() {
               )}
             </div>
           </div>
-          <button onClick={handleNextStep}>다음 {step}번 페이지</button>
+          {/* <button onClick={handleNextStep}>다음 {step}번 페이지</button>
           <button onClick={handePrevStep}>이전 {step - 1}번 페이지</button>
-          <button onClick={() => setStep(1)}>처음으로</button>
+          <button onClick={() => setStep(1)}>처음으로</button> */}
         </div>
       )}
     </>
