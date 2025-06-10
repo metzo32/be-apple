@@ -259,4 +259,12 @@ select:hover {
 
     md:w-5 md:text-xl;
   }
+
+  .searchbar-span {
+    @apply
+    w-full h-[30px] md:h-[40px] px-2 
+    border-2 border-custombg focus-within:border-primary 
+    rounded-md 
+    flex justify-end
+  }
 }

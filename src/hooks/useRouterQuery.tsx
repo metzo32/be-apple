@@ -14,7 +14,9 @@ export function useRouterQuery<T extends Record<string, any>>(
 ) {
   const router = useRouter(); // 프로그래매틱 이동
 
-  const queryString = decodeURIComponent(window.location.search); // 쿼리스트링 추출
+const queryString =
+  typeof window !== "undefined" ? decodeURIComponent(window.location.search) : "";
+ // 쿼리스트링 추출
 
   // 쿼리스트링을 객체로
   const query = qs.parse(queryString, {

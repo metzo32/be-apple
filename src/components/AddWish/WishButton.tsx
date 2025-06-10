@@ -19,20 +19,19 @@ interface WishButtonProps {
 }
 
 export default function WishButton({ product }: WishButtonProps) {
+  const { user } = useUserStore();
+  const { isModalOpen, openModal, closeModal } = useModal();
+  const router = useRouter();
   const [isFullHeart, setIsFullHeart] = useState<boolean>(product.isInWish); // 하트버튼 눌렸는지 여부
   const [isMemoOpen, setIsMemoOpen] = useState<boolean>(false); // 메모 팝업
   const [isDropped, setIsDropped] = useState<boolean>(false); // 메모 드랍다운 메뉴
   const [memo, setMemo] = useState<string>(""); // 메모 내용
-  const { user } = useUserStore();
-  const { isModalOpen, openModal, closeModal } = useModal();
-  const router = useRouter();
 
-  const addWish = useWishAddMutation();
+  const addWish = useWishAddMutation(user?.id ?? null);
   const deleteWish = useWishDeleteMutation(user?.id ?? null);
 
   const productId = product.id;
   const wishId = product.wishId;
-  console.log("위시id", wishId)
 
   const handleRoute = () => {
     router.push("/login");
@@ -63,19 +62,25 @@ export default function WishButton({ product }: WishButtonProps) {
   const handleDeleteWish = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
-    if (!wishId) return;
-
-    deleteWish.mutate(wishId);
-    setIsFullHeart(false);
-
     if (!user) {
-      console.log("로그인 해주세요");
+      openModal();
       return;
     }
+
     if (!wishId) {
-      console.log("삭제 실패: wishId 없음");
+      console.error("삭제 실패: wishId 없음");
       return;
     }
+
+    deleteWish.mutate(wishId, {
+      onSuccess: () => {
+        setIsFullHeart(false);
+      },
+      onError: (error) => {
+        console.error("위시리스트 삭제 실패:", error);
+        setIsFullHeart(true); // Revert the heart state on error
+      },
+    });
   };
 
   const handleDrop = () => {

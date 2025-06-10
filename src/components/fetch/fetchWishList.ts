@@ -4,7 +4,7 @@ import { GetWishResponse } from "@/types/wishlist";
 // 유저의 위시리스트 로드하기
 export async function fetchWishList() {
   const response = await get<GetWishResponse[]>("/wish/me");
-  return response;
+  return response.data;
 }
 
 // 위시리스트 추가하기
@@ -14,7 +14,7 @@ export async function addWish(wishData: { memo: string; productId: number }) {
 }
 
 // 위시리스트 삭제하기
-export async function deleteWish(productId: number) {
-  const response = await deleteCall(`/wish/${productId}`);
+export async function deleteWish(wishId: number) {
+  const response = await deleteCall(`/wish/${wishId}`);
   return true;
 }

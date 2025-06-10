@@ -8,6 +8,8 @@ import {
   ProductQueryString,
 } from "@/types/productCategory";
 import { IoSearchSharp } from "react-icons/io5";
+import SortButton from "./SortButton";
+import { ButtonBasic } from "./designs/ButtonBasic";
 
 export default function ProductSearchBar({
   category,
@@ -27,6 +29,10 @@ export default function ProductSearchBar({
     maxPrice: searchParams.get("maxPrice")
       ? Number(searchParams.get("maxPrice"))
       : undefined,
+    sortBy:
+      (searchParams.get("sortBy") as ProductQueryString["sortBy"]) ??
+      "releasedDate",
+    order: (searchParams.get("order") as ProductQueryString["order"]) ?? "desc",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,8 +70,8 @@ export default function ProductSearchBar({
       alert("최대값은 최소값보다 커야합니다.");
       setSearchForm((prev) => ({
         ...prev,
-        maxPrice: undefined
-      }))
+        maxPrice: undefined,
+      }));
     }
     searchMutationFn.mutate(searchForm);
   };
@@ -76,34 +82,60 @@ export default function ProductSearchBar({
     }
   };
 
+  const handleSortByChange = (sortBy: ProductQueryString["sortBy"]) => {
+    setSearchForm((prev) => {
+      const updated = { ...prev, sortBy };
+      searchMutationFn.mutate(updated); // 즉시 검색 실행
+      return updated;
+    });
+  };
+
+  const handleOrderChange = (order: ProductQueryString["order"]) => {
+    setSearchForm((prev) => {
+      const updated = { ...prev, order };
+      searchMutationFn.mutate(updated); // 즉시 검색 실행
+      return updated;
+    });
+  };
+
   return (
-    <div className="global-px w-[320px] md:w-full flex items-center mb-24">
-      <div className="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-5 ">
-        <span className="w-full h-[30px] md:h-[40px] px-2 border-2 border-custombg rounded-md bg-bglight flex justify-end">
+    <div
+      className="px-5 w-[320px] md:w-[500px] lg:w-[885px] flex items-center mb-24 relative"
+    >
+      <div className="flex-1 grid grid-cols-3 grid-rows-2 gap-2 md:gap-5 ">
+        <span className="searchbar-span col-span-3">
           <input
             type="text"
             name="name"
+            maxLength={20}
             value={searchForm.name?.trim() ?? ""}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             placeholder="제품명"
-            className="w-full h-full m-0 md:mx-2 md:mb-2"
+            className="w-full h-full m-0 md:mx-2 md:mb-2 placeholder-gray-400 "
           />
+          <button
+            onClick={handleSubmit}
+            className="text-primary w-[20px] md:w-[40px] flex justify-center items-center"
+          >
+            <IoSearchSharp className="mr-1" />
+          </button>
         </span>
 
-        <span className="w-full h-[30px] md:h-[40px] px-2 border-2 border-custombg rounded-md bg-bglight flex justify-end">
+        <span className="searchbar-span">
           <input
             type="text"
             name="tag"
+            maxLength={20}
             value={searchForm.tag?.trim() ?? ""}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             placeholder="태그"
-            className="w-full h-full m-0 md:mx-2 md:mb-2"
+            className="w-full h-full m-0 md:mx-2 md:mb-2 placeholder-gray-400 "
           />
         </span>
 
-        <span className="w-full h-[30px] md:h-[40px] px-2 border-2 border-custombg rounded-md bg-bglight flex justify-end">
+        <span className="searchbar-span">
           <input
             type="text"
             name="minPrice"
@@ -112,11 +144,11 @@ export default function ProductSearchBar({
             maxLength={8}
             onKeyDown={handleKeyDown}
             placeholder="최저가"
-            className="w-full h-full m-0 md:mx-2 md:mb-2"
+            className="w-full h-full m-0 md:mx-2 md:mb-2 placeholder-gray-400 "
           />
         </span>
 
-        <span className="w-full h-[30px] md:h-[40px] px-2 border-2 border-custombg rounded-md bg-bglight flex justify-end">
+        <span className="searchbar-span">
           <input
             type="text"
             name="maxPrice"
@@ -125,16 +157,20 @@ export default function ProductSearchBar({
             maxLength={8}
             onKeyDown={handleKeyDown}
             placeholder="최고가"
-            className="w-full h-full m-0 md:mx-2 md:mb-2"
+            className="w-full h-full m-0 md:mx-2 md:mb-2 placeholder-gray-400 "
           />
         </span>
       </div>
-      <button
-        onClick={handleSubmit}
-        className="text-primary w-[20px] aspect-square md:w-[40px] flex justify-center items-center"
-      >
-        <IoSearchSharp className="mr-1" />
-      </button>
+
+      {/* <div className="flex flex-col items-center ml-3 md:ml-5">
+        <ButtonBasic text="초기화" />
+      </div> */}
+
+      <SortButton
+        onChangeSortBy={handleSortByChange}
+        onChangeOrder={handleOrderChange}
+        order={searchForm.order}
+      />
     </div>
   );
 }

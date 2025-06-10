@@ -48,16 +48,16 @@ export default function ReviewClient({
   };
 
   return (
-    <section className="w-full flex flex-col gap-10 bg-white global-px py-36 overflow-hidden">
+    <section className="w-full flex flex-col gap-5 md:gap-10 bg-white global-px py-36 overflow-hidden">
       <div className="flex items-end gap-5">
-        <h1 className="text-2xl">리뷰 및 평점</h1>
-        <h2 className="text-base text-light">
+        <h1 className="text-lg md:text-2xl">리뷰 및 평점</h1>
+        <h2 className="text-sm md:text-base text-light">
           총 {product.reviews.length}명의 후기
         </h2>
       </div>
 
       <div className="flex gap-5 items-center">
-        <p className="text-4xl">{averageRatings}</p>
+        <p className="text-2xl md:text-4xl">{averageRatings}</p>
         <FaStar className="text-primary" />
       </div>
 
@@ -75,7 +75,7 @@ export default function ReviewClient({
           )}
         </span>
       ) : (
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-3 md:gap-5">
           <Button variant="contained" disabled>
             {!user ? "로그인 후 이용 가능합니다" : "보유하지 않은 상품입니다"}
           </Button>
@@ -91,7 +91,7 @@ export default function ReviewClient({
       <div className="grid grid-cols-1 lg:grid-cols-1 gap-5 lg:gap-10">
         {product.reviews.length === 0 ? (
           <div className="h-[300px]">
-            <p>아직 등록된 리뷰가 없습니다.</p>
+            <p className="text-sm md:text-base">아직 등록된 리뷰가 없습니다.</p>
           </div>
         ) : (
           sortedReviews?.map((review) => (

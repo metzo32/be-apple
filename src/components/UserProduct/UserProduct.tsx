@@ -2,13 +2,13 @@ import { useState } from "react";
 import { useUserProductQuery } from "@/hooks/useUserProductQuery";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { GetUserProductResponse, UserProductCondition, UserProductStatus } from "@/types/userProduct";
-import { ProductCategoryLabels } from "@/types/productCategory";
 import { deleteUserProduct } from "../fetch/fetchUserProduct";
+import type { UserProductFormData } from "@/types/addUserProducts";
+import { ProductCategoryLabels } from "@/types/productCategory";
 import UserProductCard from "../UserProductAdd/UserProductCard";
 import SummaryCard from "./SummaryCard";
 import ButtonStrong from "../designs/ButtonStrong";
 import SelectComp from "../UserProductAdd/SelectComp";
-import { UserProductFormData } from "@/types/addUserProducts";
 
 interface UserProduct {
   userId: number | null;

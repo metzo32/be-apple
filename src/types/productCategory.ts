@@ -26,7 +26,7 @@ export interface ProductQueryString {
   // 최대가격
   maxPrice?: number;
   // 정렬 기준 (default: releasedDate)
-  sortBy?: "relasedDate" | "price" | "reviewCount";
+  sortBy?: "releasedDate" | "price" | "reviewCount";
   // 정렬 순서 (default: desc)
   order?: "asc" | "desc";
 }

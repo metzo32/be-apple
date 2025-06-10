@@ -24,63 +24,65 @@ export default async function DetailPage({ params }: DetailPageProps) {
 
   if (isMacProduct(product)) {
     return (
-      <div className="w-[100vw] mb-24 -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72">
-        <Link
-          href={`/${params.category}`}
-          className="inline-flex items-center justify-center w-[50px] h-[50px] ml-5 md:ml-20"
-        >
-          <GoArrowLeft className="text-lg md:text-2xl text-mid hover:text-textHover" />
-        </Link>
+      <>
+        <div className="w-[100vw] -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72">
+          <Link
+            href={`/${params.category}`}
+            className="inline-flex items-center justify-center w-[50px] h-[50px] ml-5 md:ml-20"
+          >
+            <GoArrowLeft className="text-lg md:text-2xl text-mid hover:text-textHover" />
+          </Link>
 
-        <section className="global-px py-12 md:py-24 relative bg-bglight grid grid-cols-1 lg:grid-cols-2 gap-16">
-          <span className="block w-full aspect-[1.726] relative">
-            <Image
-              src={"/assets/images/macbook_m3_air_example.png"}
-              alt="제품 이미지"
-              fill
-              className="object-cover"
-            />
-          </span>
-          <div className="relative h-full flex flex-col gap-7">
-            <h2 className="text-3xl font-bold">{product.name}</h2>
-            <p>₩{product.price.toLocaleString()} 부터~</p>
+          <section className="global-px py-12 md:py-24 relative bg-bglight grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-16">
+            <span className="block w-full aspect-[1.726] relative">
+              <Image
+                src={"/assets/images/macbook_m3_air_example.png"}
+                alt="제품 이미지"
+                fill
+                className="object-cover"
+              />
+            </span>
+            <div className="relative h-full flex flex-col gap-5 md:gap-7">
+              <h2 className="text-xl md:text-3xl font-bold">{product.name}</h2>
+              <p className="text-sm md:text-base">₩{product.price.toLocaleString()} 부터~</p>
 
-            <div className="flex justify-between gap-5 bg-white p-5 rounded-lg shadow-light w-fit max-w-full">
-              {product.colors.map((color) => (
-                <div
-                  key={color.name}
-                  className="w-auto flex flex-col justify-center items-center gap-2"
-                >
-                  <p className="text-xs md:text-sm">{color.name}</p>
+              <div className="flex justify-between gap-5 bg-white p-5 rounded-lg shadow-light w-fit max-w-full">
+                {product.colors.map((color) => (
                   <div
-                    className="w-[10px] h-[10px]"
-                    style={{ backgroundColor: color.code }}
-                  />
-                </div>
-              ))}
-            </div>
-
-            {/* TODO 이미 위시에 추가되었는지 확인 */}
-            <ButtonStrong text="위시리스트에 추가" type="button" />
-          </div>
-        </section>
-
-        <section className="flex justify-center items-center">
-          <div className="w-[1000px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 place-items-center py-36 justify-center items-center">
-            {product.options.map((option, index) => (
-              <div
-                key={option.id}
-                className="w-[200px] h-[300px] p-5 bg-white shadow-strong flex flex-col gap-3"
-              >
-                <h5 className="text-2xl font-bold">옵션 {index + 1}</h5>
-                <p>CPU {option.cpu}</p>
-                <p>GPU {option.gpu}</p>
-                <p>Processor {option.processor}</p>
-                <p>RAM {option.ram}</p>
-                <p>Storage {option.storage}</p>
+                    key={color.name}
+                    className="w-auto flex flex-col justify-center items-center gap-2"
+                  >
+                    <p className="text-xs md:text-sm">{color.name}</p>
+                    <div
+                      className="w-[10px] h-[10px]"
+                      style={{ backgroundColor: color.code }}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+
+              {/* TODO 이미 위시에 추가되었는지 확인 */}
+              <ButtonStrong text="위시리스트에 추가" type="button" />
+            </div>
+          </section>
+        </div>
+
+        <section className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-10 place-items-center py-12 md:py-36">
+          {product.options.map((option, index) => (
+            <div
+              key={option.id}
+              className="w-[150px] h-[225px] md:w-[200px] md:h-[300px] p-3 md:p-5 bg-white shadow-strong flex flex-col gap-1 md:gap-3"
+            >
+              <h5 className="text-lg md:text-2xl font-bold">
+                옵션 {index + 1}
+              </h5>
+              <p className="text-xs md:text-sm">CPU {option.cpu}</p>
+              <p className="text-xs md:text-sm">GPU {option.gpu}</p>
+              <p className="text-xs md:text-sm">Processor {option.processor}</p>
+              <p className="text-xs md:text-sm">RAM {option.ram}</p>
+              <p className="text-xs md:text-sm">Storage {option.storage}</p>
+            </div>
+          ))}
         </section>
 
         {/* 
@@ -129,8 +131,10 @@ export default async function DetailPage({ params }: DetailPageProps) {
           </div>
         </section> */}
 
-        <ReviewClient product={product} productId={productId} />
-      </div>
+        <div className="w-[100vw] -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72">
+          <ReviewClient product={product} productId={productId} />
+        </div>
+      </>
     );
 
     //TODO 나머지 타입가드별 리턴문 작성할 것
