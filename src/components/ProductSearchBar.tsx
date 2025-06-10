@@ -79,7 +79,7 @@ export default function ProductSearchBar({
   return (
     <div className="global-px w-[320px] md:w-full flex items-center mb-24">
       <div className="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-5 ">
-        <span className="w-full h-[30px] md:h-[40px] px-3 border-2 border-custombg rounded-full bg-bglight flex justify-end">
+        <span className="w-full h-[30px] md:h-[40px] px-2 border-2 border-custombg rounded-md bg-bglight flex justify-end">
           <input
             type="text"
             name="name"
@@ -91,7 +91,7 @@ export default function ProductSearchBar({
           />
         </span>
 
-        <span className="w-full h-[30px] md:h-[40px] px-3 border-2 border-custombg rounded-full bg-bglight flex justify-end">
+        <span className="w-full h-[30px] md:h-[40px] px-2 border-2 border-custombg rounded-md bg-bglight flex justify-end">
           <input
             type="text"
             name="tag"
@@ -103,7 +103,7 @@ export default function ProductSearchBar({
           />
         </span>
 
-        <span className="w-full h-[30px] md:h-[40px] px-3 border-2 border-custombg rounded-full bg-bglight flex justify-end">
+        <span className="w-full h-[30px] md:h-[40px] px-2 border-2 border-custombg rounded-md bg-bglight flex justify-end">
           <input
             type="text"
             name="minPrice"
@@ -116,7 +116,7 @@ export default function ProductSearchBar({
           />
         </span>
 
-        <span className="w-full h-[30px] md:h-[40px] px-3 border-2 border-custombg rounded-full bg-bglight flex justify-end">
+        <span className="w-full h-[30px] md:h-[40px] px-2 border-2 border-custombg rounded-md bg-bglight flex justify-end">
           <input
             type="text"
             name="maxPrice"

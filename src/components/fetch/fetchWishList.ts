@@ -14,6 +14,7 @@ export async function addWish(wishData: { memo: string; productId: number }) {
 }
 
 // 위시리스트 삭제하기
-export async function deleteWish(id: number) {
-  const response = await deleteCall(`/wish/${id}`);
+export async function deleteWish(productId: number) {
+  const response = await deleteCall(`/wish/${productId}`);
+  return true;
 }

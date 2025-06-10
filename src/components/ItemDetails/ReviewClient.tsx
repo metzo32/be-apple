@@ -28,6 +28,10 @@ export default function ReviewClient({
   const userProductId = productDetail?.userProductId ?? null;
 
   const reviews = productDetail?.reviews; // 리뷰 배열
+  const sortedReviews = reviews?.slice().sort((a, b) => {
+    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+  });
+
   if (!reviews) return [];
 
   const writtenReview = reviews.filter((review) => review.userId === user?.id); // 내가 쓴 리뷰 객체
@@ -84,6 +88,18 @@ export default function ReviewClient({
         </div>
       )}
 
+      <div className="grid grid-cols-1 lg:grid-cols-1 gap-5 lg:gap-10">
+        {product.reviews.length === 0 ? (
+          <div className="h-[300px]">
+            <p>아직 등록된 리뷰가 없습니다.</p>
+          </div>
+        ) : (
+          sortedReviews?.map((review) => (
+            <ReviewCard key={review.id} review={review} productId={productId} />
+          ))
+        )}
+      </div>
+
       {isWriteReviewOpen && (
         <WriteReview
           productId={productId}
@@ -91,18 +107,6 @@ export default function ReviewClient({
           setIsOpen={setIsWriteReviewOpen}
         />
       )}
-
-      <div className="grid grid-cols-1 lg:grid-cols-1 gap-5 lg:gap-10">
-        {product.reviews.length === 0 ? (
-          <div className="h-[300px]">
-            <p>아직 등록된 리뷰가 없습니다.</p>
-          </div>
-        ) : (
-          reviews.map((review) => (
-            <ReviewCard key={review.id} review={review} productId={productId} />
-          ))
-        )}
-      </div>
     </section>
   );
 }

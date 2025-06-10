@@ -59,9 +59,6 @@ export const useWishDeleteMutation = (userId: number | null) => {
         await queryClient.invalidateQueries({
           queryKey: ["loadWishData", userId],
         });
-        await queryClient.refetchQueries({
-          queryKey: ["loadWishData", userId],
-        });
       }
     },
     onError: (error) => {

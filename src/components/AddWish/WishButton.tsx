@@ -28,10 +28,11 @@ export default function WishButton({ product }: WishButtonProps) {
   const router = useRouter();
 
   const addWish = useWishAddMutation();
-  const deleteWish = useWishDeleteMutation();
+  const deleteWish = useWishDeleteMutation(user?.id ?? null);
 
   const productId = product.id;
   const wishId = product.wishId;
+  console.log("위시id", wishId)
 
   const handleRoute = () => {
     router.push("/login");
@@ -53,6 +54,7 @@ export default function WishButton({ product }: WishButtonProps) {
   const handleSubmit = () => {
     // memo는 빈 문자열일 수도 있음
 
+    console.log("추가 프로턱트id", productId);
     setIsMemoOpen(false);
     setIsDropped(false);
     addWish.mutate({ memo, productId });
@@ -61,7 +63,9 @@ export default function WishButton({ product }: WishButtonProps) {
   const handleDeleteWish = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
-    deleteWish.mutate(wishId!);
+    if (!wishId) return;
+
+    deleteWish.mutate(wishId);
     setIsFullHeart(false);
 
     if (!user) {

@@ -7,12 +7,12 @@ import type { CreateNewReviewReq } from "@/types/Review";
 import { fetchUploadPhoto } from "../fetch/fetchUploadPhoto";
 import ButtonStrong from "../designs/ButtonStrong";
 import Modal from "../Modal/Modal";
-import { Rating } from "@mui/material";
 import { LuPlus } from "react-icons/lu";
 import {
   useAddReviewMutation,
   useEditReviewMutation,
 } from "@/hooks/useReviewsQuery";
+import StarRate from "../designs/StarRate";
 
 interface WriteReviewProps {
   productId: number;
@@ -39,7 +39,9 @@ export default function WriteReview({
   const [uploadedPhotos, setUploadedPhotos] = useState<string[]>(
     existingReview?.photos ?? []
   );
-  const [value, setValue] = useState<number>(existingReview?.rating ?? 2);
+  const [rating, setRating] = useState<number | null>(
+    existingReview?.rating ?? null
+  );
 
   const MAX_LENGTH = 200;
 
@@ -49,26 +51,39 @@ export default function WriteReview({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 아무것도 입력하지 않은 경우
-    if (review.length === 0) {
-      openModal();
-      return;
-    }
-
     // 유저 프로덕트 id를 가져오지 못한 경우
     if (!userProductId) {
       console.error("리뷰를 등록할 수 없습니다.");
       return;
     }
 
+    // 아무것도 입력하지 않은 경우 + 별점도 설정 안된 경우
+    const isReviewEmpty = review.trim().length === 0;
+    const isRatingNull = rating === null;
+
+    if (isReviewEmpty && isRatingNull) {
+      openModal();
+      return;
+    }
+
     const reviewData: CreateNewReviewReq = {
       userProductId: userProductId,
-      rating: value,
+      rating: rating ?? 0,
       content: review,
       photos: uploadedPhotos,
     };
 
+    // 수정 모드에서 실제 변경이 일어났는지 확인
     if (isEditMode && existingReview) {
+      const hasChanged =
+        existingReview.rating !== rating || existingReview.content !== review;
+
+      // 수정사항 없으면 창 닫기
+      if (!hasChanged) {
+        setIsOpen(false);
+        return;
+      }
+
       editReviewMutationFn({
         id: existingReview.id,
         reviewData,
@@ -140,45 +155,19 @@ export default function WriteReview({
           onChange={handleChange}
           maxLength={MAX_LENGTH}
           placeholder="리뷰 남기기"
-          className="w-full h-[250px] p-5 border-3 rounded-2xl bg-bglight border-bglight text-base resize-none focus:bg-bglightHover focus:border-secondaryLight"
+          className="w-full h-[250px] p-5 border-3 rounded-lg md:rounded-2xl bg-bglight border-bglight text-sm md:text-base resize-none focus:bg-bglightHover focus:border-secondaryLight"
         />
-        <p className="text-sm text-gray-500 text-right mt-1">
+        <p className="text-gray-500 text-xs md:text-sm text-right mt-1">
           {review.length} / {MAX_LENGTH}자
         </p>
 
         <h3 className="font-semibold">평점</h3>
-        <div className="bg-amber-200">
-          <Rating
-            value={value}
-            max={5}
-            onChange={(event, newValue) => {
-              if (typeof newValue === "number") {
-                setValue(newValue);
-              }
-            }}
-            size="large"
-            sx={{
-              "& label": {
-                width: "20px",
-              },
-              "& label > span": {
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-              },
-              "& label > span > svg": {
-                fontSize: "20px", // 별 자체 크기 조정
-              },
-            }}
-          />
-        </div>
+        <StarRate value={rating} onChange={setRating} />
 
         <div className="flex items-center gap-3">
           <h3 className="font-semibold">포토</h3>
           {isEditMode && (
-            <p className="text-sm text-light">
-              이미 업로드한 사진은 수정할 수 없습니다.
-            </p>
+            <p className="text-sm text-light">사진은 수정할 수 없습니다.</p>
           )}
         </div>
         <div className="flex gap-5 w-full">
@@ -188,7 +177,7 @@ export default function WriteReview({
                 src={photo}
                 alt={`이미지 ${index + 1}`}
                 fill
-                className="object-cover rounded-2xl"
+                className="object-cover rounded-md md:rounded-2xl"
               />
             </div>
           ))}
@@ -205,7 +194,7 @@ export default function WriteReview({
                 />
                 <label
                   htmlFor={`file-input-${index}`}
-                  className="cursor-pointer w-full h-full bg-bglight rounded-2xl flex items-center justify-center hover:bg-bglightHover"
+                  className="cursor-pointer w-full h-full bg-bglight rounded-lg md:rounded-2xl flex items-center justify-center hover:bg-bglightHover"
                 >
                   <span className="text-gray-400 text-4xl">
                     <LuPlus />

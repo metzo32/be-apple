@@ -52,9 +52,12 @@ export default function ReviewCard({ review, productId }: ReviewCardProps) {
         <div className="flex justify-between">
           <div className="flex items-center gap-5">
             <h2 className="text-sm md:text-lg">{maskedName}</h2>
-            {review.createdAt !== review.updatedAt && <p className="text-sm text-light">{updatedTime} (수정됨)</p>} 
           </div>
-          <p className="text-sm text-light">{createdTime}</p>
+          {review.createdAt !== review.updatedAt ? (
+            <p className="text-xs md:text-sm text-light">{updatedTime} (수정됨)</p>
+          ) : (
+            <p className="text-xs md:text-sm text-light">{createdTime}</p>
+          )}
         </div>
 
         <p className="light-p">{review.content}</p>

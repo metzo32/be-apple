@@ -5,7 +5,7 @@ import ReviewClient from "@/components/ItemDetails/ReviewClient";
 import { ProductDetail } from "@/types/productDetail";
 import { isMacProduct } from "@/types/productTypeGurards";
 import ButtonStrong from "@/components/designs/ButtonStrong";
-import { FaStar } from "react-icons/fa6";
+import { GoArrowLeft } from "react-icons/go";
 
 interface DetailPageProps {
   params: { id: string; category: string };
@@ -25,16 +25,14 @@ export default async function DetailPage({ params }: DetailPageProps) {
   if (isMacProduct(product)) {
     return (
       <div className="w-[100vw] mb-24 -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72">
-        {/* <Link href={`/${params.category}`} className="w-[50px] text-custombg">
-          <Image
-            src={"/assets/icons/arrow_left.svg"}
-            alt="뒤로"
-            width={50}
-            height={50}
-          />
-        </Link> */}
+        <Link
+          href={`/${params.category}`}
+          className="inline-flex items-center justify-center w-[50px] h-[50px] ml-5 md:ml-20"
+        >
+          <GoArrowLeft className="text-lg md:text-2xl text-mid hover:text-textHover" />
+        </Link>
 
-        <section className="global-px py-24 relative bg-bglight grid grid-cols-2 gap-16">
+        <section className="global-px py-12 md:py-24 relative bg-bglight grid grid-cols-1 lg:grid-cols-2 gap-16">
           <span className="block w-full aspect-[1.726] relative">
             <Image
               src={"/assets/images/macbook_m3_air_example.png"}
@@ -45,25 +43,15 @@ export default async function DetailPage({ params }: DetailPageProps) {
           </span>
           <div className="relative h-full flex flex-col gap-7">
             <h2 className="text-3xl font-bold">{product.name}</h2>
-            <div className="flex items-center gap-5">
-              <div className="flex gap-1 text-primary">
-                <FaStar />
-                <FaStar />
-                <FaStar />
-                <FaStar />
-                <FaStar />
-              </div>
-            </div>
-
             <p>₩{product.price.toLocaleString()} 부터~</p>
 
-            <div className="flex gap-5 bg-white p-5 rounded-lg shadow-light">
+            <div className="flex justify-between gap-5 bg-white p-5 rounded-lg shadow-light w-fit max-w-full">
               {product.colors.map((color) => (
                 <div
                   key={color.name}
-                  className="flex flex-col justify-center items-center gap-2"
+                  className="w-auto flex flex-col justify-center items-center gap-2"
                 >
-                  <p>{color.name}</p>
+                  <p className="text-xs md:text-sm">{color.name}</p>
                   <div
                     className="w-[10px] h-[10px]"
                     style={{ backgroundColor: color.code }}
@@ -78,7 +66,7 @@ export default async function DetailPage({ params }: DetailPageProps) {
         </section>
 
         <section className="flex justify-center items-center">
-          <div className="w-[1000px] grid grid-cols-3 py-36 justify-center items-center">
+          <div className="w-[1000px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 place-items-center py-36 justify-center items-center">
             {product.options.map((option, index) => (
               <div
                 key={option.id}
