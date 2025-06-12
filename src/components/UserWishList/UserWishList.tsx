@@ -19,7 +19,7 @@ export default function UserWishList({ userId }: UserProduct) {
 
   const { data: wishList } = useWishLoadQuery(userId);
 
-  const deleteWishMutation = useWishDeleteMutation(userId);
+  const deleteWishMutation = useWishDeleteMutation();
 
   if (!wishList) return null;
   const sortedWishList = [...wishList].sort(

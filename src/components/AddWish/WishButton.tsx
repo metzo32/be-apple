@@ -27,8 +27,8 @@ export default function WishButton({ product }: WishButtonProps) {
   const [isDropped, setIsDropped] = useState<boolean>(false); // 메모 드랍다운 메뉴
   const [memo, setMemo] = useState<string>(""); // 메모 내용
 
-  const addWish = useWishAddMutation(user?.id ?? null);
-  const deleteWish = useWishDeleteMutation(user?.id ?? null);
+  const addWish = useWishAddMutation();
+  const deleteWish = useWishDeleteMutation();
 
   const productId = product.id;
   const wishId = product.wishId;
@@ -62,25 +62,19 @@ export default function WishButton({ product }: WishButtonProps) {
   const handleDeleteWish = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
+    if (!wishId) return;
+
+    deleteWish.mutate(wishId);
+    setIsFullHeart(false);
+
     if (!user) {
-      openModal();
+      console.log("로그인 해주세요");
       return;
     }
-
     if (!wishId) {
-      console.error("삭제 실패: wishId 없음");
+      console.log("삭제 실패: wishId 없음");
       return;
     }
-
-    deleteWish.mutate(wishId, {
-      onSuccess: () => {
-        setIsFullHeart(false);
-      },
-      onError: (error) => {
-        console.error("위시리스트 삭제 실패:", error);
-        setIsFullHeart(true); // Revert the heart state on error
-      },
-    });
   };
 
   const handleDrop = () => {

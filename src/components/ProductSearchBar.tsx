@@ -9,7 +9,6 @@ import {
 } from "@/types/productCategory";
 import { IoSearchSharp } from "react-icons/io5";
 import SortButton from "./SortButton";
-import { ButtonBasic } from "./designs/ButtonBasic";
 
 export default function ProductSearchBar({
   category,
@@ -30,9 +29,9 @@ export default function ProductSearchBar({
       ? Number(searchParams.get("maxPrice"))
       : undefined,
     sortBy:
-      (searchParams.get("sortBy") as ProductQueryString["sortBy"]) ??
-      "releasedDate",
-    order: (searchParams.get("order") as ProductQueryString["order"]) ?? "desc",
+      (searchParams.get("sortBy") as ProductQueryString["sortBy"]) ?? undefined,
+    order:
+      (searchParams.get("order") as ProductQueryString["order"]) ?? undefined,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,9 +98,7 @@ export default function ProductSearchBar({
   };
 
   return (
-    <div
-      className="px-5 w-[320px] md:w-[500px] lg:w-[885px] flex items-center mb-24 relative"
-    >
+    <div className="px-5 w-[320px] md:w-[500px] lg:w-[885px] flex flex-col items-center relative">
       <div className="flex-1 grid grid-cols-3 grid-rows-2 gap-2 md:gap-5 ">
         <span className="searchbar-span col-span-3">
           <input

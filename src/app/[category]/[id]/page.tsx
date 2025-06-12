@@ -4,8 +4,8 @@ import { getProductDetail } from "@/components/fetch/fetchProduct";
 import ReviewClient from "@/components/ItemDetails/ReviewClient";
 import { ProductDetail } from "@/types/productDetail";
 import { isMacProduct } from "@/types/productTypeGurards";
-import ButtonStrong from "@/components/designs/ButtonStrong";
 import { GoArrowLeft } from "react-icons/go";
+import AddToWishDetail from "@/components/ItemDetails/AddToWishDetail";
 
 interface DetailPageProps {
   params: { id: string; category: string };
@@ -44,7 +44,9 @@ export default async function DetailPage({ params }: DetailPageProps) {
             </span>
             <div className="relative h-full flex flex-col gap-5 md:gap-7">
               <h2 className="text-xl md:text-3xl font-bold">{product.name}</h2>
-              <p className="text-sm md:text-base">₩{product.price.toLocaleString()} 부터~</p>
+              <p className="text-sm md:text-base">
+                ₩{product.price.toLocaleString()} 부터~
+              </p>
 
               <div className="flex justify-between gap-5 bg-white p-5 rounded-lg shadow-light w-fit max-w-full">
                 {product.colors.map((color) => (
@@ -62,7 +64,7 @@ export default async function DetailPage({ params }: DetailPageProps) {
               </div>
 
               {/* TODO 이미 위시에 추가되었는지 확인 */}
-              <ButtonStrong text="위시리스트에 추가" type="button" />
+              <AddToWishDetail productId={productId} />
             </div>
           </section>
         </div>

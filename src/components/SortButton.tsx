@@ -1,18 +1,23 @@
+import { useState } from "react";
 import { ProductQueryString } from "@/types/productCategory";
 import { ButtonBasic } from "./designs/ButtonBasic";
-import { RiArrowUpSFill, RiArrowDownSFill } from "react-icons/ri";
+import { RiArrowDownSFill } from "react-icons/ri";
 
 interface SortButtonProps {
   onChangeSortBy: (sortBy: ProductQueryString["sortBy"]) => void;
   onChangeOrder: (order: ProductQueryString["order"]) => void;
-  order: any,
+  order: string | undefined;
 }
 
 export default function SortButton({
   onChangeSortBy,
   onChangeOrder,
-  order
+  order,
 }: SortButtonProps) {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedSortOption, setSelectedSortOption] = useState<
+    ProductQueryString["sortBy"] | null
+  >(null);
 
   const sortOptions: { label: string; value: ProductQueryString["sortBy"] }[] =
     [
@@ -21,37 +26,40 @@ export default function SortButton({
       { label: "리뷰 많은 순", value: "reviewCount" },
     ];
 
-  const orderOptions: { label: string; value: ProductQueryString["order"] }[] =
-    [
-      { label: "오름차순", value: "asc" },
-      { label: "내림차순", value: "desc" },
-    ];
+  const handleSortSelect = (option: ProductQueryString["sortBy"]) => {
+    setSelectedSortOption(option);
+    onChangeSortBy(option);
+    setIsDropdownOpen(false);
+  };
+
+  const selectedLabel =
+    sortOptions.find((opt) => opt.value === selectedSortOption)?.label ||
+    "정렬";
 
   return (
-    <div className="absolute -bottom-24 right-0 md:-bottom-30 flex gap-5 z-30">
-      <div className="flex flex-col p-3 bg-white shadow-strong">
-        {sortOptions.map((sortOption) => (
-          <span key={sortOption.label} className="flex items-center gap-2">
-            <ButtonBasic
-              text={sortOption.label}
-              onClick={() => onChangeSortBy(sortOption.value)}
-            />
-            <div className="w-[15px] flex flex-col">
-              {order === "asc" ? (
-                <ButtonBasic
-                  text={<RiArrowUpSFill />}
-                  onClick={() => onChangeOrder(orderOptions[0].value)}
-                />
-              ) : (
-                <ButtonBasic
-                  text={<RiArrowDownSFill />}
-                  onClick={() => onChangeOrder(orderOptions[1].value)}
-                />
-              )}
-            </div>
+    <div className="w-full flex justify-end relative z-30 my-10">
+      <ButtonBasic
+        text={
+          <span className="flex items-center gap-1">
+            {selectedLabel} <RiArrowDownSFill />
           </span>
-        ))}
-      </div>
+        }
+        onClick={() => setIsDropdownOpen((prev) => !prev)}
+      />
+
+      {isDropdownOpen && (
+        <div className="absolute bg-white shadow-md p-5 w-36 box-border">
+          <span className="bg-gray-500">X</span>
+          {sortOptions.map((option) => (
+            <li key={option.value} className="p-3">
+              <ButtonBasic
+                onClick={() => handleSortSelect(option.value)}
+                text={option.label}
+              />
+            </li>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

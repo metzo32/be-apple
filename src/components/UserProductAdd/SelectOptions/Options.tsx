@@ -1,4 +1,4 @@
-import { useProductOptionsQuery } from "@/hooks/useProductQuery";
+import { useProductDetailQuery } from "@/hooks/useProductQuery";
 import { isIpadProduct, isIphoneProduct, isMacProduct } from "@/types/productTypeGurards";
 
 interface OptionsProps {
@@ -19,7 +19,7 @@ export default function Options({
 }: OptionsProps) {
   const isOptionOpen = productId === clickedProductId;
 
-  const { data: optionsData } = useProductOptionsQuery(productId, {
+  const { data: optionsData } = useProductDetailQuery(productId, {
     enabled: isOptionOpen,
   });
 

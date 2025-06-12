@@ -7,8 +7,7 @@ import { useProductDetailQuery } from "@/hooks/useProductDetailQuery";
 import type { ProductDetail } from "@/types/productDetail";
 import ReviewCard from "./ReviewCard";
 import WriteReview from "./WriteReview";
-import { Button } from "@mui/material";
-import ButtonStrong from "../designs/ButtonStrong";
+import ButtonStrong, { ButtonDisabled } from "../designs/ButtonStrong";
 import { ButtonBasic } from "../designs/ButtonBasic";
 import { FaStar } from "react-icons/fa6";
 
@@ -64,9 +63,7 @@ export default function ReviewClient({
       {userProductId ? (
         <span className="w-[200px]">
           {writtenReview.length > 0 ? (
-            <Button variant="contained" disabled>
-              이미 리뷰를 작성했습니다
-            </Button>
+            <ButtonDisabled text="이미 리뷰를 작성했습니다" />
           ) : (
             <ButtonStrong
               text="나의 리뷰 작성하기"
@@ -76,9 +73,11 @@ export default function ReviewClient({
         </span>
       ) : (
         <div className="flex items-center gap-3 md:gap-5">
-          <Button variant="contained" disabled>
-            {!user ? "로그인 후 이용 가능합니다" : "보유하지 않은 상품입니다"}
-          </Button>
+          <ButtonDisabled
+            text={
+              !user ? "로그인 후 이용 가능합니다" : "보유하지 않은 상품입니다"
+            }
+          />
 
           {user && (
             <Link href={"/user"}>

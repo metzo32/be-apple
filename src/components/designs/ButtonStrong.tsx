@@ -7,6 +7,7 @@ export default function ButtonStrong({
   onClick,
   type,
   margin,
+  onMouseLeave,
 }: ButtonProps) {
   return (
     <Button
@@ -32,15 +33,44 @@ export default function ButtonStrong({
   );
 }
 
-export function ButtonMedium({ text, onClick, type, margin }: ButtonProps) {
+export function ButtonMedium({
+  text,
+  onClick,
+  type,
+  margin,
+  onMouseLeave,
+}: ButtonProps) {
   return (
     <Button
       color="secondary"
       variant="outlined"
       type={type}
       onClick={onClick}
+      onMouseLeave={onMouseLeave}
       size="medium"
       className={`${margin ? "mt-10" : ""}`}
+      sx={{
+        fontSize: "14px",
+        paddingX: "10px",
+        paddingY: "3px",
+        "@media (max-width: 767px)": {
+          fontSize: "12px",
+          paddingX: "8px",
+          paddingY: "2px",
+        },
+      }}
+    >
+      {text}
+    </Button>
+  );
+}
+
+export function ButtonDisabled({ text }: ButtonProps) {
+  return (
+    <Button
+      variant="contained"
+      size="medium"
+      disabled
       sx={{
         fontSize: "14px",
         paddingX: "10px",

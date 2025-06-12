@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
   addWish,
   deleteWish,
@@ -23,7 +23,7 @@ export const useWishLoadQuery = (userId: number | null) => {
 };
 
 // 위시 추가
-export const useWishAddMutation = (userId: number | null) => {
+export const useWishAddMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -31,40 +31,33 @@ export const useWishAddMutation = (userId: number | null) => {
       return addWish(wishData);
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["loadWishData", userId],
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ["loadProductDetail", userId],
+      queryClient.invalidateQueries({
+        refetchType: "all",
+        queryKey: ["loadWishData"],
       });
     },
     onError: (error: any) => {
-      console.error("위시리스트 추가 실패:", error?.message || error);
+      console.error("위시리스트 추가 실패:", error || error.message);
     },
   });
 };
 
 // 위시 삭제
-export const useWishDeleteMutation = (userId: number | null) => {
+export const useWishDeleteMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (wishId: number) => {
-      if (!wishId) {
-        return Promise.reject(new Error("위시 ID가 없습니다."));
-      }
-      return deleteWish(wishId);
+    mutationFn: (productId: number) => {
+      return deleteWish(productId);
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["loadWishData", userId],
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ["loadProductDetail", userId],
+      queryClient.invalidateQueries({
+        refetchType: "all",
+        queryKey: ["loadWishData"],
       });
     },
     onError: (error) => {
-      console.error("위시리스트 삭제에 실패했습니다:", error);
+      console.error("위시리스트 삭제에 실패했습니다.", error);
     },
   });
 };

@@ -63,7 +63,7 @@ export const useSearchMutation = (category: ProductCategoryEnum) => {
   });
 };
 
-export const useProductOptionsQuery = (
+export const useProductDetailQuery = (
   productId: number,
   options?: { enabled?: boolean }
 ) => {

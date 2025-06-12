@@ -5,4 +5,5 @@ export interface ButtonProps {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   type?: "submit" | "reset" | "button" | undefined;
   margin?: boolean;
+  onMouseLeave?: () => void;
 }

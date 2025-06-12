@@ -4,6 +4,7 @@ import { GetWishResponse } from "@/types/wishlist";
 // 유저의 위시리스트 로드하기
 export async function fetchWishList() {
   const response = await get<GetWishResponse[]>("/wish/me");
+  console.log("나의 위시리스트", response.data);
   return response.data;
 }
 

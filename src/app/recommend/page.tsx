@@ -28,7 +28,6 @@ export default function RecommendPage() {
   const { user } = useUserStore();
   const { isModalOpen, openModal, closeModal } = useModal();
   const [step, setStep] = useState(1);
-  const [completed, setCompleted] = useState(false);
 
   const router = useRouter();
 
@@ -163,7 +162,6 @@ export default function RecommendPage() {
 
   const handleStep05 = async (productRecommendationId: number) => {
     await postRecommendComplete(productRecommendationId);
-    setCompleted(true);
     router.push(`/recommend/${productRecommendationId}`);
   };
 
@@ -202,9 +200,10 @@ export default function RecommendPage() {
                       <li
                         key={category}
                         value={ProductCategoryLabels[category]}
-                        onClick={() =>
-                          handleStep01(productRecommendationId, category)
-                        }
+                        onClick={() => {
+                          if (!productRecommendationId) return;
+                          handleStep01(productRecommendationId, category);
+                        }}
                       >
                         <ButtonBasicLarge
                           text={ProductCategoryLabels[category]}
@@ -223,7 +222,7 @@ export default function RecommendPage() {
                         key={tag}
                         value={tag}
                         onClick={() =>
-                          handleStep02(productRecommendationId, tags)
+                          handleStep02(productRecommendationId, [tag])
                         }
                       >
                         <ButtonBasicLarge text={tag} />
@@ -295,9 +294,6 @@ export default function RecommendPage() {
                       {spec.type} : {spec.value}
                     </p>
                   ))}
-                  {completed && <div>생성 완료</div>}
-
-                  {/* <div>{recommendedItem.toString()}</div> */}
 
                   <ButtonStrong
                     text="완료"
@@ -307,9 +303,6 @@ export default function RecommendPage() {
               )}
             </div>
           </div>
-          {/* <button onClick={handleNextStep}>다음 {step}번 페이지</button>
-          <button onClick={handePrevStep}>이전 {step - 1}번 페이지</button>
-          <button onClick={() => setStep(1)}>처음으로</button> */}
         </div>
       )}
     </>
