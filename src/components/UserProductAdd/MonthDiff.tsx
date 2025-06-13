@@ -2,16 +2,13 @@ import { useRouter } from "next/navigation";
 import { ButtonBasic } from "../designs/ButtonBasic";
 import { differenceInMonths } from "date-fns";
 
-export default function MonthDiff({
-  purchasedAt,
-}: {
+interface MonthDiffProps {
   purchasedAt: string | null;
-}) {
-  const router = useRouter();
+  category: string; // TODO 타입 바꾸기
+}
 
-  const handleCheckNewProduct = (category: string) => {
-    router.push(category);
-  };
+export default function MonthDiff({ purchasedAt, category }: MonthDiffProps) {
+  const router = useRouter();
 
   const purchasedAtToMonth = (purchasedAt: string) => {
     const result = differenceInMonths(purchasedAt, new Date());
@@ -31,6 +28,12 @@ export default function MonthDiff({
     }
   };
 
+  const handleCheckNewProduct = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    router.push(`/${category}`);
+  };
+
   return monthDiff ? (
     <>
       <div className="flex flex-row md:flex-col items-center gap-3 md:gap-1">
@@ -40,8 +43,7 @@ export default function MonthDiff({
         {monthDiff >= 6 ? (
           <ButtonBasic
             text="최신 제품 알아보기"
-            // TODO 경로 수정
-            onClick={() => handleCheckNewProduct("test")}
+            onClick={handleCheckNewProduct}
           />
         ) : null}
       </div>

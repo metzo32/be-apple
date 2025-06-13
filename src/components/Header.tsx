@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
 import Image from "next/image";
@@ -9,26 +8,14 @@ import { ButtonBasic } from "./designs/ButtonBasic";
 import { basicDeviceData } from "../../public/fakeData/basicDeviceData";
 import { IoMdPerson } from "react-icons/io";
 
-type HeaderText = "..." | "로그인" | "내 정보";
 
 export default function Header() {
-  const [text, setText] = useState<HeaderText>("...");
-  const [nextPath, setNextPath] = useState<string>("/login");
   const router = useRouter();
   const { user } = useUserStore();
 
-  useEffect(() => {
-    if (!user) {
-      setText("로그인");
-      setNextPath("/login");
-    } else {
-      setText("내 정보");
-      setNextPath("/user");
-    }
-  }, [user]);
 
-  const handleClick = () => {
-    router.push(nextPath);
+  const handleClick = (path: string) => {
+    router.push(`/${path}`);
   };
 
   return (
@@ -53,12 +40,30 @@ export default function Header() {
           ))}
         </nav>
         <span className="hidden md:block w-[80px]">
-          <ButtonStrong text={text} onClick={handleClick} />
+          {user ? (
+            <ButtonStrong text="내 정보" onClick={() => handleClick("user")} />
+          ) : (
+            <ButtonStrong text="로그인" onClick={() => handleClick("login")} />
+          )}
+
+          {/* <ButtonStrong text={text} onClick={handleClick} /> */}
         </span>
 
-        <button className="block md:hidden text-primary" onClick={handleClick}>
-          <IoMdPerson />
-        </button>
+        {user ? (
+          <button
+            className="block md:hidden text-primary"
+            onClick={() => handleClick("/user")}
+          >
+            <IoMdPerson />
+          </button>
+        ) : (
+          <button
+            className="block md:hidden text-primary"
+            onClick={() => handleClick("/login")}
+          >
+            <IoMdPerson />
+          </button>
+        )}
       </header>
     </>
   );

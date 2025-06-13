@@ -87,7 +87,7 @@ export default function UserProductCard({
 
           <span className="justify-self-center">
             {userProduct.status !== "SOLD" && (
-              <MonthDiff purchasedAt={userProduct.purchasedAt} />
+              <MonthDiff purchasedAt={userProduct.purchasedAt} category="Mac" />
             )}
           </span>
 
@@ -162,7 +162,7 @@ export default function UserProductCard({
 
         <span className="justify-self-center">
           {userProduct.status !== "SOLD" && (
-            <MonthDiff purchasedAt={userProduct.purchasedAt} />
+            <MonthDiff purchasedAt={userProduct.purchasedAt} category="iPad"/>
           )}
         </span>
 
@@ -194,7 +194,7 @@ export default function UserProductCard({
 
     return (
       <Link
-        href={`/iPad/${userProduct.product.id}`}
+        href={`/iPhone/${userProduct.product.id}`}
         className="user-product-card"
       >
         {/* TODO 이미지로 대체 */}
@@ -222,7 +222,7 @@ export default function UserProductCard({
 
         <span className="justify-self-center">
           {userProduct.status !== "SOLD" && (
-            <MonthDiff purchasedAt={userProduct.purchasedAt} />
+            <MonthDiff purchasedAt={userProduct.purchasedAt} category="iPhone"/>
           )}
         </span>
 
