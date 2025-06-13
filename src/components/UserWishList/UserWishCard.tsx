@@ -25,13 +25,11 @@ export default function UserWishCard({
     onDelete();
   };
 
-  console.log(wishList)
-
   return (
-    <div className="flex flex-col w-[110px] md:w-[240px] aspect-2/3 ">
+    <div className="flex flex-col bg-white shadow-light mt-5">
       <Link
         href={`/${wishList.product.category}/${wishList.product.id}`}
-        className="w-full max-w-[240px] aspect-square relative"
+        className="w-[130px] md:w-[200px] aspect-square relative bg-gray-300"
       >
         {/* <Image
           src={wishList.product.photos[0]}

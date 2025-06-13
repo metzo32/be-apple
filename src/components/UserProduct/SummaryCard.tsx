@@ -5,8 +5,9 @@ interface SummaryCardProps {
 
 export default function SummaryCard({ title, content }: SummaryCardProps) {
   return (
-    <div className="w-full h-[70px] md:h-[110px] xl:h-[150px] p-3 md:p-5 bg-white shadow-light">
-      <h5 className="text-bold">{title}</h5>
+    <div className="w-full py-3 md:py-5 border-b border-lineLight">
+      <h5 className="text-bold hidden md:block">{title}</h5>
+      <h5 className="user-title-sm">{title}</h5>
       <p className="text-xl md:text-3xl font-bold text-secondary">{content}</p>
     </div>
   );

@@ -101,13 +101,13 @@ export default function WishButton({ product }: WishButtonProps) {
 
       {/* 하트 버튼 */}
       {!isFullHeart ? (
-        <button onClick={handleAddWish} className="text-2xl hover:opacity-70">
+        <button onClick={handleAddWish} className="text-lg md:text-2xl hover:opacity-70">
           <GoHeart className="text-primary" />
         </button>
       ) : (
         <button
           onClick={handleDeleteWish}
-          className="text-2xl hover:opacity-70"
+          className="text-lg md:text-2xl hover:opacity-70"
         >
           <GoHeartFill className="text-primary" />
         </button>

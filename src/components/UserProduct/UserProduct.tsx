@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { useUserProductQuery } from "@/hooks/useUserProductQuery";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { GetUserProductResponse, UserProductCondition, UserProductStatus } from "@/types/userProduct";
+import {
+  GetUserProductResponse,
+  UserProductCondition,
+  UserProductStatus,
+} from "@/types/userProduct";
 import { deleteUserProduct } from "../fetch/fetchUserProduct";
 import type { UserProductFormData } from "@/types/addUserProducts";
 import { ProductCategoryLabels } from "@/types/productCategory";
@@ -24,12 +28,16 @@ export const initialUserProductForm: UserProductFormData = {
   repurchasedCount: 0,
   condition: UserProductCondition.NEW,
   memo: "",
-}
+};
 
 export default function UserProduct({ userId }: UserProduct) {
   const [selectOpen, setSelectOpen] = useState(false);
-  const [formData, setFormData] = useState<UserProductFormData>(initialUserProductForm)
-  const [userProductIdToUpdate, setUserProductIdToUpdate] = useState<number | null>(null)
+  const [formData, setFormData] = useState<UserProductFormData>(
+    initialUserProductForm
+  );
+  const [userProductIdToUpdate, setUserProductIdToUpdate] = useState<
+    number | null
+  >(null);
 
   const queryClient = useQueryClient();
 
@@ -72,7 +80,7 @@ export default function UserProduct({ userId }: UserProduct) {
   };
 
   const handleEdit = (userProduct: GetUserProductResponse) => {
-    setUserProductIdToUpdate(userProduct.id)
+    setUserProductIdToUpdate(userProduct.id);
     setFormData({
       productId: userProduct.product.id,
       productOptionId: userProduct.product.myOption?.id,
@@ -83,27 +91,31 @@ export default function UserProduct({ userId }: UserProduct) {
       repurchasedCount: userProduct.repurchasedCount,
       condition: userProduct.condition,
       memo: userProduct.memo ?? "",
-    })
+    });
     setSelectOpen(true);
   };
 
   const handleCloseSelect = () => {
     setSelectOpen(false);
-    setUserProductIdToUpdate(null)
-    setFormData(initialUserProductForm)
+    setUserProductIdToUpdate(null);
+    setFormData(initialUserProductForm);
   };
 
   return (
     <>
       <section className="userSection">
-        <div className="flex gap-3 items-start">
-          <h2 className="user-h2">내 제품 목록</h2>
-          <ButtonStrong
-            text="장비 추가하고 티어 올리기"
-            onClick={handleOpenSelect}
-          />
+        <div className="flex flex-col md:flex-col gap-1 md:gap-3 items-start mt-5 md:mt-0">
+          <span className="w-full flex items-center justify-between">
+            <h2 className="user-h2">내 제품 목록</h2>
+            <ButtonStrong
+              text="장비 추가하고 티어 올리기"
+              onClick={handleOpenSelect}
+            />
+          </span>
+          {/* 구분선 */}
+          <span className="w-full h-[3px] bg-black block" />
         </div>
-        <div className="w-full mb-10 grid gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
+        <div className="w-full mb-10 grid gap-1 md:gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
           <SummaryCard
             title="현재 보유한 기기 수"
             content={userProducts.length}
@@ -119,7 +131,7 @@ export default function UserProduct({ userId }: UserProduct) {
           />
         </div>
 
-        <div className="user-common-container min-h-[500px]">
+        <div className="min-h-[500px]">
           {userProducts.length > 0 ? (
             <div className="w-full flex flex-col gap-5">
               {userProducts.map((userProduct, index) => (

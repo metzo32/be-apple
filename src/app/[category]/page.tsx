@@ -47,13 +47,14 @@ export default function SearchPage({
   });
 
   return (
-    <div className="flex flex-col items-center min-w-[320px] w-[100vw] pt-20 pb-64 -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72 bg-white">
-      <ProductSearchBar category={typedCategory} />
+    // <div className="flex flex-col items-center min-w-[320px] w-[100vw] pt-20 pb-64 -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72 bg-amber-400">
+    <div className="flex flex-col items-center w-full pt-20 pb-64">
+      {/* <ProductSearchBar category={typedCategory} /> */}
 
       {wishUpdatedProductsList.length === 0 ? (
         <p>결과가 없습니다.</p>
       ) : (
-        <div className="grid place-items-center gap-8 md:gap-16 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+        <div className="w-full grid place-items-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {wishUpdatedProductsList.map((product) => (
             <SearchCard key={product.id} product={product} userId={userId} />
           ))}

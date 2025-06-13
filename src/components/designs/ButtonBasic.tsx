@@ -9,7 +9,7 @@ export function ButtonBasic({ text, onClick, type }: ButtonProps) {
       onClick={onClick}
       className="hover:text-textHover"
       sx={{
-        color: "#797979", // light
+        color: "#444444", // mid
         boxShadow: "none",
         fontSize: "14px",
         "@media (max-width: 767px)": {

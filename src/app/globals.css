@@ -26,9 +26,11 @@
   --color-secondary: #c466f3;
   --color-secondaryLight: #ead4f5;
   --color-strong: #1a0e6e;
-  --color-custombg: #d4d4e7;
+  /* --color-custombg: #d4d4e7; */
+  --color-custombg: #fff;
   --color-bglight: #f1f1fe;
   --color-bglightHover: #f8f0fd;
+  --color-lineLight: #e2e2e2;
 
   --color-text: #000000;
   --color-textHover: #444444;
@@ -88,9 +90,6 @@ select:hover {
   color: #ececec;
 }
 
-.userSection {
-  @apply min-h-[350px] py-5 md:py-12;
-}
 
 @tailwind utilities;
 
@@ -148,6 +147,14 @@ select:hover {
       bg-overlay;
   }
 
+  .header-px {
+    @apply min-w-[320px]
+    px-5
+    md:px-10
+    xl:px-25 
+    2xl:px-36;
+  }
+
   .global-px {
     @apply min-w-[320px]
     px-5
@@ -195,6 +202,22 @@ select:hover {
     md:text-sm md:leading-tight;
   }
 
+  .userSection {
+    @apply
+    md:min-h-[350px]
+    min-w-[320px] 
+    md:min-w-full
+    
+    w-[100vw] md:w-full
+    -mx-5 md:mx-0
+    p-5 md:pb-12 md:pt-0
+}
+
+  .userSection-line {
+    @apply
+     border-b border-lineLight md:border-none
+  }
+
   .user-product-card {
     @apply shrink-0 w-full h-auto 
     border-b-2 border-secondaryLight 
@@ -240,15 +263,17 @@ select:hover {
     @apply bg-bglightHover border-secondaryLight;
   }
 
-  .user-common-container {
-    @apply bg-white shadow-light
-    p-5 
-    md:p-12;
+  .user-h2 {
+    @apply 
+    font-bold mb-2 md:mb-5
+    text-xl md:text-2xl
   }
 
-  .user-h2 {
-    @apply font-bold mb-2 md:mb-5
-    text-xl md:text-2xl;
+  .user-title-sm {
+    @apply 
+    block md:hidden
+    mb-2 md:mb-5
+    text-base text-light;
   }
 
   .user-wishcard-btn {
@@ -261,10 +286,9 @@ select:hover {
   }
 
   .searchbar-span {
-    @apply
-    w-full h-[30px] md:h-[40px] px-2 
+    @apply w-full h-[30px] md:h-[40px] px-2 
     border-2 border-custombg focus-within:border-primary 
     rounded-md 
-    flex justify-end
+    flex justify-end;
   }
 }

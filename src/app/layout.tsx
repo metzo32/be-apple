@@ -3,6 +3,7 @@ import "./globals.css";
 import ClientProvider from "@/components/provider/ClientProvider";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: "앱등이가되",
@@ -18,11 +19,12 @@ export default function RootLayout({
     <html lang="kr">
       <body>
         <ClientProvider>
-          <Header />
-          <div className="global-px">
-            {children}
+          <div className="fixed top-0 left-0 w-full z-10 py-3 md:py-5 bg-white">
+            <Header />
+            <Navbar />
           </div>
-          <Footer/>
+          <div className="global-px mt-[103px] md:mt-[140px]">{children}</div>
+          <Footer />
         </ClientProvider>
       </body>
     </html>

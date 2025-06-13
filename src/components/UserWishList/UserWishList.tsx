@@ -58,10 +58,12 @@ export default function UserWishList({ userId }: UserProduct) {
 
   return (
     <section className="my-12">
-      <div className="user-common-container min-h-[500px]">
-        <h2 className="user-h2">내 위시리스트</h2>
+      <div className="min-h-[500px]">
+        <h2 className="user-h2">내 위시리스트 {wishList.length}</h2>
+        {/* 구분선 */}
+        <span className="w-full h-[3px] bg-black block" />
         {wishList.length > 0 ? (
-          <div className="flex flex-wrap gap-5 xl:gap-18">
+          <div className="flex flex-wrap justify-between">
             {sortedWishList.map((wish) => {
               const isPendingDelete = pendingDeleteIds.includes(wish.id);
               return (

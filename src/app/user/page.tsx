@@ -33,20 +33,43 @@ export default function UserPage() {
   const userId: number | null = user?.id ?? null;
 
   return (
-    <div className="relative">
-      <section className="pt-12 md:py-24 flex flex-col items-center gap-5 md:gap-10">
-        <h1>안녕하세요, {user?.name} 님.</h1>
-        <div className="flex items-center gap-10">
+    <div className="relative flex flex-col md:flex-row pt-5 md:py-12">
+      <section
+        className="
+          min-w-[320px] w-[100vw] md:min-w-[180px] md:w-1/5
+          h-[120px] md:h-auto
+          -mx-5 md:mx-0
+          p-5 md:p-0
+          flex flex-col 
+          justify-center md:justify-normal
+          gap-3 md:gap-10
+          bg-primary md:bg-transparent
+        "
+      >
+        <h1 className="text-2xl md:text-3xl text-white md:text-text">
+          {user?.name}
+        </h1>
+
+        <div className="hidden md:flex flex-col gap-3 items-start">
+          <h2 className="md:text-lg font-bold">나의 등급</h2>
+          <p className="text-[10px] md:text-[14px]">모시깽</p>
+          <p className="text-[10px] md:text-[14px]">등급표 확인하기</p>
+        </div>
+
+        <div className="hidden md:flex flex-col gap-3 items-start">
+          <h2 className="md:text-lg font-bold">나의 계정정보</h2>
           <ChangePassword />
           <SignOut setIsSigningOut={setIsSigningOut} />
         </div>
       </section>
 
-      <UserInfo userId={userId}/>
+      <div>
+        <UserInfo userId={userId} />
 
-      <UserProduct userId={userId}/>
+        <UserProduct userId={userId} />
 
-      <UserWishList userId={userId}/>
+        <UserWishList userId={userId} />
+      </div>
     </div>
   );
 }

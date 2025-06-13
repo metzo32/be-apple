@@ -1,19 +1,28 @@
+import ButtonStrong from "../designs/ButtonStrong";
+import UserSectionSm from "../UserPage/UserSectionSm";
+
 interface UserInfoProps {
   userId: number | null;
 }
 
 export default function UserInfo({ userId }: UserInfoProps) {
-
   return (
-    <section className="userSection">
-      <h2 className="user-h2">내 정보</h2>
-      <div className="w-full">
-        <div className="user-common-container py-5 md:py-10 min-h-[160px] md:min-h-[300px] flex flex-col justify-center items-center gap-3 md:gap-5">
-          <h3>당신의 티어는 모시깽입니다.</h3>
+    // md미만 뷰
+    <section>
+      <UserSectionSm title="내 등급" line={true}>
+        <div className="w-full flex items-center justify-between">
           {/* TODO 점수 추가 */}
-          <h1>총 0.0점</h1>
+          <h1 className="text-2xl">총 0.0점</h1>
+          <ButtonStrong text="점수표 보기" />
+          {/* TODO 점수표 이동 */}
         </div>
-      </div>
+      </UserSectionSm>
+      <UserSectionSm title="다음 단계까지" line={true}>
+        <div className="w-full">
+          {/* TODO 점수 추가 */}
+          <h1 className="text-2xl">n점</h1>
+        </div>
+      </UserSectionSm>
     </section>
   );
 }

@@ -4,15 +4,11 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/stores/useUserStore";
 import Image from "next/image";
 import ButtonStrong from "./designs/ButtonStrong";
-import { ButtonBasic } from "./designs/ButtonBasic";
-import { basicDeviceData } from "../../public/fakeData/basicDeviceData";
 import { IoMdPerson } from "react-icons/io";
-
 
 export default function Header() {
   const router = useRouter();
   const { user } = useUserStore();
-
 
   const handleClick = (path: string) => {
     router.push(`/${path}`);
@@ -20,8 +16,8 @@ export default function Header() {
 
   return (
     <>
-      <header className="global-px py-3 min-w-[320px] flex justify-center md:justify-between items-center bg-white">
-        <button className="relative w-[18px] md:w-[40px] xl:w-[50px] aspect-square">
+      <header className="header-px py-3 min-w-[320px] flex justify-between items-center bg-white">
+        <button className="relative w-[18px] md:w-[25px] xl:w-[35px] aspect-square">
           <Image
             src="/assets/images/apple.png"
             alt="홈"
@@ -30,23 +26,13 @@ export default function Header() {
             onClick={() => router.push("/")}
           />
         </button>
-        <nav className="w-[160px] md:w-1/2 mx-[30px] md:m-0 flex md:items-end justify-between">
-          {basicDeviceData.map((device) => (
-            <ButtonBasic
-              key={device.alt}
-              text={device.alt}
-              onClick={() => router.push(`/${device.category}`)}
-            />
-          ))}
-        </nav>
+
         <span className="hidden md:block w-[80px]">
           {user ? (
             <ButtonStrong text="내 정보" onClick={() => handleClick("user")} />
           ) : (
             <ButtonStrong text="로그인" onClick={() => handleClick("login")} />
           )}
-
-          {/* <ButtonStrong text={text} onClick={handleClick} /> */}
         </span>
 
         {user ? (

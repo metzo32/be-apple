@@ -10,45 +10,53 @@ interface SearchCardProps {
 }
 
 export default function SearchCard({ userId, product }: SearchCardProps) {
-
   const originalName = product.name;
   const idx = originalName.indexOf("(");
-  const resultName = originalName.slice(0, idx - 1)
+  const resultName = originalName.slice(0, idx - 1);
 
   return (
-    <div className=" h-[80px] lg:h-[150px] shrink-0 overflow-hidden flex gap-0 lg:gap-0 items-start relative">
+    <div className="w-full md:w-auto shrink-0 overflow-hidden flex flex-col gap-0 lg:gap-0 items-start relative">
       <Link
         href={`/${product.category}/${product.id}`} // product의 Id
-        className="w-[130px] lg:w-[260px] h-[75px] lg:h-[150px] relative"
+        className="w-full aspect-square md:aspect-auto md:w-[200px] md:h-[200px] bg-lineLight flex justify-center items-center"
       >
-        {/* TODO 이미지 대체 */}
-        <Image
-          src={product.photos[0]}
-          // src="/assets/images/macbook_m3_air_example.png"
-          alt={product.name}
-          className="object-cover"
-          fill
-        />
+        <div
+          className={`relative aspect-[88/51] md:aspect-auto
+            ${
+              product.category === "Mac"
+                ? "w-[80%] md:w-[177px] md:h-[102px]"
+                : "w-full md:w-[221px] md:h-[128px]"
+            }
+          `}
+        >
+          <Image
+            src={product.photos[0]}
+            alt={product.name}
+            className="object-cover"
+            fill
+          />
+        </div>
       </Link>
 
-      <div className="w-[150px] lg:w-[150px] h-full flex flex-col py-0 lg:py-2 justify-between">
-        <div className="flex flex-col gap-0 lg:gap-2">
-          <h5 className="text-sm lg:text-base font-bold whitespace-nowrap">{resultName}</h5>
+      <div className="w-full h-full flex flex-col py-0 lg:py-2 justify-between">
+        <div className="flex flex-col gap-0 lg:gap-1">
+          <h5 className="text-sm lg:text-base font-bold whitespace-nowrap">
+            {resultName}
+          </h5>
           <p className="light-p">{product.generation}</p>
 
-          <span className="flex gap-3 items-center">
-            <p className="light-p">{product.price.toLocaleString()}원</p>
-            {product.userProductId && (
-              <span>
-                <FaCheck className="text-green-500" />
-              </span>
-            )}
-          </span>
+          <div className="w-full flex justify-between items-center">
+            <div className="flex gap-3 items-center">
+              <p className="light-p">{product.price.toLocaleString()}원</p>
+              {product.userProductId && (
+                <span className="text-sm md:text-base">
+                  <FaCheck className="text-green-500" />
+                </span>
+              )}
+            </div>
+            <WishButton product={product} />
+          </div>
         </div>
-
-        <span className="w-full flex justify-end">
-          <WishButton product={product} />
-        </span>
       </div>
     </div>
   );
