@@ -9,7 +9,7 @@ import ReviewCard from "./ReviewCard";
 import WriteReview from "./WriteReview";
 import ButtonStrong, { ButtonDisabled } from "../designs/ButtonStrong";
 import { ButtonBasic } from "../designs/ButtonBasic";
-import { FaStar } from "react-icons/fa6";
+import { BsStarFill, BsStar, BsStarHalf } from "react-icons/bs";
 
 interface ReviewClientProps {
   product: ProductDetail;
@@ -35,19 +35,37 @@ export default function ReviewClient({
 
   const writtenReview = reviews.filter((review) => review.userId === user?.id); // 내가 쓴 리뷰 객체
 
-  const totalRatings = reviews.reduce((sum, review) => sum + review.rating, 0); // 총점
-  let averageRatings = (totalRatings / reviews.length).toFixed(1).toString(); // 평균 평점
+  const totalRatings =
+    reviews?.reduce((sum, review) => sum + review.rating, 0) ?? 0;
+  const averageRatings =
+    reviews && reviews.length > 0
+      ? (totalRatings / reviews.length).toFixed(1)
+      : "0.0";
 
-  if (reviews.length === 0) {
-    averageRatings = "0.0";
-  }
+  const num = Number(averageRatings);
+  const naturalNum = Math.floor(num); // 정수 부분
+  const hasHalf = num - naturalNum >= 0.5; // 반개 조건
+  const emptyCount = 5 - naturalNum - (hasHalf ? 1 : 0); // 빈 별 개수
+
+  const fullStars = Array.from({ length: naturalNum }, (_, i) => (
+    <BsStarFill key={`full-${i}`} className="text-primary" />
+  ));
+
+  const halfStar = hasHalf ? (
+    <BsStarHalf key="half" className="text-primary" />
+  ) : null;
+
+  const emptyStars = Array.from({ length: emptyCount }, (_, i) => (
+    <BsStar key={`empty-${i}`} className="text-primary" />
+  ));
 
   const handleOpenWriteReview = () => {
     setIsWriteReviewOpen(true);
   };
 
   return (
-    <section className="w-full flex flex-col gap-5 md:gap-10 bg-white global-px py-36 overflow-hidden">
+    <section className="w-full flex flex-col gap-3 md:gap-5 bg-white global-px py-36 overflow-hidden">
+      <span className="thick-line" />
       <div className="flex items-end gap-5">
         <h1 className="text-lg md:text-2xl">리뷰 및 평점</h1>
         <h2 className="text-sm md:text-base text-light">
@@ -55,9 +73,22 @@ export default function ReviewClient({
         </h2>
       </div>
 
-      <div className="flex gap-5 items-center">
+      {/* 리뷰 평균 */}
+      <div className="flex gap-3 items-center">
         <p className="text-2xl md:text-4xl">{averageRatings}</p>
-        <FaStar className="text-primary" />
+        <div className="flex items-center gap-[1px]">
+          {reviews && reviews.length > 0 ? (
+            <>
+              {fullStars}
+              {halfStar}
+              {emptyStars}
+            </>
+          ) : (
+            Array.from({ length: 5 }, (_, i) => (
+              <BsStar key={`empty-review-${i}`} className="text-primary" />
+            ))
+          )}
+        </div>
       </div>
 
       {userProductId ? (
@@ -90,7 +121,7 @@ export default function ReviewClient({
       <div className="grid grid-cols-1 lg:grid-cols-1 gap-5 lg:gap-10">
         {product.reviews.length === 0 ? (
           <div className="h-[300px]">
-            <p className="text-sm md:text-base">아직 등록된 리뷰가 없습니다.</p>
+            <p className="text-sm md:text-base mt-15">아직 등록된 리뷰가 없습니다.</p>
           </div>
         ) : (
           sortedReviews?.map((review) => (

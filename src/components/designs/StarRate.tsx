@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { FaStar, FaRegStar } from "react-icons/fa";
+import { BsStarFill, BsStar, BsStarHalf } from "react-icons/bs";
+
 
 interface StarRatingProps {
   value: number | null;
@@ -27,7 +28,7 @@ export default function StarRate({ value, onChange }: StarRatingProps) {
             onClick={() => handleClick(star)}
             className="text-yellow-400 text-lg md:text-2xl"
           >
-            {isFilled ? <FaStar /> : <FaRegStar />}
+            {isFilled ? <BsStarFill /> : <BsStar />}
           </button>
         );
       })}

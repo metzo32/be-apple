@@ -63,7 +63,7 @@ export default function UserWishList({ userId }: UserProduct) {
         {/* 구분선 */}
         <span className="thick-line" />
         {wishList.length > 0 ? (
-          <div className="flex flex-wrap justify-between">
+          <div className="grid grid-cols-2 lg:grid-cols-3 md:gap-10 lg:gap-15 xl:gap-21">
             {sortedWishList.map((wish) => {
               const isPendingDelete = pendingDeleteIds.includes(wish.id);
               return (

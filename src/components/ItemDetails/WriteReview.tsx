@@ -7,12 +7,13 @@ import type { CreateNewReviewReq } from "@/types/Review";
 import { fetchUploadPhoto } from "../fetch/fetchUploadPhoto";
 import ButtonStrong from "../designs/ButtonStrong";
 import Modal from "../Modal/Modal";
-import { LuPlus } from "react-icons/lu";
+import { TfiPlus } from "react-icons/tfi";
 import {
   useAddReviewMutation,
   useEditReviewMutation,
 } from "@/hooks/useReviewsQuery";
 import StarRate from "../designs/StarRate";
+import CloseButton from "../designs/CloseButton";
 
 interface WriteReviewProps {
   productId: number;
@@ -105,7 +106,7 @@ export default function WriteReview({
     }
   };
 
-  const handleBack = () => {
+  const handleClose = () => {
     setIsOpen(false);
   };
 
@@ -130,39 +131,32 @@ export default function WriteReview({
 
       <form
         onSubmit={handleSubmit}
-        className="w-[300px] md:w-[480px] p-5 md:p-10 bg-white rounded-2xl shadow-2xl flex flex-col gap-3 md:gap-5"
+        className="relative w-[300px] md:w-[480px] p-7 md:p-10 bg-white flex flex-col gap-3 md:gap-5"
       >
-        <button
-          type="button"
-          onClick={handleBack}
-          className="w-[50px] text-custombg"
-        >
-          <Image
-            src={"/assets/icons/arrow_left.svg"}
-            alt="뒤로"
-            width={50}
-            height={50}
+        <CloseButton onClick={handleClose} />
+
+        <div className="border-b border-lineLight flex flex-col gap-3 pb-3">
+          <h3 className="text-base md:text-lg font-semibold">
+            해당 제품에 대한 리뷰를 남겨주세요.
+          </h3>
+
+          <textarea
+            id="review"
+            value={review}
+            onChange={handleChange}
+            maxLength={MAX_LENGTH}
+            placeholder="리뷰 남기기"
+            className="w-full h-[200px] p-3 md:p-5 border-2 bg-bglight border-bglight text-sm md:text-base resize-none focus:bg-bglightHover focus:border-secondaryLight"
           />
-        </button>
+          <p className="text-gray-500 text-xs md:text-sm text-right mt-1">
+            {review.length} / {MAX_LENGTH}자
+          </p>
+        </div>
 
-        <h3 className="text-lg font-semibold">
-          해당 제품을 사용해보셨다면 리뷰를 남겨주세요.
-        </h3>
-
-        <textarea
-          id="review"
-          value={review}
-          onChange={handleChange}
-          maxLength={MAX_LENGTH}
-          placeholder="리뷰 남기기"
-          className="w-full h-[250px] p-5 border-3 rounded-lg md:rounded-2xl bg-bglight border-bglight text-sm md:text-base resize-none focus:bg-bglightHover focus:border-secondaryLight"
-        />
-        <p className="text-gray-500 text-xs md:text-sm text-right mt-1">
-          {review.length} / {MAX_LENGTH}자
-        </p>
-
-        <h3 className="font-semibold">평점</h3>
-        <StarRate value={rating} onChange={setRating} />
+        <div className="border-b border-lineLight flex flex-col gap-3 pb-3">
+          <h3 className="font-semibold">평점</h3>
+          <StarRate value={rating} onChange={setRating} />
+        </div>
 
         <div className="flex items-center gap-3">
           <h3 className="font-semibold">포토</h3>
@@ -177,7 +171,7 @@ export default function WriteReview({
                 src={photo}
                 alt={`이미지 ${index + 1}`}
                 fill
-                className="object-cover rounded-md md:rounded-2xl"
+                className="object-cover"
               />
             </div>
           ))}
@@ -194,10 +188,10 @@ export default function WriteReview({
                 />
                 <label
                   htmlFor={`file-input-${index}`}
-                  className="cursor-pointer w-full h-full bg-bglight rounded-lg md:rounded-2xl flex items-center justify-center hover:bg-bglightHover"
+                  className="cursor-pointer w-full h-full bg-bglight flex items-center justify-center hover:bg-bglightHover"
                 >
-                  <span className="text-gray-400 text-4xl">
-                    <LuPlus />
+                  <span className="text-gray-400 text-2xl">
+                    <TfiPlus />
                   </span>
                 </label>
               </div>

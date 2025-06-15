@@ -46,8 +46,9 @@ export default function UserPage() {
           bg-primary md:bg-transparent
         "
       >
+        
         <h1 className="text-2xl md:text-3xl text-white md:text-text">
-          {user?.name}
+          {user?.name} <span className="font-medium text-lg md:text-xl text-light">님</span>
         </h1>
 
         <div className="hidden md:flex flex-col gap-3 items-start">
@@ -69,6 +70,8 @@ export default function UserPage() {
         <UserProduct userId={userId} />
 
         <UserWishList userId={userId} />
+
+        {/* <UserAuth userId={userId />} */}
       </div>
     </div>
   );

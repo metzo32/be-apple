@@ -1,11 +1,10 @@
 import Image from "next/image";
-import Link from "next/link";
 import { getProductDetail } from "@/components/fetch/fetchProduct";
 import ReviewClient from "@/components/ItemDetails/ReviewClient";
 import { ProductDetail } from "@/types/productDetail";
 import { isMacProduct } from "@/types/productTypeGurards";
-import { GoArrowLeft } from "react-icons/go";
 import AddToWishDetail from "@/components/ItemDetails/AddToWishDetail";
+import WishButton from "@/components/AddWish/WishButton";
 
 interface DetailPageProps {
   params: { id: string; category: string };
@@ -26,29 +25,33 @@ export default async function DetailPage({ params }: DetailPageProps) {
     return (
       <>
         <div className="w-[100vw] -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72">
-          <Link
-            href={`/${params.category}`}
-            className="inline-flex items-center justify-center w-[50px] h-[50px] ml-5 md:ml-20"
-          >
-            <GoArrowLeft className="text-lg md:text-2xl text-mid hover:text-textHover" />
-          </Link>
-
-          <section className="global-px py-12 md:py-24 relative bg-bglight grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-16">
-            <span className="block w-full aspect-[1.726] relative">
-              <Image
-                src={"/assets/images/macbook_m3_air_example.png"}
-                alt="제품 이미지"
-                fill
-                className="object-cover"
-              />
-            </span>
-            <div className="relative h-full flex flex-col gap-5 md:gap-7">
-              <h2 className="text-xl md:text-3xl font-bold">{product.name}</h2>
-              <p className="text-sm md:text-base">
-                ₩{product.price.toLocaleString()} 부터~
+          <section className="global-px py-12 md:py-24 relative grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-16">
+            <div className="w-full flex items-center justify-center">
+              <span className="w-1/2 lg:w-full aspect-[1.726] relative">
+                <Image
+                  src={"/assets/images/macbook_m3_air_example.png"}
+                  alt="제품 이미지"
+                  fill
+                  className="object-cover"
+                />
+              </span>
+            </div>
+            <div className="relative h-full flex flex-col gap-3 md:gap-7">
+              <span className="thick-line" />
+              <div className="flex gap-5 md:gap-10">
+                <h2 className="text-xl md:text-3xl font-bold">
+                  {product.name}
+                </h2>
+                {/* TODO 이미 위시에 추가되었는지 확인 */}
+                {/* <AddToWishDetail productId={productId} /> */}
+                <WishButton product={product} />
+              </div>
+              <p className="text-sm md:text-lg font-bold">
+                {product.price.toLocaleString()}원{" "}
+                <span className="font-medium text-mid text-sm">부터~</span>
               </p>
 
-              <div className="flex justify-between gap-5 bg-white p-5 rounded-lg shadow-light w-fit max-w-full">
+              <div className="flex gap-5 p-5 w-full bg-bglight">
                 {product.colors.map((color) => (
                   <div
                     key={color.name}
@@ -62,9 +65,6 @@ export default async function DetailPage({ params }: DetailPageProps) {
                   </div>
                 ))}
               </div>
-
-              {/* TODO 이미 위시에 추가되었는지 확인 */}
-              <AddToWishDetail productId={productId} />
             </div>
           </section>
         </div>
@@ -73,7 +73,7 @@ export default async function DetailPage({ params }: DetailPageProps) {
           {product.options.map((option, index) => (
             <div
               key={option.id}
-              className="w-[150px] h-[225px] md:w-[200px] md:h-[300px] p-3 md:p-5 bg-white shadow-strong flex flex-col gap-1 md:gap-3"
+              className="w-[150px] h-[225px] md:w-[200px] md:h-[300px] p-3 md:p-5 flex flex-col gap-1 md:gap-3"
             >
               <h5 className="text-lg md:text-2xl font-bold">
                 옵션 {index + 1}
@@ -86,52 +86,6 @@ export default async function DetailPage({ params }: DetailPageProps) {
             </div>
           ))}
         </section>
-
-        {/* 
-        <section className="w-full flex flex-col gap-10 mb-28 bg-white rounded-2xl p-10 overflow-hidden shadow-strong">
-          <div className="w-full flex gap-5 items-end">
-            <h1>{product.name}</h1>
-            <p className="text-sm text-light">{product.releasedDate}</p>
-          </div>
-          <div className="flex flex-col gap-3">
-            <p>세대: {product.generation}</p>
-            <p>무게: {product.weight}</p>
-            <div className="flex gap-5">
-              {product.colors.map((color) => (
-                <div
-                  key={color.name}
-                  className="flex flex-col justify-center items-center gap-2"
-                >
-                  <p>{color.name}</p>
-                  <div
-                    className="w-[10px] h-[10px]"
-                    style={{ backgroundColor: color.code }}
-                  />
-                </div>
-              ))}
-            </div>
-            <p>디스플레이 가로: {product.displaySize}</p>
-
-            <p>상품 스펙:</p>
-            {product.specs.map((spec, index) => (
-              <p key={index}>
-                타입:{spec.type} 밸류:{spec.value}
-              </p>
-            ))}
-            <p>구매 여부 {product.isPurchased}</p>
-            <p>유저 프로덕트 id {product.userProductId}</p>
-
-            {product.options.map((option) => (
-              <div key={option.id}>
-                <p>차액 : {option.additionalPrice}</p>
-                <p>gpu : {option.gpu}</p>
-                <p>ram : {option.ram}</p>
-                <p>storage : {option.storage}</p>
-                <p>processor : {option.processor}</p>
-              </div>
-            ))}
-          </div>
-        </section> */}
 
         <div className="w-[100vw] -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72">
           <ReviewClient product={product} productId={productId} />

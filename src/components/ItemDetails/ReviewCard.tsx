@@ -7,9 +7,9 @@ import useModal from "@/hooks/useModal";
 import { formatDate } from "@/module/formatDate";
 import { useUserStore } from "@/stores/useUserStore";
 import Modal from "../Modal/Modal";
-import { FaStar } from "react-icons/fa6";
 import { useDeleteReviewMutation } from "@/hooks/useReviewsQuery";
 import WriteReview from "./WriteReview";
+import { BsStarFill } from "react-icons/bs";
 
 interface ReviewCardProps {
   review: Review;
@@ -41,40 +41,34 @@ export default function ReviewCard({ review, productId }: ReviewCardProps) {
     .join("");
 
   return (
-    <div className="w-full flex flex-col gap-3">
-      <div
-        className={`w-full p-5 border-2 ${
-          review.userId === Number(currentUserId)
-            ? "border-secondaryLight shadow-light"
-            : "border-bglight"
-        } flex flex-col gap-3 lg:gap-5 bg-bglight`}
-      >
+    <div className="w-full flex flex-col gap-3 border-b border-lineLight pb-3 mt-15">
+      <div className="w-full flex flex-col gap-3 lg:gap-5">
         <div className="flex justify-between">
-          <div className="flex items-center gap-5">
-            <h2 className="text-sm md:text-lg">{maskedName}</h2>
+          <div className="flex items-center gap-3">
+            <div className="flex text-xs gap-[1px]">
+              {Array.from({ length: review.rating }).map((_, index) => (
+                <BsStarFill key={index} className="text-text" />
+              ))}
+            </div>
+            <h2 className="text-sm text-light">{maskedName}</h2>
           </div>
+
           {review.createdAt !== review.updatedAt ? (
-            <p className="text-xs md:text-sm text-light">{updatedTime} (수정됨)</p>
+            <p className="text-xs text-mid">{updatedTime} (수정됨)</p>
           ) : (
-            <p className="text-xs md:text-sm text-light">{createdTime}</p>
+            <p className="text-xs text-mid">{createdTime}</p>
           )}
         </div>
 
-        <p className="light-p">{review.content}</p>
-
-        <div className="flex">
-          {Array.from({ length: review.rating }).map((_, index) => (
-            <FaStar key={index} className="text-primary" />
-          ))}
-        </div>
-
         {/* TODO: 실제 옵션 데이터로 바꾸기 */}
-        <p className="text-sm text-light break-words break-keep">
+        <p className="text-xs text-light break-words break-keep">
           Macbook Air 13inch 10코어 CPU 10코어 GPU 16GB 통합 메모리 512GB SSD
         </p>
 
+        <p>{review.content}</p>
+
         {review.photos && review.photos.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-2 gap-3 md:gap-5">
             {review.photos.map((photo, index) => (
               <span
                 key={index}
@@ -93,17 +87,17 @@ export default function ReviewCard({ review, productId }: ReviewCardProps) {
       </div>
 
       {review.userId === Number(currentUserId) && (
-        <div className="w-full h-[20px] pr-5">
-          <div className="flex justify-end items-center gap-5">
+        <div className="w-full h-[20px]">
+          <div className="flex justify-end items-center gap-3 md:gap-5">
             <button
               onClick={handleEditReview}
-              className="text-sm text-light hover:text-mid"
+              className="text-xs md:text-sm text-light hover:text-mid"
             >
               수정
             </button>
             <button
               onClick={openModal}
-              className="text-sm text-light hover:text-mid"
+              className="text-xs md:text-sm text-light hover:text-mid"
             >
               삭제
             </button>

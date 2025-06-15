@@ -38,14 +38,14 @@ export default function Header() {
         {user ? (
           <button
             className="block md:hidden text-primary"
-            onClick={() => handleClick("/user")}
+            onClick={() => handleClick("user")}
           >
             <IoMdPerson />
           </button>
         ) : (
           <button
             className="block md:hidden text-primary"
-            onClick={() => handleClick("/login")}
+            onClick={() => handleClick("login")}
           >
             <IoMdPerson />
           </button>
