@@ -297,4 +297,10 @@ select:hover {
     @apply
     w-full h-[3px] bg-black block mt-3 
   }
+
+  .auth-form {
+    @apply
+    w-[200px] md:w-[250px]
+    py-5 md:py-10 flex flex-col gap-10 md:gap-15 items-center justify-center
+  }
 }

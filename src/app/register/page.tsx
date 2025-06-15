@@ -63,7 +63,7 @@ export default function RegisterPage() {
   return (
     <section className="py-12 md:py-20 flex flex-col items-center justify-center">
       <form
-        className="py-5 md:py-10 flex flex-col gap-3 md:gap-16 items-center justify-center"
+        className="auth-form"
         onSubmit={handleSubmit}
       >
         <div className="w-full flex flex-col gap-3 md:gap-5">

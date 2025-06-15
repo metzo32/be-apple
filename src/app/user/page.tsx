@@ -33,7 +33,7 @@ export default function UserPage() {
   const userId: number | null = user?.id ?? null;
 
   return (
-    <div className="relative flex flex-col md:flex-row pt-5 md:py-12">
+    <div className="relative flex flex-col md:flex-row md:gap-10 pt-5 md:py-12">
       <section
         className="
           min-w-[320px] w-[100vw] md:min-w-[180px] md:w-1/5
@@ -64,7 +64,7 @@ export default function UserPage() {
         </div>
       </section>
 
-      <div>
+      <div className="w-full">
         <UserInfo userId={userId} />
 
         <UserProduct userId={userId} />

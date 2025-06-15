@@ -58,8 +58,8 @@ export default function UserWishList({ userId }: UserProduct) {
   };
 
   return (
-    <section className="my-12">
-      <div className="min-h-[500px]">
+    <section className="my-18">
+      <div className="min-h-[200px] md:min-h-[300px]">
         <h2 className="user-h2">내 위시리스트 {wishList.length}</h2>
         {/* 구분선 */}
         <span className="thick-line" />
@@ -88,7 +88,7 @@ export default function UserWishList({ userId }: UserProduct) {
             })}
           </div>
         ) : (
-          <p className="light-p">위시리스트가 비어있습니다.</p>
+          <p className="light-p mt-10">위시리스트가 비어있습니다.</p>
         )}
       </div>
 
