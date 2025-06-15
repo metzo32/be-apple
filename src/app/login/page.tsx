@@ -73,7 +73,7 @@ export default function LoginPage() {
   ) : (
     <section className="py-18 md:py-32 flex flex-col items-center justify-center">
       <form
-        className="w-[260px] h-[420px] md:w-[400px] md:h-[600px] pt-32 pb-10 px-10 md:pt-50 md:pb-12 md:px-16 shadow-strong flex flex-col gap-3 md:gap-16 items-center justify-center bg-white rounded-2xl"
+        className="py-5 md:py-10 flex flex-col gap-3 md:gap-16 items-center justify-center"
         onSubmit={handleSubmit}
       >
         <div className="w-full flex flex-col gap-5">

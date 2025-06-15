@@ -104,17 +104,15 @@ export default function UserProduct({ userId }: UserProduct) {
   return (
     <>
       <section className="userSection">
-        <div className="flex flex-col md:flex-col gap-1 md:gap-3 items-start mt-5 md:mt-0">
-          <span className="w-full flex items-center justify-between">
-            <h2 className="user-h2">내 제품 목록</h2>
-            <ButtonStrong
-              text="장비 추가하고 티어 올리기"
-              onClick={handleOpenSelect}
-            />
-          </span>
-          {/* 구분선 */}
-          <span className="w-full h-[3px] bg-black block" />
-        </div>
+        <span className="w-full flex items-center justify-between">
+          <h2 className="user-h2">내 제품 목록</h2>
+          <ButtonStrong
+            text="장비 추가하고 티어 올리기"
+            onClick={handleOpenSelect}
+          />
+        </span>
+        {/* 구분선 */}
+        <span className="thick-line"/>
         <div className="w-full mb-10 grid gap-1 md:gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
           <SummaryCard
             title="현재 보유한 기기 수"

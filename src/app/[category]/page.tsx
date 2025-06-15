@@ -10,6 +10,7 @@ import type { GetProductResponse } from "@/types/product";
 import SearchCard from "@/components/Search/SearchCard";
 import LoadingScreen from "@/components/LoadingScreen";
 import ProductSearchBar from "@/components/ProductSearchBar";
+import { notFound } from "next/navigation";
 
 export default function SearchPage({
   params,
@@ -36,7 +37,7 @@ export default function SearchPage({
   } = useWishLoadQuery(userId);
 
   if (productsLoading || wishLoading) return <LoadingScreen />;
-  if (productsError || !productsList || wishError) return <h2>문제가 발생했습니다.</h2>;
+  if (productsError || !productsList || wishError) return notFound();
 
   const wishUpdatedProductsList: GetProductResponse[] = productsList.map((product) => {
     const matchedWish = wishList?.find((wish) => wish.productId === product.id);
@@ -47,14 +48,13 @@ export default function SearchPage({
   });
 
   return (
-    // <div className="flex flex-col items-center min-w-[320px] w-[100vw] pt-20 pb-64 -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72 bg-amber-400">
-    <div className="flex flex-col items-center w-full pt-20 pb-64">
+    <div className="min-w-[320px] w-[100vw] md:w-full flex flex-col items-center pt-5 pb-18 md:pt-18 md:pb-64 -mx-5 md:mx-0">
       {/* <ProductSearchBar category={typedCategory} /> */}
 
       {wishUpdatedProductsList.length === 0 ? (
         <p>결과가 없습니다.</p>
       ) : (
-        <div className="w-full grid place-items-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="w-full grid place-items-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-15">
           {wishUpdatedProductsList.map((product) => (
             <SearchCard key={product.id} product={product} userId={userId} />
           ))}

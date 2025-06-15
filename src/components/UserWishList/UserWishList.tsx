@@ -61,7 +61,7 @@ export default function UserWishList({ userId }: UserProduct) {
       <div className="min-h-[500px]">
         <h2 className="user-h2">내 위시리스트 {wishList.length}</h2>
         {/* 구분선 */}
-        <span className="w-full h-[3px] bg-black block" />
+        <span className="thick-line" />
         {wishList.length > 0 ? (
           <div className="flex flex-wrap justify-between">
             {sortedWishList.map((wish) => {

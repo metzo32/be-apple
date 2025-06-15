@@ -17,13 +17,32 @@ export default function RegisterPage() {
   });
   const router = useRouter();
 
+  const NO_WHITESPACE_FIELDS = ["name", "email", "password", "passwordConfirm"];
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    // 공백문자 입력 무시
+    if (NO_WHITESPACE_FIELDS.includes(name) && /\s/.test(value)) return;
+
+    if (name === "email") {
+      if (value.length > 100) return; // 100자 넘어가면 무시
+    }
+
+    if (name === "name") {
+      if (value.length > 20) return;
+    }
+
+    if (name === "password" || name === "passwordConfirm") {
+      if (value.length > 64) return;
+    }
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    formData.name.trim();
 
     if (formData.password !== formData.passwordConfirm) {
       alert("비밀번호가 일치하지 않습니다.");
@@ -42,9 +61,9 @@ export default function RegisterPage() {
   };
 
   return (
-    <section className="py-18 md:py-32 flex flex-col items-center justify-center">
+    <section className="py-12 md:py-20 flex flex-col items-center justify-center">
       <form
-        className="w-[260px] h-[420px] md:w-[400px] md:h-[600px] py-10 px-10 md:py-12 md:px-16 shadow-strong flex flex-col gap-10 md:gap-16 items-center justify-center bg-white rounded-2xl"
+        className="py-5 md:py-10 flex flex-col gap-3 md:gap-16 items-center justify-center"
         onSubmit={handleSubmit}
       >
         <div className="w-full flex flex-col gap-3 md:gap-5">
@@ -104,71 +123,5 @@ export default function RegisterPage() {
         </div>
       </form>
     </section>
-    // <section className="py-24 flex flex-col items-center justify-center">
-    //   <h1>회원가입</h1>
-    //   <form
-    //     className="pt-20 lg:pt-30 flex flex-col gap-20 items-center justify-center"
-    //     onSubmit={handleSubmit}
-    //   >
-    //     <div className="flex flex-col gap-5 lg:gap-10">
-    //       <div className="register-label-box">
-    //         <label htmlFor="email">이메일</label>
-    //         <input
-    //           id="email"
-    //           name="email"
-    //           type="text"
-    //           onChange={handleChange}
-    //           required
-    //           className="w-45 lg:w-60 border-b-2 border-text"
-    //         />
-    //       </div>
-    //       <div className="register-label-box">
-    //         <label htmlFor="name">이름</label>
-    //         <input
-    //           id="name"
-    //           name="name"
-    //           type="text"
-    //           onChange={handleChange}
-    //           required
-    //           className="w-45 lg:w-60 border-b-2 border-text"
-    //         />
-    //       </div>
-    //       <div className="register-label-box">
-    //         <label htmlFor="password">비밀번호</label>
-    //         <input
-    //           id="password"
-    //           name="password"
-    //           type="password"
-    //           onChange={handleChange}
-    //           required
-    //           className="w-45 lg:w-60 border-b-2 border-text"
-    //         />
-    //       </div>
-    //       <div className="register-label-box">
-    //         <label htmlFor="password">비밀번호 확인</label>
-    //         <input
-    //           id="passwordConfirm"
-    //           name="passwordConfirm"
-    //           type="password"
-    //           onChange={handleChange}
-    //           required
-    //           className="w-45 lg:w-60 border-b-2 border-text"
-    //         />
-    //       </div>
-    //     </div>
-    //     <div className="flex gap-10">
-    //       <GoogleButton />
-    //       <KakaoButton />
-    //     </div>
-    //     <div className="flex flex-col gap-10">
-    //       <ButtonStrong type="submit" text="가입하기" />
-    //       <ButtonBasic
-    //         type="button"
-    //         text="로그인"
-    //         onClick={() => router.push("/login")}
-    //       />
-    //     </div>
-    //   </form>
-    // </section>
   );
 }

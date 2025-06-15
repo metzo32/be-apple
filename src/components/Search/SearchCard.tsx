@@ -38,7 +38,7 @@ export default function SearchCard({ userId, product }: SearchCardProps) {
         </div>
       </Link>
 
-      <div className="w-full h-full flex flex-col py-0 lg:py-2 justify-between">
+      <div className="w-full h-full flex flex-col p-2 md:px-0 md:py-2 justify-between">
         <div className="flex flex-col gap-0 lg:gap-1">
           <h5 className="text-sm lg:text-base font-bold whitespace-nowrap">
             {resultName}

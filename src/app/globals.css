@@ -211,6 +211,7 @@ select:hover {
     w-[100vw] md:w-full
     -mx-5 md:mx-0
     p-5 md:pb-12 md:pt-0
+    my-12 md:my-0
 }
 
   .userSection-line {
@@ -220,7 +221,7 @@ select:hover {
 
   .user-product-card {
     @apply shrink-0 w-full h-auto 
-    border-b-2 border-secondaryLight 
+    border-b border-lineLight
     /* rounded-xl */
     py-2
     md:p-5
@@ -265,14 +266,14 @@ select:hover {
 
   .user-h2 {
     @apply 
-    font-bold mb-2 md:mb-5
+    font-bold
     text-xl md:text-2xl
   }
 
   .user-title-sm {
     @apply 
     block md:hidden
-    mb-2 md:mb-5
+    mb-1 md:mb-5
     text-base text-light;
   }
 
@@ -290,5 +291,10 @@ select:hover {
     border-2 border-custombg focus-within:border-primary 
     rounded-md 
     flex justify-end;
+  }
+
+  .thick-line {
+    @apply
+    w-full h-[3px] bg-black block mt-3 
   }
 }

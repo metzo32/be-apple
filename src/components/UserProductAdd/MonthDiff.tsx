@@ -49,6 +49,6 @@ export default function MonthDiff({ purchasedAt, category }: MonthDiffProps) {
       </div>
     </>
   ) : (
-    <p className="light-p whitespace-nowrap">구매일 미입력</p>
+    <p className="light-p whitespace-nowrap text-lineLight">구매일 미입력</p>
   );
 }

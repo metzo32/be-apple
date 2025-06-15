@@ -19,11 +19,11 @@ export default function RootLayout({
     <html lang="kr">
       <body>
         <ClientProvider>
-          <div className="fixed top-0 left-0 w-full z-10 py-3 md:py-5 bg-white">
+          <div className="fixed top-0 left-0 w-full z-10 py-0 md:py-5 bg-white">
             <Header />
             <Navbar />
           </div>
-          <div className="global-px mt-[103px] md:mt-[140px]">{children}</div>
+          <div className="global-px mt-[63px] md:mt-[140px]">{children}</div>
           <Footer />
         </ClientProvider>
       </body>

@@ -21,7 +21,7 @@ export default function SignOut({ setIsSigningOut }: SignOutProps) {
       setIsSigningOut(true);
       await fetchSignOut();
       resetUser();
-      router.replace("/");
+      router.push("/login");
     } catch (error) {
       console.error("로그아웃 실패:", error);
     } finally {

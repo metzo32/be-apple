@@ -93,7 +93,7 @@ export default function UserProductCard({
 
           <span className="w-full flex justify-between md:justify-end items-center">
             {userProduct.purchasePrice && userProduct.purchasePrice !== 0 ? (
-              <p className="justify-self-end light-p whitespace-nowrap">{`${userProduct.purchasePrice.toLocaleString()}원`}</p>
+              <p className="justify-self-end light-p whitespace-nowrap">{`${userProduct.purchasePrice.toLocaleString()}`}</p>
             ) : (
               <p className="justify-self-end light-p whitespace-nowrap">
                 가격 미입력
@@ -141,7 +141,7 @@ export default function UserProductCard({
         <div className="w-16 h-16 bg-gray-300" />
         <div className="flex flex-col items-start gap-1 col-span-2">
           <h3
-            className={`justify-self-start ${
+            className={`justify-self-start font-bold ${
               userProduct.status === "SOLD" && "line-through text-light"
             }`}
           >
@@ -168,7 +168,7 @@ export default function UserProductCard({
 
         <span className="w-full flex justify-between md:justify-end items-center">
           {userProduct.purchasePrice && userProduct.purchasePrice !== 0 ? (
-            <p className="justify-self-end light-p whitespace-nowrap">{`${userProduct.purchasePrice.toLocaleString()}원`}</p>
+            <p className="justify-self-end light-p whitespace-nowrap">{`${userProduct.purchasePrice.toLocaleString()}`}</p>
           ) : (
             <p className="justify-self-end light-p whitespace-nowrap">
               가격 미입력
@@ -201,7 +201,7 @@ export default function UserProductCard({
         <div className="w-16 h-16 bg-gray-300" />
         <div className="flex flex-col items-start gap-1 col-span-2">
           <h3
-            className={`justify-self-start ${
+            className={`justify-self-start font-bold ${
               userProduct.status === "SOLD" && "line-through text-light"
             }`}
           >
@@ -222,13 +222,13 @@ export default function UserProductCard({
 
         <span className="justify-self-center">
           {userProduct.status !== "SOLD" && (
-            <MonthDiff purchasedAt={userProduct.purchasedAt} category="iPhone"/>
+            <MonthDiff purchasedAt={userProduct.purchasedAt} category="iP"/>
           )}
         </span>
 
         <span className="w-full flex justify-between md:justify-end items-center">
           {userProduct.purchasePrice && userProduct.purchasePrice !== 0 ? (
-            <p className="justify-self-end light-p whitespace-nowrap">{`${userProduct.purchasePrice.toLocaleString()}원`}</p>
+            <p className="justify-self-end light-p whitespace-nowrap">{`${userProduct.purchasePrice.toLocaleString()}`}</p>
           ) : (
             <p className="justify-self-end light-p whitespace-nowrap">
               가격 미입력

@@ -26,7 +26,7 @@ export default function UserWishCard({
   };
 
   return (
-    <div className="flex flex-col bg-white shadow-light mt-5">
+    <div className="flex flex-col mt-5">
       <Link
         href={`/${wishList.product.category}/${wishList.product.id}`}
         className="w-[130px] md:w-[200px] aspect-square relative bg-gray-300"
@@ -47,31 +47,35 @@ export default function UserWishCard({
 
       {/* TODO: 실제 이미지로 교체 */}
 
-      <div className="h-[100px] md:h-[120px] p-3 flex flex-col justify-between">
-        <div className="flex flex-col gap-2">
+      <div className="h-[100px] md:h-[120px] py-1 md:py-3 flex flex-col justify-between">
+        <div className="flex flex-col gap-1 md:gap-2">
           <h3 className="font-bold text-xs md:text-base">
             {wishList.product.name}
           </h3>
           <p className="light-p">{wishList.product.generation}</p>
-        </div>
-        <div className="flex justify-between items-center relative">
-          <p className="light-p">{wishList.product.price.toLocaleString()}원</p>
 
-          {wishList.memo.length !== 0 && (
-            <>
-              <button
-                onClick={() => onToggle(wishList.id)}
-                className="user-wishcard-btn"
-              >
-                <IoDocumentOutline />
-              </button>
-              {isOpen && (
-                <span className="select-none absolute top-full transform translate-y-0 md:translate-y-4 -translate-x-0  md:translate-x-0 z-30 w-[200px] xl:w-[300px] h-[120px] bg-white p-5 border-2 border-secondaryLight shadow-strong">
-                  <p className="text-xs md:text-sm text-mid">{wishList.memo}</p>
-                </span>
-              )}
-            </>
-          )}
+          <div className="flex justify-between items-center relative">
+            <p className="light-p">
+              {wishList.product.price.toLocaleString()}원
+            </p>
+            {wishList.memo.length !== 0 && (
+              <>
+                <button
+                  onClick={() => onToggle(wishList.id)}
+                  className="user-wishcard-btn"
+                >
+                  <IoDocumentOutline />
+                </button>
+                {isOpen && (
+                  <span className="select-none absolute top-full transform translate-y-0 md:translate-y-4 -translate-x-0  md:translate-x-0 z-30 w-[200px] xl:w-[300px] h-[120px] bg-white p-5 border-2 border-secondaryLight shadow-strong">
+                    <p className="text-xs md:text-sm text-mid">
+                      {wishList.memo}
+                    </p>
+                  </span>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
