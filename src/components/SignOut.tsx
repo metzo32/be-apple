@@ -7,25 +7,20 @@ import useModal from "@/hooks/useModal";
 import Modal from "./Modal/Modal";
 import { ButtonBasic } from "./designs/ButtonBasic";
 
-interface SignOutProps {
-  setIsSigningOut: (value: boolean) => void;
-}
 
-export default function SignOut({ setIsSigningOut }: SignOutProps) {
+export default function SignOut() {
   const { isModalOpen, openModal, closeModal } = useModal();
   const { resetUser } = useUserStore();
   const router = useRouter();
 
   const handleSignOut = async () => {
     try {
-      setIsSigningOut(true);
       await fetchSignOut();
       resetUser();
       router.push("/login");
     } catch (error) {
       console.error("로그아웃 실패:", error);
     } finally {
-      setIsSigningOut(false);
     }
   };
 

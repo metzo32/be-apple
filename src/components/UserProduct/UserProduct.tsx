@@ -14,7 +14,7 @@ import SummaryCard from "./SummaryCard";
 import ButtonStrong from "../designs/ButtonStrong";
 import SelectComp from "../UserProductAdd/SelectComp";
 
-interface UserProduct {
+interface UserProductProps {
   userId: number | null;
 }
 
@@ -30,7 +30,7 @@ export const initialUserProductForm: UserProductFormData = {
   memo: "",
 };
 
-export default function UserProduct({ userId }: UserProduct) {
+export default function UserProduct({ userId }: UserProductProps) {
   const [selectOpen, setSelectOpen] = useState(false);
   const [formData, setFormData] = useState<UserProductFormData>(
     initialUserProductForm

@@ -9,11 +9,11 @@ import SignOut from "@/components/SignOut";
 import UserInfo from "@/components/UserProductAdd/UserInfo";
 import UserProduct from "@/components/UserProduct/UserProduct";
 import ChangePassword from "@/components/ChangePassword";
+import UserAuth from "@/components/UserPage/UserAuth";
 
 export default function UserPage() {
   const { user } = useUserStore();
   const [checking, setChecking] = useState(true);
-  const [isSigningOut, setIsSigningOut] = useState(false);
 
   const router = useRouter();
 
@@ -28,7 +28,7 @@ export default function UserPage() {
     }
   }, [user]);
 
-  if (checking || isSigningOut) return <LoadingScreen />;
+  if (checking) return <LoadingScreen />;
 
   const userId: number | null = user?.id ?? null;
 
@@ -60,7 +60,7 @@ export default function UserPage() {
         <div className="hidden md:flex flex-col gap-3 items-start">
           <h2 className="md:text-lg font-bold">나의 계정정보</h2>
           <ChangePassword />
-          <SignOut setIsSigningOut={setIsSigningOut} />
+          <SignOut />
         </div>
       </section>
 
@@ -71,7 +71,7 @@ export default function UserPage() {
 
         <UserWishList userId={userId} />
 
-        {/* <UserAuth userId={userId />} */}
+        <UserAuth userId={userId} />
       </div>
     </div>
   );

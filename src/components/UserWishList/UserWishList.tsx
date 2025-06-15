@@ -9,6 +9,7 @@ import DeletePopup from "../DeletePopup/DeletePopup";
 interface UserProduct {
   userId: number | null;
 }
+
 export default function UserWishList({ userId }: UserProduct) {
   const [pendingDeleteIds, setPendingDeleteIds] = useState<number[]>([]);
   const [recentlyDeleted, setRecentlyDeleted] =
@@ -63,17 +64,17 @@ export default function UserWishList({ userId }: UserProduct) {
         {/* 구분선 */}
         <span className="thick-line" />
         {wishList.length > 0 ? (
-          <div className="grid grid-cols-2 lg:grid-cols-3 md:gap-10 lg:gap-15 xl:gap-21">
+          <div className="grid grid-cols-2 lg:grid-cols-3 lg:gap-15 xl:gap-21 ">
             {sortedWishList.map((wish) => {
               const isPendingDelete = pendingDeleteIds.includes(wish.id);
               return (
                 <div
                   key={wish.id}
-                  className={
+                  className={`justify-self-center ${
                     isPendingDelete
                       ? "saturate-0 opacity-30 pointer-events-none"
                       : ""
-                  }
+                  }`}
                 >
                   <UserWishCard
                     key={wish.id}
