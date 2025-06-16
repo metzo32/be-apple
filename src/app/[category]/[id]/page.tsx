@@ -21,54 +21,57 @@ export default async function DetailPage({ params }: DetailPageProps) {
   }
   // TODO 서버 컴포넌트라서 현재 보유여부 & 위시여부 가져오지 못하고 있다. 한번 더 페칭하는 방법 생각해보자.
 
-  if (isMacProduct(product)) {
-    return (
-      <>
-        <div className="w-[100vw] -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72">
-          <section className="global-px py-12 md:py-24 relative grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-16">
-            <div className="w-full flex items-center justify-center">
+  return (
+    <>
+      <div className="w-[100vw] -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72">
+        <section className="global-px py-12 md:py-24 relative grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-16">
+          <div className="w-full flex items-center justify-center">
+            {product.photos && product.photos.length > 0 ? (
               <span className="w-1/2 lg:w-full aspect-[1.726] relative">
                 <Image
-                  src={"/assets/images/macbook_m3_air_example.png"}
+                  src={product.photos[0]}
                   alt="제품 이미지"
                   fill
                   className="object-cover"
                 />
               </span>
+            ) : (
+              <span className="w-1/2 lg:w-full aspect-[1.726] bg-light" />
+            )}
+          </div>
+          <div className="relative h-full flex flex-col gap-3 md:gap-7">
+            <span className="thick-line" />
+            <div className="flex items-center gap-3 md:justify-between">
+              <h2 className="text-xl md:text-3xl font-bold">{product.name}</h2>
+              {/* TODO 이미 위시에 추가되었는지 확인 */}
+              {/* <AddToWishDetail productId={productId} /> */}
+              <WishButton product={product} />
             </div>
-            <div className="relative h-full flex flex-col gap-3 md:gap-7">
-              <span className="thick-line" />
-              <div className="flex gap-5 md:gap-10">
-                <h2 className="text-xl md:text-3xl font-bold">
-                  {product.name}
-                </h2>
-                {/* TODO 이미 위시에 추가되었는지 확인 */}
-                {/* <AddToWishDetail productId={productId} /> */}
-                <WishButton product={product} />
-              </div>
-              <p className="text-sm md:text-lg font-bold">
-                {product.price.toLocaleString()}원{" "}
-                <span className="font-medium text-mid text-sm">부터~</span>
-              </p>
+            <p className="text-sm md:text-lg font-bold">
+              {product.price.toLocaleString()}원{" "}
+              <span className="font-medium text-mid text-sm">부터~</span>
+            </p>
 
-              <div className="flex gap-5 p-5 w-full bg-bglight">
-                {product.colors.map((color) => (
+            <div className="flex gap-3 md:gap-5 p-3 md:p-5 w-full bg-bglight">
+              {product.colors.map((color) => (
+                <div
+                  key={color.name}
+                  className="w-auto flex flex-col justify-self-center items-center gap-2"
+                >
+                  <p className="text-[10px] md:text-sm">{color.name}</p>
                   <div
-                    key={color.name}
-                    className="w-auto flex flex-col justify-center items-center gap-2"
-                  >
-                    <p className="text-xs md:text-sm">{color.name}</p>
-                    <div
-                      className="w-[10px] h-[10px]"
-                      style={{ backgroundColor: color.code }}
-                    />
-                  </div>
-                ))}
-              </div>
+                    className="w-[10px] h-[10px]"
+                    style={{ backgroundColor: color.code }}
+                  />
+                </div>
+              ))}
             </div>
-          </section>
-        </div>
+          </div>
+        </section>
+      </div>
 
+      {/* 맥북 옵션G */}
+      {isMacProduct(product) && (
         <section className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-10 place-items-center py-12 md:py-36">
           {product.options.map((option, index) => (
             <div
@@ -78,6 +81,7 @@ export default async function DetailPage({ params }: DetailPageProps) {
               <h5 className="text-lg md:text-2xl font-bold">
                 옵션 {index + 1}
               </h5>
+
               <p className="text-xs md:text-sm">CPU {option.cpu}</p>
               <p className="text-xs md:text-sm">GPU {option.gpu}</p>
               <p className="text-xs md:text-sm">Processor {option.processor}</p>
@@ -86,13 +90,11 @@ export default async function DetailPage({ params }: DetailPageProps) {
             </div>
           ))}
         </section>
+      )}
 
-        <div className="w-[100vw] -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72">
-          <ReviewClient product={product} productId={productId} />
-        </div>
-      </>
-    );
-
-    //TODO 나머지 타입가드별 리턴문 작성할 것
-  }
+      <div className="w-[100vw] -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72">
+        <ReviewClient product={product} productId={productId} />
+      </div>
+    </>
+  );
 }

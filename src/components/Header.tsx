@@ -17,7 +17,7 @@ export default function Header() {
   return (
     <>
       <header className="header-px py-3 min-w-[320px] flex justify-between items-center bg-white">
-        <button className="relative w-[18px] md:w-[25px] xl:w-[35px] aspect-square">
+        <button className="relative w-[18px] md:w-[30px] xl:w-[35px] aspect-square">
           <Image
             src="/assets/images/apple.png"
             alt="홈"

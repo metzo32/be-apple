@@ -7,8 +7,8 @@ import {
   ProductCategoryEnum,
   ProductQueryString,
 } from "@/types/productCategory";
-import { IoSearchSharp } from "react-icons/io5";
 import SortButton from "./SortButton";
+import { IoSearchSharp } from "react-icons/io5";
 
 export default function ProductSearchBar({
   category,
@@ -18,6 +18,7 @@ export default function ProductSearchBar({
   const searchParams = useSearchParams();
   const searchMutationFn = useSearchMutation(category);
 
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchForm, setSearchForm] = useState<ProductQueryString>({
     category,
     name: searchParams.get("name") || "",
@@ -39,10 +40,7 @@ export default function ProductSearchBar({
 
     setSearchForm((prev) => ({
       ...prev,
-      [name]:
-        name === "minPrice" || name === "maxPrice"
-          ? Number(value) || undefined
-          : value,
+      [name]: value,
     }));
   };
 
@@ -61,18 +59,26 @@ export default function ProductSearchBar({
   };
 
   const handleSubmit = () => {
+    const trimmedForm = {
+      ...searchForm,
+      name: searchForm.name?.trim() || "",
+      tag: searchForm.tag?.trim() || "",
+    };
+
     if (
-      searchForm.minPrice &&
-      searchForm.maxPrice &&
-      searchForm.minPrice >= searchForm.maxPrice
+      trimmedForm.minPrice &&
+      trimmedForm.maxPrice &&
+      trimmedForm.minPrice >= trimmedForm.maxPrice
     ) {
       alert("최대값은 최소값보다 커야합니다.");
       setSearchForm((prev) => ({
         ...prev,
         maxPrice: undefined,
       }));
+      return;
     }
-    searchMutationFn.mutate(searchForm);
+
+    searchMutationFn.mutate(trimmedForm);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -98,76 +104,84 @@ export default function ProductSearchBar({
   };
 
   return (
-    <div className="px-5 w-[320px] md:w-[500px] lg:w-[885px] flex flex-col items-center relative">
-      <div className="flex-1 grid grid-cols-3 grid-rows-2 gap-2 md:gap-5 ">
-        <span className="searchbar-span col-span-3">
-          <input
-            type="text"
-            name="name"
-            maxLength={20}
-            value={searchForm.name?.trim() ?? ""}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-            placeholder="제품명"
-            className="w-full h-full m-0 md:mx-2 md:mb-2 placeholder-gray-400 "
-          />
-          <button
-            onClick={handleSubmit}
-            className="text-primary w-[20px] md:w-[40px] flex justify-center items-center"
-          >
-            <IoSearchSharp className="mr-1" />
-          </button>
-        </span>
+    <>
+      {/* <button onClick={() => setIsSearchOpen(!isSearchOpen)} className="text-4xl text-primary">
+        <IoSearchSharp />
+      </button> */}
 
-        <span className="searchbar-span">
-          <input
-            type="text"
-            name="tag"
-            maxLength={20}
-            value={searchForm.tag?.trim() ?? ""}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-            placeholder="태그"
-            className="w-full h-full m-0 md:mx-2 md:mb-2 placeholder-gray-400 "
-          />
-        </span>
+      {!isSearchOpen && (
+        <div className="px-5 w-[320px] md:w-full flex flex-col items-center relative">
+          <div className="px-10 flex-1 grid grid-cols-3 grid-rows-2 gap-2 md:gap-5 ">
+            <span className="searchbar-span col-span-3">
+              <input
+                type="text"
+                name="name"
+                maxLength={20}
+                value={searchForm.name ?? ""}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                placeholder="제품명"
+                className="w-full h-full m-0 md:mx-2 md:mb-2 placeholder-gray-400 "
+              />
+              <button
+                onClick={handleSubmit}
+                className="text-primary text-2xl w-[20px] md:w-[40px] flex justify-center items-center"
+              >
+                <IoSearchSharp />
+              </button>
+            </span>
 
-        <span className="searchbar-span">
-          <input
-            type="text"
-            name="minPrice"
-            value={searchForm.minPrice ?? ""}
-            onChange={handlePriceChange}
-            maxLength={8}
-            onKeyDown={handleKeyDown}
-            placeholder="최저가"
-            className="w-full h-full m-0 md:mx-2 md:mb-2 placeholder-gray-400 "
-          />
-        </span>
+            <span className="searchbar-span">
+              <input
+                type="text"
+                name="tag"
+                maxLength={20}
+                value={searchForm.tag ?? ""}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                placeholder="태그"
+                className="w-full h-full m-0 md:mx-2 md:mb-2 placeholder-gray-400 "
+              />
+            </span>
 
-        <span className="searchbar-span">
-          <input
-            type="text"
-            name="maxPrice"
-            value={searchForm.maxPrice ?? ""}
-            onChange={handlePriceChange}
-            maxLength={8}
-            onKeyDown={handleKeyDown}
-            placeholder="최고가"
-            className="w-full h-full m-0 md:mx-2 md:mb-2 placeholder-gray-400 "
-          />
-        </span>
-      </div>
+            <span className="searchbar-span">
+              <input
+                type="text"
+                name="minPrice"
+                value={searchForm.minPrice ?? ""}
+                onChange={handlePriceChange}
+                maxLength={8}
+                onKeyDown={handleKeyDown}
+                placeholder="최저가"
+                className="w-full h-full m-0 md:mx-2 md:mb-2 placeholder-gray-400 "
+              />
+            </span>
 
-      {/* <div className="flex flex-col items-center ml-3 md:ml-5">
+            <span className="searchbar-span">
+              <input
+                type="text"
+                name="maxPrice"
+                value={searchForm.maxPrice ?? ""}
+                onChange={handlePriceChange}
+                maxLength={8}
+                onKeyDown={handleKeyDown}
+                placeholder="최고가"
+                className="w-full h-full m-0 md:mx-2 md:mb-2 placeholder-gray-400 "
+              />
+            </span>
+          </div>
+
+          {/* <div className="flex flex-col items-center ml-3 md:ml-5">
         <ButtonBasic text="초기화" />
       </div> */}
 
-      <SortButton
-        onChangeSortBy={handleSortByChange}
-        onChangeOrder={handleOrderChange}
-        order={searchForm.order}
-      />
-    </div>
+          <SortButton
+            onChangeSortBy={handleSortByChange}
+            onChangeOrder={handleOrderChange}
+            order={searchForm.order}
+          />
+        </div>
+      )}
+    </>
   );
 }

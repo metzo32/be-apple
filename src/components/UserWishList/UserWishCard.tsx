@@ -29,7 +29,7 @@ export default function UserWishCard({
     <div className="flex flex-col mt-5">
       <Link
         href={`/${wishList.product.category}/${wishList.product.id}`}
-        className="w-[130px] md:w-[200px] aspect-square relative bg-gray-300"
+        className="w-[130px] md:w-[200px] aspect-square relative bg-lineLight"
       >
         {/* <Image
           src={wishList.product.photos[0]}

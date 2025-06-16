@@ -10,10 +10,13 @@ import UserInfo from "@/components/UserProductAdd/UserInfo";
 import UserProduct from "@/components/UserProduct/UserProduct";
 import ChangePassword from "@/components/ChangePassword";
 import UserAuth from "@/components/UserPage/UserAuth";
+import { ButtonBasic } from "@/components/designs/ButtonBasic";
+import GradeChart from "@/components/UserPage/GradeChart";
 
 export default function UserPage() {
   const { user } = useUserStore();
   const [checking, setChecking] = useState(true);
+  const [isGradeOpen, setIsGradeOpen] = useState(false);
 
   const router = useRouter();
 
@@ -32,6 +35,10 @@ export default function UserPage() {
 
   const userId: number | null = user?.id ?? null;
 
+  const handleClose = () => {
+    setIsGradeOpen(false);
+  };
+
   return (
     <div className="relative flex flex-col md:flex-row md:gap-10 pt-5 md:py-12">
       <section
@@ -46,15 +53,21 @@ export default function UserPage() {
           bg-primary md:bg-transparent
         "
       >
-        
         <h1 className="text-2xl md:text-3xl text-white md:text-text">
-          {user?.name} <span className="font-medium text-lg md:text-xl text-light">님</span>
+          {user?.name}
+          <span className="font-medium text-lg md:text-xl text-light">님</span>
         </h1>
 
         <div className="hidden md:flex flex-col gap-3 items-start">
           <h2 className="md:text-lg font-bold">나의 등급</h2>
-          <p className="text-[10px] md:text-[14px]">모시깽</p>
-          <p className="text-[10px] md:text-[14px]">등급표 확인하기</p>
+          <ButtonBasic text="모시깽" />
+          <span className="relative">
+            <ButtonBasic
+              text="등급표 확인하기"
+              onClick={() => setIsGradeOpen(!isGradeOpen)}
+            />
+            <GradeChart isGradeOpen={isGradeOpen} onClose={handleClose} />
+          </span>
         </div>
 
         <div className="hidden md:flex flex-col gap-3 items-start">

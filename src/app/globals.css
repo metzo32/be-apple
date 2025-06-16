@@ -137,6 +137,11 @@ select:hover {
     @apply text-base text-textHover
     leading-snug;
   }
+
+  button {
+    @apply
+    text-xs md:text-sm text-mid 
+  }
 }
 
 @layer components {
@@ -288,8 +293,7 @@ select:hover {
 
   .searchbar-span {
     @apply w-full h-[30px] md:h-[40px] px-2 
-    border-2 border-custombg focus-within:border-primary 
-    rounded-md 
+    border-b-2 border-light focus-within:border-primary 
     flex justify-end;
   }
 

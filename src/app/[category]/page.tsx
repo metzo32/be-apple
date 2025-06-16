@@ -49,10 +49,10 @@ export default function SearchPage({
 
   return (
     <div className="min-w-[320px] w-[100vw] md:w-full flex flex-col items-center pt-5 pb-18 md:pt-18 md:pb-64 -mx-5 md:mx-0">
-      {/* <ProductSearchBar category={typedCategory} /> */}
+      <ProductSearchBar category={typedCategory} />
 
       {wishUpdatedProductsList.length === 0 ? (
-        <p>결과가 없습니다.</p>
+        <p className="pt-[80px] md:pt-[145px] text-sm md:text-base">결과가 없습니다.</p>
       ) : (
         <div className="w-full grid place-items-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-15">
           {wishUpdatedProductsList.map((product) => (
