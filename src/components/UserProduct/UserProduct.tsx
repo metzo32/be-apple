@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import { useUserProductQuery } from "@/hooks/useUserProductQuery";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -32,6 +32,7 @@ export const initialUserProductForm: UserProductFormData = {
 
 export default function UserProduct({ userId }: UserProductProps) {
   const [selectOpen, setSelectOpen] = useState(false);
+  const [isOpenSatInfo, setIsOpenSatInfo] = useState(false);
   const [formData, setFormData] = useState<UserProductFormData>(
     initialUserProductForm
   );
@@ -67,7 +68,16 @@ export default function UserProduct({ userId }: UserProductProps) {
   const reviews = userProductData.userReviews;
 
   // 포화도
-  const categorySaturation = 100 / Object.keys(ProductCategoryLabels).length;
+  const categories = [
+    ...new Set(
+      userProductData.userProducts.map((item) => item.product.category)
+    ),
+  ];
+
+  const categorySaturation = (
+    (categories.length / Object.keys(ProductCategoryLabels).length) *
+    100
+  ).toFixed(1);
 
   // 총액
   const totalPrice = userProducts.reduce(
@@ -77,6 +87,10 @@ export default function UserProduct({ userId }: UserProductProps) {
 
   const handleOpenSelect = () => {
     setSelectOpen(true);
+  };
+
+  const handleOpenSatInfo = () => {
+    setIsOpenSatInfo(!isOpenSatInfo);
   };
 
   const handleEdit = (userProduct: GetUserProductResponse) => {
@@ -112,7 +126,7 @@ export default function UserProduct({ userId }: UserProductProps) {
           />
         </span>
         {/* 구분선 */}
-        <span className="thick-line"/>
+        <span className="thick-line" />
         <div className="w-full mb-10 grid gap-1 md:gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
           <SummaryCard
             title="현재 보유한 기기 수"
@@ -120,7 +134,11 @@ export default function UserProduct({ userId }: UserProductProps) {
           />
           <SummaryCard
             title="포화도"
-            content={`${Math.round(categorySaturation)}%`}
+            content={`${categorySaturation}%`}
+            showQuestion
+            openInfo={handleOpenSatInfo}
+            isInfoOpen={isOpenSatInfo}
+            info={<p className="text-[10px]">전체 카테고리 중 사용자가 몇 가지 제품 카테고리를 보유했는지를 나타내는 비율입니다.</p>}
           />
           <SummaryCard title="총액" content={totalPrice.toLocaleString()} />
           <SummaryCard

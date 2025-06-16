@@ -55,7 +55,7 @@ export default function UserPage() {
       >
         <h1 className="text-2xl md:text-3xl text-white md:text-text">
           {user?.name}
-          <span className="font-medium text-lg md:text-xl text-light">님</span>
+          <span className="font-medium text-lg md:text-xl text-light ml-1">님</span>
         </h1>
 
         <div className="hidden md:flex flex-col gap-3 items-start">

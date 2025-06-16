@@ -90,7 +90,6 @@ select:hover {
   color: #ececec;
 }
 
-
 @tailwind utilities;
 
 @layer base {
@@ -137,17 +136,12 @@ select:hover {
     @apply text-base text-textHover
     leading-snug;
   }
-
-  button {
-    @apply
-    text-xs md:text-sm text-mid 
-  }
 }
 
 @layer components {
   .overlay {
     @apply min-w-[320px]
-      w-screen h-full
+      w-[100vw] h-full
       fixed inset-0 z-10
       bg-overlay;
   }
@@ -200,6 +194,10 @@ select:hover {
     lg:gap-10;
   }
 
+  .btn {
+    @apply text-xs md:text-sm text-mid;
+  }
+
   .light-p {
     @apply text-xs text-mid
     leading-snug
@@ -208,20 +206,18 @@ select:hover {
   }
 
   .userSection {
-    @apply
-    md:min-h-[350px]
+    @apply md:min-h-[350px]
     min-w-[320px] 
     md:min-w-full
     
     w-[100vw] md:w-full
     -mx-5 md:mx-0
     p-5 md:pb-12 md:pt-0
-    my-12 md:my-0
-}
+    my-12 md:my-0;
+  }
 
   .userSection-line {
-    @apply
-     border-b border-lineLight md:border-none
+    @apply border-b border-lineLight md:border-none;
   }
 
   .user-product-card {
@@ -270,15 +266,12 @@ select:hover {
   }
 
   .user-h2 {
-    @apply 
-    font-bold
-    text-xl md:text-2xl
+    @apply font-bold
+    text-xl md:text-2xl;
   }
 
   .user-title-sm {
-    @apply 
-    block md:hidden
-    mb-1 md:mb-5
+    @apply block md:hidden
     text-base text-light;
   }
 
@@ -298,13 +291,11 @@ select:hover {
   }
 
   .thick-line {
-    @apply
-    w-full h-[3px] bg-black block mt-3 
+    @apply w-full h-[3px] bg-black block mt-3;
   }
 
   .auth-form {
-    @apply
-    w-[200px] md:w-[250px]
-    py-5 md:py-10 flex flex-col gap-10 md:gap-15 items-center justify-center
+    @apply w-[200px] md:w-[250px]
+    py-5 md:py-10 flex flex-col gap-10 md:gap-15 items-center justify-center;
   }
 }

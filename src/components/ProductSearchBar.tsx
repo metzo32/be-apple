@@ -105,13 +105,9 @@ export default function ProductSearchBar({
 
   return (
     <>
-      {/* <button onClick={() => setIsSearchOpen(!isSearchOpen)} className="text-4xl text-primary">
-        <IoSearchSharp />
-      </button> */}
-
       {!isSearchOpen && (
-        <div className="px-5 w-[320px] md:w-full flex flex-col items-center relative">
-          <div className="px-10 flex-1 grid grid-cols-3 grid-rows-2 gap-2 md:gap-5 ">
+        <div className="px-5 min-w-[320px] w-full flex flex-col items-center relative">
+          <div className="px-0 md:px-10 flex-1 grid grid-cols-3 grid-rows-2 gap-2 md:gap-5 ">
             <span className="searchbar-span col-span-3">
               <input
                 type="text"

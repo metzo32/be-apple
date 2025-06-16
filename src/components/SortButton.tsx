@@ -52,9 +52,9 @@ export default function SortButton({
     <div className="w-full flex justify-end relative h-[105px] md:h-[110px]">
       <div
         onClick={() => setIsDropdownOpen((prev) => !prev)}
-        className="absolute top-0 right-0 z-30 w-[100px] md:w-[120px] my-10 border border-lineLight bg-white flex flex-col items-start"
+        className="absolute top-0 right-0 z-10 w-[100px] md:w-[120px] my-10 border border-lineLight bg-white flex flex-col items-start"
       >
-        <button className="w-full flex items-center justify-between px-2 py-1 md:px-3 md:py-2">
+        <button className="btn w-full flex items-center justify-between px-2 py-1 md:px-3 md:py-2">
           <span>{selectedLabel}</span>
           <RiArrowDownSFill />
         </button>
@@ -68,7 +68,7 @@ export default function SortButton({
                   e.stopPropagation();
                   handleSortSelect(option.value, option.order);
                 }}
-                className="w-full px-2 py-1 md:px-3 md:py-2 flex items-center justify-between hover:bg-lineLight"
+                className="btn w-full px-2 py-1 md:px-3 md:py-2 flex items-center justify-between hover:bg-bglightHover"
               >
                 {option.label}
               </button>

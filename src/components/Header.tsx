@@ -44,7 +44,7 @@ export default function Header() {
           </button>
         ) : (
           <button
-            className="block md:hidden text-primary"
+            className="block md:hidden text-primary text-xl"
             onClick={() => handleClick("login")}
           >
             <IoMdPerson />
