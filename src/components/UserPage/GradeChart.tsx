@@ -25,14 +25,14 @@ export default function GradeChart({ isGradeOpen, onClose }: GradeChartProps) {
   ];
 
   return isGradeOpen ? (
-    <div className="absolute top-0 left-full transform translate-x-10 z-5 bg-lineLight w-[160px] p-3 border border-lineLight flex flex-col gap-3">
+    <div className="absolute top-0 left-full transform translate-x-10 z-5 bg-lineLight w-[160px] px-3 py-2 border border-lineLight flex flex-col gap-3">
       <CloseButton onClick={onClose} smallMode />
       {gradeData.map((data) => (
         <div key={data.label}>
-          <h6>
-            {data.min} - {data.max !== Infinity ? data.max : ""}
+          <h6 className="text-mid">
+            {data.min} ~ {data.max !== Infinity ? data.max : ""}
           </h6>
-          <p className="text-xs md:text-sm ">{data.label}</p>
+          <p className="text-xs md:text-sm font-bold">{data.label}</p>
         </div>
       ))}
     </div>

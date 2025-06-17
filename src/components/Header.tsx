@@ -19,7 +19,7 @@ export default function Header() {
       <header className="header-px py-3 min-w-[320px] flex justify-between items-center bg-white">
         <button className="relative w-[18px] md:w-[30px] xl:w-[35px] aspect-square">
           <Image
-            src="/assets/images/apple.png"
+            src="/assets/images/icon.png"
             alt="홈"
             fill
             className="object-cover"
@@ -54,25 +54,3 @@ export default function Header() {
     </>
   );
 }
-
-// import { basicDeviceData } from "../../../public/fakeData/basicDeviceData";
-// import { useRouter } from "next/navigation";
-// import { Button } from "@mui/material";
-
-// export default function SearchHeader() {
-//   const router = useRouter();
-
-//   return (
-//     <nav className="py-12 flex items-end justify-between">
-//       {basicDeviceData.map((item) => (
-//         <button
-//           key={item.id}
-//           onClick={() => router.push(`/search/${item.category}`)}
-//           className="text-mid rounded-lg border-b-3 border-transparent px-5 py-2 hover:bg-[#C466F333] hover:text-white hover:border-secondary"
-//         >
-//           {item.alt}
-//         </button>
-//       ))}
-//     </nav>
-//   );
-// }
