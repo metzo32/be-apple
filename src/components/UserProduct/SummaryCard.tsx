@@ -43,12 +43,20 @@ export default function SummaryCard({
       <div className="flex md:hidden w-full items-center gap-2">
         <h5 className="user-title-sm">{title}</h5>
         {showQuestion && (
-          <button
-            onClick={openInfo}
-            className="flex items-center justify-center text-light"
-          >
-            <AiFillQuestionCircle />
-          </button>
+          <span className="relative">
+            <button
+              onClick={openInfo}
+              className="flex items-center justify-center text-light"
+            >
+              <AiFillQuestionCircle />
+            </button>
+
+            {isInfoOpen && (
+              <div className="absolute w-40 h-14 p-2 top-full z-5 left-full translate-x-1 -translate-y-full bg-lineLight">
+                {info}
+              </div>
+            )}
+          </span>
         )}
       </div>
 

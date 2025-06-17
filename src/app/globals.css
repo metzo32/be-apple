@@ -285,7 +285,7 @@ select:hover {
   }
 
   .searchbar-span {
-    @apply w-full h-[30px] md:h-[40px] px-2 
+    @apply w-full h-[30px] md:h-[40px] 
     border-b-2 border-light focus-within:border-primary 
     flex justify-end;
   }
