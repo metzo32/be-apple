@@ -58,9 +58,9 @@ export default function RenderProducts({
                 productSelectInfo.productId === product.id
                   ? "border-secondaryLight bg-bglight brightness-70"
                   : "border-transparent"
-              } cursor-pointer border-2 rounded-lg md:rounded-2xl flex items-center justify-center overflow-hidden p-5 hover:bg-bglightHover hover:border-secondaryLight`}
+              } cursor-pointer border-2 flex items-center justify-center overflow-hidden p-5 hover:bg-bglightHover hover:border-secondaryLight`}
             >
-              <div className="w-full h-full flex flex-col items-center">
+              <div className="w-full h-full flex flex-col items-center gap-5 py-5">
                 <span className="w-[200px] xl:w-[300px] aspect-[5/3] overflow-hidden relative">
                   <Image
                     src={product.photos[0]}
@@ -69,8 +69,8 @@ export default function RenderProducts({
                     className="flex items-center justify-center object-cover"
                   />
                 </span>
-                <div className="h-[50px] mt-5">
-                  <p className="text-sm text-center font-bold">
+                <div>
+                  <p className="text-sm font-bold">
                     {product.name}
                   </p>
                   <p className="text-sm text-center">{product.generation}</p>

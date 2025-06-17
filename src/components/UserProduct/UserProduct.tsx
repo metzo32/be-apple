@@ -1,4 +1,4 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { useUserProductQuery } from "@/hooks/useUserProductQuery";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -10,9 +10,9 @@ import { deleteUserProduct } from "../fetch/fetchUserProduct";
 import type { UserProductFormData } from "@/types/addUserProducts";
 import { ProductCategoryLabels } from "@/types/productCategory";
 import UserProductCard from "../UserProductAdd/UserProductCard";
+import SelectComp from "../UserProductAdd/SelectComp";
 import SummaryCard from "./SummaryCard";
 import ButtonStrong from "../designs/ButtonStrong";
-import SelectComp from "../UserProductAdd/SelectComp";
 
 interface UserProductProps {
   userId: number | null;
@@ -32,7 +32,7 @@ export const initialUserProductForm: UserProductFormData = {
 
 export default function UserProduct({ userId }: UserProductProps) {
   const [selectOpen, setSelectOpen] = useState(false);
-  const [isOpenSatInfo, setIsOpenSatInfo] = useState(false);
+  const [isOpenSaturationInfo, setIsOpenSaturationInfo] = useState(false);
   const [formData, setFormData] = useState<UserProductFormData>(
     initialUserProductForm
   );
@@ -74,7 +74,7 @@ export default function UserProduct({ userId }: UserProductProps) {
     ),
   ];
 
-  const categorySaturation = (
+  const categorySaturationuration = (
     (categories.length / Object.keys(ProductCategoryLabels).length) *
     100
   ).toFixed(1);
@@ -89,8 +89,8 @@ export default function UserProduct({ userId }: UserProductProps) {
     setSelectOpen(true);
   };
 
-  const handleOpenSatInfo = () => {
-    setIsOpenSatInfo(!isOpenSatInfo);
+  const handleOpenSaturationInfo = () => {
+    setIsOpenSaturationInfo(!isOpenSaturationInfo);
   };
 
   const handleEdit = (userProduct: GetUserProductResponse) => {
@@ -134,11 +134,16 @@ export default function UserProduct({ userId }: UserProductProps) {
           />
           <SummaryCard
             title="포화도"
-            content={`${categorySaturation}%`}
+            content={`${categorySaturationuration}%`}
             showQuestion
-            openInfo={handleOpenSatInfo}
-            isInfoOpen={isOpenSatInfo}
-            info={<p className="text-[10px]">전체 카테고리 중 사용자가 몇 가지 제품 카테고리를 보유했는지를 나타내는 비율입니다.</p>}
+            openInfo={handleOpenSaturationInfo}
+            isInfoOpen={isOpenSaturationInfo}
+            info={
+              <p className="text-[10px]">
+                전체 카테고리 중 사용자가 몇 가지 제품 카테고리를 보유했는지를
+                나타내는 비율입니다.
+              </p>
+            }
           />
           <SummaryCard title="총액" content={totalPrice.toLocaleString()} />
           <SummaryCard

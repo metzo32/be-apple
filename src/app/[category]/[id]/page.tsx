@@ -3,8 +3,7 @@ import { getProductDetail } from "@/components/fetch/fetchProduct";
 import ReviewClient from "@/components/ItemDetails/ReviewClient";
 import { ProductDetail } from "@/types/productDetail";
 import { isMacProduct } from "@/types/productTypeGurards";
-import AddToWishDetail from "@/components/ItemDetails/AddToWishDetail";
-import WishButton from "@/components/AddWish/WishButton";
+import DetailPageWishButton from "@/components/ItemDetails/DetailPageWishButton";
 
 interface DetailPageProps {
   params: { id: string; category: string };
@@ -40,12 +39,11 @@ export default async function DetailPage({ params }: DetailPageProps) {
             )}
           </div>
           <div className="relative h-full flex flex-col gap-3 md:gap-7">
-            <span className="thick-line" />
+            <span className="thick-line mt-0" />
             <div className="flex items-center gap-3 md:justify-between">
               <h2 className="text-xl md:text-3xl font-bold">{product.name}</h2>
               {/* TODO 이미 위시에 추가되었는지 확인 */}
-              {/* <AddToWishDetail productId={productId} /> */}
-              <WishButton product={product} />
+              <DetailPageWishButton productId={product.id} />
             </div>
             <p className="text-sm md:text-lg font-bold">
               {product.price.toLocaleString()}원{" "}
@@ -70,27 +68,50 @@ export default async function DetailPage({ params }: DetailPageProps) {
         </section>
       </div>
 
-      {/* 맥북 옵션G */}
-      {isMacProduct(product) && (
-        <section className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-10 place-items-center py-12 md:py-36">
-          {product.options.map((option, index) => (
-            <div
-              key={option.id}
-              className="w-[150px] h-[225px] md:w-[200px] md:h-[300px] p-3 md:p-5 flex flex-col gap-1 md:gap-3"
-            >
-              <h5 className="text-lg md:text-2xl font-bold">
-                옵션 {index + 1}
-              </h5>
+      <section className="flex flex-col gap-3 md:gap-7">
+        <span className="thick-line" />
+        <h1 className="text-lg md:text-2xl">상세 옵션</h1>
 
-              <p className="text-xs md:text-sm">CPU {option.cpu}</p>
-              <p className="text-xs md:text-sm">GPU {option.gpu}</p>
-              <p className="text-xs md:text-sm">Processor {option.processor}</p>
-              <p className="text-xs md:text-sm">RAM {option.ram}</p>
-              <p className="text-xs md:text-sm">Storage {option.storage}</p>
-            </div>
-          ))}
-        </section>
-      )}
+        <p>{product.generation}세대</p>
+        <p>밝기{product.displayBrightness}</p>
+        <p>
+          가로 세로 두께cm {product.width} * {product.height} *{" "}
+          {product.thickness}
+        </p>
+        <p>
+          가로 세로 px {product.displayHorizontalPixel} *{" "}
+          {product.displayVerticalPixel}
+        </p>
+        <p>{product.weight}kg</p>
+
+        {isMacProduct(product) && (
+          <div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-10">
+            {product.options.map((option, index) => (
+              <div
+                key={option.id}
+                className="w-[150px] h-[225px] md:w-[200px] md:h-[300px] flex flex-col gap-1 md:gap-3"
+              >
+                <h5 className="text-lg md:text-2xl font-bold">
+                  옵션 {index + 1}
+                </h5>
+
+                <p className="text-xs md:text-sm">
+                  CPU <span className="font-bold">{option.cpu}</span>{" "}
+                </p>
+                <p className="text-xs md:text-sm">GPU {option.gpu}</p>
+                <p className="text-xs md:text-sm">
+                  Processor {option.processor}
+                </p>
+                <p className="text-xs md:text-sm">RAM {option.ram}</p>
+                <p className="text-xs md:text-sm">Storage {option.storage}</p>
+                <p className="text-xs md:text-sm">
+                  추가 {option.additionalPrice}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
 
       <div className="w-[100vw] -ml-5 md:-ml-20 xl:-ml-50 2xl:-ml-72">
         <ReviewClient product={product} productId={productId} />

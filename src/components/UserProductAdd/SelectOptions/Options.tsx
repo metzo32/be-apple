@@ -1,5 +1,9 @@
 import { useProductDetailQuery } from "@/hooks/useProductQuery";
-import { isIpadProduct, isIphoneProduct, isMacProduct } from "@/types/productTypeGurards";
+import {
+  isIpadProduct,
+  isIphoneProduct,
+  isMacProduct,
+} from "@/types/productTypeGurards";
 
 interface OptionsProps {
   productId: number;
@@ -23,6 +27,8 @@ export default function Options({
     enabled: isOptionOpen,
   });
 
+  console.log("옵션 데이터", optionsData);
+
   return isOptionOpen ? (
     <div className="flex absolute top-2 right-2 z-20">
       {/* 맥 케이스 */}
@@ -34,47 +40,61 @@ export default function Options({
               key={macOption.id}
               onClick={() => onOptionSelect(macOption.id)}
               className={`${
-                selectedOptionId === macOption.id ? "selected" : "bg-bglight"
+                selectedOptionId === macOption.id ? "selected" : "bg-white"
               } option-select hover:bg-bglightHover`}
             >
-              {macOption.optionSpecs.map((spec) => (
-                <p key={spec.type} className="text-xs text-textHover">
-                  {spec.value}
-                </p>
-              ))}
+              {macOption.optionSpecs.map((spec) =>
+                spec.type === "storage" ? (
+                  <p key={spec.type} className="text-xs">
+                    {spec.value}
+                  </p>
+                ) : null
+              )}
+            </div>
+          ))}
+
+        {/* 아이패드 케이스 */}
+        {optionsData &&
+          isIpadProduct(optionsData) &&
+          optionsData.options.map((ipadOption) => (
+            <div
+              key={ipadOption.id}
+              onClick={() => onOptionSelect(ipadOption.id)}
+              className={`${
+                selectedOptionId === ipadOption.id ? "selected" : "bg-bglight"
+              } option-select  hover:bg-bglightHover`}
+            >
+              {ipadOption.optionSpecs.map((spec) =>
+                spec.type === "storage" ? (
+                  <p key={spec.type} className="text-xs">
+                    {spec.value}
+                  </p>
+                ) : null
+              )}
+            </div>
+          ))}
+
+        {/* 아이폰 케이스 */}
+        {optionsData &&
+          isIphoneProduct(optionsData) &&
+          optionsData.options.map((iphoneOption) => (
+            <div
+              key={iphoneOption.id}
+              onClick={() => onOptionSelect(iphoneOption.id)}
+              className={`${
+                selectedOptionId === iphoneOption.id ? "selected" : "bg-bglight"
+              } option-select  hover:bg-bglightHover`}
+            >
+              {iphoneOption.optionSpecs.map((spec) =>
+                spec.type === "storage" ? (
+                  <p key={spec.type} className="text-xs">
+                    {spec.value}
+                  </p>
+                ) : null
+              )}
             </div>
           ))}
       </div>
-
-      {/* 아이패드 케이스 */}
-      {optionsData &&
-        isIpadProduct(optionsData) &&
-        optionsData.options.map((ipadOption) => (
-          <div
-            key={ipadOption.id}
-            onClick={() => onOptionSelect(ipadOption.id)}
-            className={`${
-              selectedOptionId === ipadOption.id ? "selected" : "bg-bglight"
-            } option-select  hover:bg-bglightHover`}
-          >
-            <p>{ipadOption.storage}</p>
-          </div>
-        ))}
-
-      {/* 아이폰 케이스 */}
-      {optionsData &&
-        isIphoneProduct(optionsData) &&
-        optionsData.options.map((iphoneOption) => (
-          <div
-            key={iphoneOption.id}
-            onClick={() => onOptionSelect(iphoneOption.id)}
-            className={`${
-              selectedOptionId === iphoneOption.id ? "selected" : "bg-bglight"
-            } option-select  hover:bg-bglightHover`}
-          >
-            <p>{iphoneOption.storage}</p>
-          </div>
-        ))}
     </div>
   ) : null;
 }

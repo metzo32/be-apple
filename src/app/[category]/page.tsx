@@ -39,6 +39,8 @@ export default function SearchPage({
   if (productsLoading || wishLoading) return <LoadingScreen />;
   if (productsError || !productsList || wishError) return notFound();
 
+
+  // 중요!!
   const wishUpdatedProductsList: GetProductResponse[] = productsList.map((product) => {
     const matchedWish = wishList?.find((wish) => wish.productId === product.id);
     return {
@@ -46,6 +48,9 @@ export default function SearchPage({
       wishId: matchedWish?.id ?? null, // 기존 wishId가 있다면 유지
     };
   });
+
+  console.log("목록", productsList)
+
 
   return (
     <div className="min-w-[320px] w-[100vw] md:w-full flex flex-col items-center pt-5 pb-18 md:pt-18 md:pb-64 -mx-5 md:mx-0">

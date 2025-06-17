@@ -11,8 +11,8 @@ interface SearchCardProps {
 
 export default function SearchCard({ userId, product }: SearchCardProps) {
   const originalName = product.name;
-  const idx = originalName.indexOf("(");
-  const resultName = originalName.slice(0, idx - 1);
+  // const idx = originalName.indexOf("(");
+  // const resultName = originalName.slice(0, idx - 1);
 
   return (
     <div className="w-full md:w-auto shrink-0 overflow-hidden flex flex-col gap-0 lg:gap-0 items-start relative">
@@ -39,13 +39,13 @@ export default function SearchCard({ userId, product }: SearchCardProps) {
       </Link>
 
       <div className="w-full h-full flex flex-col p-2 md:px-0 md:py-2 justify-between">
-        <div className="flex flex-col gap-0 lg:gap-1">
-          <h5 className="text-sm lg:text-base font-bold whitespace-nowrap">
-            {resultName}
-          </h5>
-          <p className="light-p">{product.generation}</p>
+        <div className="flex justify-between items-end">
+          <div className="flex flex-col gap-1 lg:gap-2">
+            <h5 className="text-sm lg:text-base font-bold whitespace-nowrap">
+              {originalName}
+            </h5>
+            <p className="light-p">{product.generation}</p>
 
-          <div className="w-full flex justify-between items-center">
             <div className="flex gap-3 items-center">
               <p className="light-p">{product.price.toLocaleString()}원</p>
               {product.userProductId && (
@@ -54,8 +54,10 @@ export default function SearchCard({ userId, product }: SearchCardProps) {
                 </span>
               )}
             </div>
-            <WishButton product={product} />
+
+            <p className="text-[10px] text-light">리뷰 및 평점</p>
           </div>
+          <WishButton product={product} />
         </div>
       </div>
     </div>

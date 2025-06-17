@@ -93,7 +93,14 @@ export const useDeleteUserProductMutation = (userId: number | null) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => deleteUserProduct(id),
+    mutationFn: ({
+      id,
+      options,
+    }: {
+      id: number;
+      options?: { force: boolean };
+    }) => deleteUserProduct(id, options),
+    
     onSuccess: () => {
       if (userId !== null) {
         queryClient.invalidateQueries({

@@ -29,6 +29,7 @@ import {
 import { useUserStore } from "@/stores/useUserStore";
 import { initialUserProductForm } from "../UserProduct/UserProduct";
 import { useUserProductModalPage } from "@/hooks/useUserProductModalPage";
+import CloseButton from "../designs/CloseButton";
 
 interface SelectCompProps {
   isSelectWindowOpened: boolean;
@@ -99,22 +100,21 @@ export default function SelectComp({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    initializePageNumber();
 
     // 수정 로직
     if (editMode) {
-      setTimeout(() => {
-        editUserProductMutationFn(
-          { userProduct: formData, userProductId: userProductIdToUpdate },
-          {
-            onSuccess: () => {
-              setIsSelectWindowOpened(false);
-            },
-            onError: () => {
-              console.error("유저 보유 목록 수정 실패");
-            },
-          }
-        );
-      }, 2000);
+      editUserProductMutationFn(
+        { userProduct: formData, userProductId: userProductIdToUpdate },
+        {
+          onSuccess: () => {
+            setIsSelectWindowOpened(false);
+          },
+          onError: () => {
+            console.error("유저 보유 목록 수정 실패");
+          },
+        }
+      );
       return;
     }
 
@@ -240,14 +240,7 @@ export default function SelectComp({
       {isSelectWindowOpened ? (
         <div className="overlay flex justify-center items-center">
           <div className="overflow-hidden w-[300px] h-[500px] md:w-[800px] md:h-[600px] xl:w-[1200px] xl:h-[800px] p-5 pt-10 md:p-12 md:pt-18 xl:p-16 bg-white relative">
-            <button // 창 닫기 버튼
-              type="button"
-              onClick={handleCloseSelectWindow}
-              className="w-7 md:w-12 aspect-square text-xl md:text-4xl flex items-center justify-center absolute top-0 right-0 bg-light text-white hover:bg-mid"
-            >
-              <IoCloseOutline />
-            </button>
-
+            <CloseButton onClick={handleCloseSelectWindow} />
             <form
               onSubmit={handleSubmit}
               className="w-full h-full flex flex-col gap-5"
@@ -266,7 +259,7 @@ export default function SelectComp({
                 {/* 검색바 */}
                 {currentPageNumber === 0 && (
                   <span className="hidden xl:flex w-[260px] h-[40px] md:w-full xl:w-[500px] ml-0 xl:ml-16 items-center justify-center gap-5">
-                    {/* <SearchBar /> */}
+                    검색바
                   </span>
                 )}
 
@@ -287,7 +280,7 @@ export default function SelectComp({
 
               {/* 검색바 */}
               {currentPageNumber === 0 && (
-                <span className="block xl:hidden">{/* <SearchBar /> */}</span>
+                <span className="block xl:hidden">검색바</span>
               )}
 
               {currentPageNumber === 0 && ( // 카테고리 선택바 및 검색바
@@ -317,7 +310,9 @@ export default function SelectComp({
 
               {currentPageNumber === 2 && ( // 구매 시기
                 <SelectPurchasedDate
-                  pickedDate={formData.purchasedAt ? new Date(formData.purchasedAt) : null}
+                  pickedDate={
+                    formData.purchasedAt ? new Date(formData.purchasedAt) : null
+                  }
                   onChangePurchasedDate={handlePurchasedDateChange}
                 />
               )}
