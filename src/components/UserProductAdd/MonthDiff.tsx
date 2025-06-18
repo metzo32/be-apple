@@ -42,7 +42,7 @@ export default function MonthDiff({ purchasedAt, category }: MonthDiffProps) {
         </p>
         {monthDiff >= 6 ? (
           <ButtonBasic
-            text="최신 제품 알아보기"
+            text="최신 제품 보기"
             onClick={handleCheckNewProduct}
           />
         ) : null}
