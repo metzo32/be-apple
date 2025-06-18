@@ -4,7 +4,6 @@ import { use } from "react";
 import { useUserStore } from "@/stores/useUserStore";
 import { useProductLoadQuery } from "@/hooks/useProductQuery";
 import { useWishLoadQuery } from "@/hooks/useWishQuery";
-import { useRouterQuery } from "@/hooks/useRouterQuery";
 import {
   ProductCategoryEnum,
   ProductQueryString,

@@ -25,6 +25,8 @@ export default function UserWishCard({
     onDelete();
   };
 
+  console.log("위시리스트ㅡㅡ", wishList)
+
   return (
     <div className="flex flex-col mt-5">
       <Link

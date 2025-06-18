@@ -1,6 +1,9 @@
+"use client";
+
 import { useState } from "react";
 import { ProductQueryString } from "@/types/productCategory";
 import { RiArrowDownSFill } from "react-icons/ri";
+import { useSearchParams } from "next/navigation";
 
 interface SortButtonProps {
   onChangeSortBy: (sortBy: ProductQueryString["sortBy"]) => void;
@@ -11,12 +14,12 @@ interface SortButtonProps {
 export default function SortButton({
   onChangeSortBy,
   onChangeOrder,
-  order,
 }: SortButtonProps) {
+  const searchParams = useSearchParams();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedSortOption, setSelectedSortOption] = useState<
-    ProductQueryString["sortBy"] | null
-  >(null);
+
+  const currentSortBy = searchParams.get("sortBy") as ProductQueryString["sortBy"];
+  const currentOrder = searchParams.get("order") as ProductQueryString["order"];
 
   const sortOptions: {
     label: string;
@@ -35,7 +38,6 @@ export default function SortButton({
     option: ProductQueryString["sortBy"],
     order: ProductQueryString["order"]
   ) => {
-    setSelectedSortOption(option);
     onChangeSortBy(option);
     onChangeOrder(order);
     setIsDropdownOpen(false);
@@ -43,14 +45,14 @@ export default function SortButton({
 
   const selectedLabel =
     sortOptions.find(
-      (option) => option.value === selectedSortOption && option.order === order
+      (option) => option.value === currentSortBy && option.order === currentOrder
     )?.label || sortOptions[0].label;
 
   return (
-    <div className="w-full flex justify-end relative h-[105px] md:h-[110px]">
+    <div className="w-full flex justify-end relative h-[65px] md:h-[110px]">
       <div
         onClick={() => setIsDropdownOpen((prev) => !prev)}
-        className="absolute top-0 right-0 z-10 w-[100px] md:w-[120px] my-10 border border-lineLight bg-white flex flex-col items-start"
+        className="absolute top-0 right-0 z-10 w-[80px] md:w-[120px] my-5 md:my-10 border border-lineLight bg-white flex flex-col items-start"
       >
         <button className="btn w-full flex items-center justify-between px-2 py-1 md:px-3 md:py-2">
           <span>{selectedLabel}</span>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { GetUserProductResponse } from "@/types/userProduct";
 import MonthDiff from "./MonthDiff";
 import useModal from "@/hooks/useModal";
@@ -53,6 +54,8 @@ export default function UserProductCard({
 
   const { myOption, displaySize } = userProduct.product;
 
+  console.log("유저프로덕트", userProduct)
+
   return (
     <>
       <Link
@@ -60,7 +63,14 @@ export default function UserProductCard({
         className="user-product-card"
       >
         {/* TODO 이미지로 대체 */}
-        <div className="w-16 h-16 bg-gray-300" />
+        <div className="w-16 h-16 relative">
+          {/* <Image
+            src={}
+            alt={product.name}
+            className="object-cover"
+            fill
+          /> */}
+        </div>
 
         <div className="flex flex-col items-start gap-1 col-span-2">
           <h3
