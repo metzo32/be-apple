@@ -3,7 +3,7 @@ import {
   ProductCategoryEnum,
   ProductQueryString,
 } from "@/types/productCategory";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouterQuery } from "./useRouterQuery";
 import { isEqual } from "lodash";
 import { removeEmptyFields } from "@/module/\bremoveEmptyFields";
@@ -32,30 +32,26 @@ const validateRange = (min: number, max: number): boolean => {
   return true;
 };
 
+// 검색
 export const useSearchMutation = (category: ProductCategoryEnum) => {
   const { push } = useRouterQuery();
   const initialForm: ProductQueryString = { category };
-  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (searchForm: ProductQueryString) => {
-      if (searchForm.name && searchForm.name.length < 1) return;
-
       if (searchForm.minPrice != null && searchForm.maxPrice != null) {
         const isValid = validateRange(searchForm.minPrice, searchForm.maxPrice);
         if (!isValid) return;
       }
 
-      if (isEqual(initialForm, searchForm)) return;
+      if (isEqual(initialForm, searchForm)) return; // 직전 검색 내역과 같다면 리턴
 
-      const filtered = removeEmptyFields(searchForm);
+      const filtered = removeEmptyFields(searchForm); // 입력되지 않은 항목은 쿼리스트링으로 전달하지 않음
       push(`/${category}`, filtered);
     },
+
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["loadProducts"],
-      });
-    
+      return true;
     },
     onError: (error) => {
       console.error("검색 필터링에 실패했습니다.", error);

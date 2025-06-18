@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { ProductQueryString } from "@/types/productCategory";
-import { ButtonBasic } from "./designs/ButtonBasic";
 import { RiArrowDownSFill } from "react-icons/ri";
-import CloseButton from "./designs/CloseButton";
 
 interface SortButtonProps {
   onChangeSortBy: (sortBy: ProductQueryString["sortBy"]) => void;

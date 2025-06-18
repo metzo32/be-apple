@@ -18,7 +18,7 @@ export default function ProductSearchBar({
   const searchParams = useSearchParams();
   const searchMutationFn = useSearchMutation(category);
 
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  // 입력 상태, 제출용
   const [searchForm, setSearchForm] = useState<ProductQueryString>({
     category,
     name: searchParams.get("name") || "",
@@ -97,15 +97,14 @@ export default function ProductSearchBar({
 
   const handleOrderChange = (order: ProductQueryString["order"]) => {
     setSearchForm((prev) => {
-      const updated = { ...prev, order };
-      searchMutationFn.mutate(updated); // 즉시 검색 실행
-      return updated;
+      const updatedOrder = { ...prev, order };
+      searchMutationFn.mutate(updatedOrder); // 즉시 검색 실행
+      return updatedOrder;
     });
   };
 
   return (
     <>
-      {!isSearchOpen && (
         <div className="px-5 min-w-[320px] w-full flex flex-col items-center relative">
           <div className="px-0 md:px-10 flex-1 grid grid-cols-3 grid-rows-2 gap-2 md:gap-5 ">
             <span className="searchbar-span col-span-3">
@@ -167,17 +166,12 @@ export default function ProductSearchBar({
             </span>
           </div>
 
-          {/* <div className="flex flex-col items-center ml-3 md:ml-5">
-        <ButtonBasic text="초기화" />
-      </div> */}
-
           <SortButton
             onChangeSortBy={handleSortByChange}
             onChangeOrder={handleOrderChange}
             order={searchForm.order}
           />
         </div>
-      )}
     </>
   );
 }

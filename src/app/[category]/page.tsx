@@ -5,12 +5,15 @@ import { useUserStore } from "@/stores/useUserStore";
 import { useProductLoadQuery } from "@/hooks/useProductQuery";
 import { useWishLoadQuery } from "@/hooks/useWishQuery";
 import { useRouterQuery } from "@/hooks/useRouterQuery";
-import { ProductCategoryEnum } from "@/types/productCategory";
+import {
+  ProductCategoryEnum,
+  ProductQueryString,
+} from "@/types/productCategory";
 import type { GetProductResponse } from "@/types/product";
+import { notFound, useSearchParams } from "next/navigation";
 import SearchCard from "@/components/Search/SearchCard";
 import LoadingScreen from "@/components/LoadingScreen";
 import ProductSearchBar from "@/components/ProductSearchBar";
-import { notFound } from "next/navigation";
 
 export default function SearchPage({
   params,
@@ -20,15 +23,30 @@ export default function SearchPage({
   const { user } = useUserStore();
   const { category } = use(params);
   const typedCategory = category as ProductCategoryEnum;
-  const { query } = useRouterQuery();
 
-  const userId: number | null = user?.id ?? null;
+  const searchParams = useSearchParams();
+
+  // 검색할 때마다 queryObject을 바꾸고, useProductLoadQuery의 두번째 인자로 전달 -> 새로운 queryKey 생성
+  const queryObject: Omit<ProductQueryString, "category"> = {
+    name: searchParams.get("name") || "",
+    tag: searchParams.get("tag") || "",
+    minPrice: searchParams.get("minPrice")
+      ? Number(searchParams.get("minPrice"))
+      : undefined,
+    maxPrice: searchParams.get("maxPrice")
+      ? Number(searchParams.get("maxPrice"))
+      : undefined,
+    sortBy: searchParams.get("sortBy") as ProductQueryString["sortBy"],
+    order: searchParams.get("order") as ProductQueryString["order"],
+  };
 
   const {
     data: productsList,
     isLoading: productsLoading,
     error: productsError,
-  } = useProductLoadQuery(typedCategory, query);
+  } = useProductLoadQuery(typedCategory, queryObject);
+
+  const userId: number | null = user?.id ?? null;
 
   const {
     data: wishList,
@@ -39,25 +57,27 @@ export default function SearchPage({
   if (productsLoading || wishLoading) return <LoadingScreen />;
   if (productsError || !productsList || wishError) return notFound();
 
-
   // 중요!!
-  const wishUpdatedProductsList: GetProductResponse[] = productsList.map((product) => {
-    const matchedWish = wishList?.find((wish) => wish.productId === product.id);
-    return {
-      ...product,
-      wishId: matchedWish?.id ?? null, // 기존 wishId가 있다면 유지
-    };
-  });
-
-  console.log("목록", productsList)
-
+  const wishUpdatedProductsList: GetProductResponse[] = productsList.map(
+    (product) => {
+      const matchedWish = wishList?.find(
+        (wish) => wish.productId === product.id
+      );
+      return {
+        ...product,
+        wishId: matchedWish?.id ?? null, // 기존 wishId가 있다면 유지
+      };
+    }
+  );
 
   return (
     <div className="min-w-[320px] w-[100vw] md:w-full flex flex-col items-center pt-5 pb-18 md:pt-18 md:pb-64 -mx-5 md:mx-0">
       <ProductSearchBar category={typedCategory} />
 
       {wishUpdatedProductsList.length === 0 ? (
-        <p className="pt-[80px] md:pt-[145px] text-sm md:text-base">결과가 없습니다.</p>
+        <p className="pt-[80px] md:pt-[145px] text-sm md:text-base">
+          결과가 없습니다.
+        </p>
       ) : (
         <div className="w-full grid place-items-center grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-15">
           {wishUpdatedProductsList.map((product) => (
