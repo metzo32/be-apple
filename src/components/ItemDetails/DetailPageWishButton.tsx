@@ -2,6 +2,8 @@
 
 import { useProductDetailQuery } from "@/hooks/useProductQuery";
 import WishButton from "../AddWish/WishButton";
+import { useWishLoadQuery } from "@/hooks/useWishQuery";
+import { useUserStore } from "@/stores/useUserStore";
 
 interface DetailPageWishButtonProps {
   productId: number;
@@ -10,14 +12,21 @@ interface DetailPageWishButtonProps {
 export default function DetailPageWishButton({
   productId,
 }: DetailPageWishButtonProps) {
+  const { user } = useUserStore();
   const { data: ProductDetailData } = useProductDetailQuery(productId);
+  const { data: wishList } = useWishLoadQuery(user?.id ?? null);
 
-  console.log("다시 불러온 디테일", ProductDetailData)
+  console.log("각 카드의 wishId", ProductDetailData?.wishId);
 
   // 디테일 정보 못가져오면 위시 버튼 띄우지 않음
-  if (!ProductDetailData) {
-    return null;
-  }
+  if (!ProductDetailData || !wishList) return null;
 
-  return <WishButton product={ProductDetailData} />;
+  const matchedWish = wishList.find((wish) => wish.productId === ProductDetailData.id);
+  const productWithWish = {
+    ...ProductDetailData,
+    wishId: matchedWish?.id ?? null,
+    isInWish: matchedWish?.id ? true : false,
+  };
+
+  return <WishButton product={productWithWish} />;
 }
