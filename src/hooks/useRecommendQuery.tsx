@@ -6,13 +6,15 @@ import {
   postRecommend03,
   postRecommend04,
   postRecommend05,
+  postRecommendComplete,
 } from "@/components/fetch/fetchRecommend";
 import { ProductCategoryEnum } from "@/types/productCategory";
 import { GetProductRecommendationResDto } from "@/types/recommend";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { isNil, isNumber } from "lodash";
+import { useRouter } from "next/router";
 
-// 추천 상세 로드
+// ✅ 추천 상세 로드
 export const useGetRecommendDetail = (recommendId: number | null) => {
   return useQuery<GetProductRecommendationResDto>({
     queryKey: ["recommendList", recommendId],
@@ -29,7 +31,7 @@ export const useGetRecommendDetail = (recommendId: number | null) => {
   });
 };
 
-// 추천 id 최초 생성
+// 추천 ID 생성
 export const useRecommendCreateQuery = (userId: number | null) => {
   return useQuery({
     queryKey: ["createRecommend", userId],
@@ -40,7 +42,6 @@ export const useRecommendCreateQuery = (userId: number | null) => {
       const productRecommendationId = await createNewRecommend();
       return productRecommendationId;
     },
-
     enabled: isNumber(userId),
   });
 };
@@ -55,19 +56,17 @@ export const useRecommendStep01 = () => {
     }: {
       productRecommendationId: number;
       productCategory: ProductCategoryEnum;
-    }) => {
-      return postRecommend01(productRecommendationId, {
+    }) =>
+      postRecommend01(productRecommendationId, {
         step: "STEP_1",
         productCategory,
-      });
-    },
-    onSuccess: async (data) => {
-      console.log("1단계 생성 성공", data);
-
+      }),
+    onSuccess: (data) => {
+      console.log("1단계 성공:", data);
       queryClient.setQueryData(["recommendStep01Tags"], data.tags);
     },
-    onError: (error) => {
-      console.error("1단계 추천 생성에 실패했습니다.", error);
+    onError: (err) => {
+      console.error("1단계 실패", err);
     },
   });
 };
@@ -82,16 +81,18 @@ export const useRecommendStep02 = () => {
     }: {
       productRecommendationId: number;
       tags: string[];
-    }) => {
-      return postRecommend02(productRecommendationId, { step: "STEP_2", tags });
-    },
-    onSuccess: async (data) => {
-      console.log("2단계 생성 성공", data);
+    }) =>
+      postRecommend02(productRecommendationId, {
+        step: "STEP_2",
+        tags,
+      }),
+    onSuccess: (data) => {
+      console.log("2단계 성공:", data);
       queryClient.setQueryData(["recommendStep02MinPrice"], data.minPrice);
       queryClient.setQueryData(["recommendStep02MaxPrice"], data.maxPrice);
     },
-    onError: (error) => {
-      console.error("2단계 추천 생성에 실패했습니다.", error);
+    onError: (err) => {
+      console.error("2단계 실패", err);
     },
   });
 };
@@ -108,21 +109,21 @@ export const useRecommendStep03 = () => {
       productRecommendationId: number;
       minPrice: number;
       maxPrice: number;
-    }) => {
-      return postRecommend03(productRecommendationId, {
+    }) =>
+      postRecommend03(productRecommendationId, {
         step: "STEP_3",
         minPrice,
         maxPrice,
-      });
-    },
-    onSuccess: async (data) => {
+      }),
+    onSuccess: (data) => {
+      console.log("3단계 성공:", data);
       queryClient.setQueryData(
         ["recommendStep03MinReleasedDate"],
         data.minReleasedDate
       );
     },
-    onError: (error) => {
-      console.error("3단계 추천 생성에 실패했습니다.", error);
+    onError: (err) => {
+      console.error("3단계 실패", err);
     },
   });
 };
@@ -137,42 +138,44 @@ export const useRecommendStep04 = () => {
     }: {
       productRecommendationId: number;
       minReleasedDate: string | null;
-    }) => {
-      return postRecommend04(productRecommendationId, {
+    }) =>
+      postRecommend04(productRecommendationId, {
         step: "STEP_4",
         minReleasedDate,
-      });
-    },
-    onSuccess: async (data) => {
+      }),
+    onSuccess: (data) => {
+      console.log("4단계 성공:", data);
       queryClient.setQueryData(["recommendStep04Specs"], data.specs);
     },
-    onError: (error) => {
-      console.error("4단계 추천 생성에 실패했습니다.", error);
+    onError: (err) => {
+      console.error("4단계 실패", err);
     },
   });
 };
 
 export const useRecommendStep05 = () => {
-  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
+    mutationFn: ({ // 이 객체가 onSuccess의 args
       productRecommendationId,
       specs,
     }: {
       productRecommendationId: number;
       specs: { type: string; value: string }[];
-    }) => {
-      return postRecommend05(productRecommendationId, {
+    }) =>
+      postRecommend05(productRecommendationId, {
         step: "STEP_5",
         specs,
-      });
+      }),
+    onSuccess: async (_, args) => {
+      try {
+        await postRecommendComplete(args.productRecommendationId);
+      } catch (err) {
+        console.error("완료페이지 이동 실패", err);
+      }
     },
-    onSuccess: async (data) => {
-      console.log(data);
-    },
-    onError: (error) => {
-      console.error("5단계 추천 생성에 실패했습니다.", error);
+    onError: (err) => {
+      console.error("5단계 추천 생성 실패", err);
     },
   });
 };

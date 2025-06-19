@@ -11,23 +11,31 @@ export async function createNewRecommend() {
 // 작성 중 이탈 시 완료되지 않은 추천이 있다는 것을 보여주는게 force: "f",
 // 그거 날리고 처음부터 하겠다 force "t"
 
-// 단계별 요청
+// 1단계: 카테고리 선택 → 사용목적 리스트 응답
 export async function postRecommend01(
   productRecommendationId: number,
-  args: { step: "STEP_1"; productCategory: ProductCategoryEnum }
+  args: {
+    step: "STEP_1";
+    productCategory: ProductCategoryEnum;
+  }
 ) {
   const { data } = await patch<{
     productRecommendationId: number;
     nextStep: "STEP_2";
-    tags: string[]; // 관련된 태그들을 미리 보내줍니다 10개
+    tags: string[];
   }>(`/product-recommendation/${productRecommendationId}`, args);
+
   console.log("1단계 데이터", data);
   return data;
 }
 
+// 2단계: 사용 목적 선택 → 최소최대가 응답
 export async function postRecommend02(
   productRecommendationId: number,
-  args: { step: "STEP_2"; tags?: string[] }
+  args: {
+    step: "STEP_2";
+    tags: string[]; 
+  }
 ) {
   const { data } = await patch<{
     productRecommendationId: number;
@@ -35,45 +43,61 @@ export async function postRecommend02(
     minPrice: number;
     maxPrice: number;
   }>(`/product-recommendation/${productRecommendationId}`, args);
+
   console.log("2단계 데이터", data);
   return data;
 }
 
+// 3단계: 최소최대가 선택 → 최소출시일 응답
 export async function postRecommend03(
   productRecommendationId: number,
-  args: { step: "STEP_3"; minPrice?: number; maxPrice?: number }
+  args: {
+    step: "STEP_3";
+    minPrice: number;
+    maxPrice: number;
+  }
 ) {
   const { data } = await patch<{
     productRecommendationId: number;
     nextStep: "STEP_4";
     minReleasedDate: string | null;
   }>(`/product-recommendation/${productRecommendationId}`, args);
+
   console.log("3단계 데이터", data);
   return data;
 }
 
+// 4단계: 최소출시일 선택 - 스펙 리스트 응답
 export async function postRecommend04(
   productRecommendationId: number,
-  args: { step: "STEP_4"; minReleasedDate: string | null}
+  args: {
+    step: "STEP_4";
+    minReleasedDate: string | null;
+  }
 ) {
   const { data } = await patch<{
     productRecommendationId: number;
     nextStep: "STEP_5";
     specs: { type: string; value: string }[];
   }>(`/product-recommendation/${productRecommendationId}`, args);
+
   console.log("4단계 데이터", data);
   return data;
 }
 
-// 사용하지 않음
+// 5단계: 선택된 스펙 전송 - 완료 응답
 export async function postRecommend05(
   productRecommendationId: number,
-  args: { step: "STEP_5"; specs?: { type: string; value: string }[] }
+  args: {
+    step: "STEP_5";
+    specs: { type: string; value: string }[];
+  }
 ) {
   const { data } = await patch<{
     productRecommendationId: number;
     nextStep: null;
   }>(`/product-recommendation/${productRecommendationId}`, args);
+
   console.log("5단계 데이터", data);
   return data;
 }

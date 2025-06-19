@@ -30,7 +30,7 @@ export default function SelectCategory({
   };
 
   return (
-    <div>
+    <>
       <div className="pb-7 flex justify-center">
         <div className="px-5 py-3 flex flex-wrap gap-2 md:gap-15">
           {categories.map((category) => (
@@ -50,13 +50,13 @@ export default function SelectCategory({
         </div>
       </div>
 
-      <div>
+      <div className="overflow-y-auto">
         <RenderProducts
           selectedCategory={selectedCategory}
           productSelectInfo={productSelectInfo}
           setproductSelectInfo={setproductSelectInfo}
         />
       </div>
-    </div>
+    </>
   );
 }

@@ -1,5 +1,6 @@
 import { TextField } from "@mui/material";
 import OptionTitle from "./OptionTitleForm";
+import CustomTextField from "@/components/designs/CustomTextField";
 
 interface SelectPurchasedPriceProps {
   displayedPrice: string;
@@ -12,21 +13,17 @@ export default function SelectPurchasedPrice({
 }: SelectPurchasedPriceProps) {
   return (
     <OptionTitle title="구매한 가격을 작성해주세요.">
-      <TextField
-        label="가격"
-        variant="outlined"
-        sx={{ width: "330px", margin: 0 }}
-        value={displayedPrice}
-        onChange={(event) => onChange(event.target.value)}
-        slotProps={{
-          inputLabel: {
-            sx: {
-              textAlign: "left",
-              width: "100%",
-            },
-          },
-        }}
-      />
+      <div className="w-full max-w-[300px]">
+        <CustomTextField
+          id="userProductRegisterPrice"
+          name="userProductRegisterPrice"
+          label="가격"
+          type="text"
+          value={displayedPrice}
+          handleChange={(event) => onChange(event.target.value)}
+          required={false}
+        />
+      </div>
     </OptionTitle>
   );
 }

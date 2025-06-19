@@ -19,9 +19,9 @@ export default function SelectMemo({
         onChange={handleMemoChange}
         maxLength={maxLength}
         placeholder="작성한 메모는 나에게만 보여요."
-        className="w-full h-[150px] p-5 border-2 border-bglight text-base rounded-lg resize-none"
+        className="w-full h-[150px] p-3 md:p-5 border-2 border-bglight text-sm md:text-base resize-none placeholder:text-[10px] placeholder:md:text-base "
       />
-      <p className="text-sm text-gray-500 text-right mt-1">
+      <p className="text-xs md:text-sm text-mid text-right mt-1">
         {tempMemo.length} / {maxLength}자
       </p>
     </OptionTitle>

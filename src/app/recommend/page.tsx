@@ -11,6 +11,7 @@ import {
   useRecommendStep02,
   useRecommendStep03,
   useRecommendStep04,
+  useRecommendStep05,
 } from "@/hooks/useRecommendQuery";
 import ButtonStrong from "@/components/designs/ButtonStrong";
 import {
@@ -22,7 +23,7 @@ import { postRecommendComplete } from "@/components/fetch/fetchRecommend";
 import { ButtonBasicLarge } from "@/components/designs/ButtonBasic";
 import RecommendBox from "@/components/designs/RecommendBox";
 import PickDate from "@/components/UserProductAdd/PickDate";
-import { formatDate } from "@/module/formatDate";
+import { formatDate, formatStringToDate } from "@/module/formatDate";
 
 export default function RecommendPage() {
   const { user } = useUserStore();
@@ -35,8 +36,7 @@ export default function RecommendPage() {
   const recommendMutationStep02 = useRecommendStep02();
   const recommendMutationStep03 = useRecommendStep03();
   const recommendMutationStep04 = useRecommendStep04();
-
-  const MAX_STEP = 5;
+  const recommendMutationStep05 = useRecommendStep05();
 
   const { data: tags = [] } = useQuery<string[]>({
     queryKey: ["recommendStep01Tags"],
@@ -63,15 +63,19 @@ export default function RecommendPage() {
   });
 
   const { data: specs = [] } = useQuery<{ type: string; value: string }[]>({
-    queryKey: ["recommendStep04specs"],
+    queryKey: ["recommendStep04Specs"],
     queryFn: () => Promise.resolve([]), // queryFn 누락 오류 방지용 기본값
     enabled: false,
   });
 
-  const [userMinPrice, setUserMinPrice] = useState<number | null>(null);
-  const [userMaxPrice, setUserMaxPrice] = useState<number | null>(null);
+  const [userMinPrice, setUserMinPrice] = useState<number | null>(minPrice);
+  const [userMaxPrice, setUserMaxPrice] = useState<number | null>(maxPrice);
   const [selectedMinReleasedDate, setSelectedMinReleasedDate] =
-    useState<Date | null>(null);
+    useState<Date | null>(formatStringToDate(minReleasedDate));
+
+  const [selectedSpecs, setSelectedSpecs] = useState<
+    { type: string; value: string }[]
+  >([]);
 
   // 로그인 여부 체크
   useEffect(() => {
@@ -88,20 +92,6 @@ export default function RecommendPage() {
     router.push("/login");
   };
 
-  const handleNextStep = () => {
-    if (step >= MAX_STEP) {
-      return;
-    }
-    setStep(step + 1);
-  };
-
-  const handePrevStep = () => {
-    if (step <= 1) {
-      return;
-    }
-    setStep(step - 1);
-  };
-
   const userId: number | null = user?.id ?? null;
 
   // 추천 Id 생성 (최초 동작)
@@ -116,7 +106,7 @@ export default function RecommendPage() {
       productRecommendationId,
       productCategory,
     });
-    console.log(productRecommendationId);
+    console.log(productCategory);
     setStep(step + 1);
   };
 
@@ -126,7 +116,7 @@ export default function RecommendPage() {
       productRecommendationId,
       tags,
     });
-    console.log(productRecommendationId);
+    console.log(tags);
     setStep(step + 1);
   };
 
@@ -144,10 +134,6 @@ export default function RecommendPage() {
     setStep(step + 1);
   };
 
-  const handleMinDateChange = (date: Date) => {
-    setSelectedMinReleasedDate(date);
-  };
-
   // 4 -> 5
   const handleStep04 = (
     productRecommendationId: number,
@@ -160,9 +146,17 @@ export default function RecommendPage() {
     setStep(step + 1);
   };
 
-  const handleStep05 = async (productRecommendationId: number) => {
-    await postRecommendComplete(productRecommendationId);
-    router.push(`/recommend/${productRecommendationId}`);
+  const handleStep05 = (productRecommendationId: number) => {
+    recommendMutationStep05.mutate({
+      productRecommendationId,
+      specs: selectedSpecs,
+    });
+
+       router.push(`/recommend/${productRecommendationId}`);
+  };
+
+  const handleMinDateChange = (date: Date) => {
+    setSelectedMinReleasedDate(date);
   };
 
   const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -191,8 +185,10 @@ export default function RecommendPage() {
       ) : (
         <div className="mt-0 md:mt-10 flex flex-col gap-10">
           <div className="w-full md:min-h-[500px] bg-white p-5 md:p-18 my-18">
-            <h1 className="text-lg md:text-2xl">알맞은 제품을 추천해드려요.</h1>
-            <div className="h-[300px] md:h-[400px] flex items-center justify-center">
+            <h1 className="text-lg md:text-xl text-light font-medium mb-10">
+              알맞은 제품을 추천해드려요.
+            </h1>
+            <div className="flex items-center justify-center">
               {step === 1 && (
                 <RecommendBox title="카테고리">
                   <ul className="w-full flex flex-col justify-between md:flex-row">
@@ -235,21 +231,29 @@ export default function RecommendPage() {
               {step === 3 && (
                 <RecommendBox title="가격대">
                   <div className="w-full flex items-start lg:items-center gap-5 flex-col lg:flex-row">
-                    <input
-                      value={userMinPrice ?? ""}
-                      placeholder={"최저가"}
-                      maxLength={7}
-                      onChange={handleMinChange}
-                      className="border border-secondary rounded-sm p-2 lg:p-3"
-                    />
+                    <span className="searchbar-span">
+                      <input
+                        type="text"
+                        name="tag"
+                        maxLength={7}
+                        value={userMinPrice ?? ""}
+                        onChange={handleMinChange}
+                        placeholder={"최저가"}
+                        className="w-full h-full m-0 md:mx-2 md:mb-2 placeholder-gray-400 "
+                      />
+                    </span>
 
-                    <input
-                      value={userMaxPrice ?? ""}
-                      placeholder={"최대가"}
-                      maxLength={7}
-                      onChange={handleMaxChange}
-                      className="border border-secondary rounded-sm p-2 lg:p-3"
-                    />
+                    <span className="searchbar-span">
+                      <input
+                        type="text"
+                        name="tag"
+                        maxLength={7}
+                        value={userMaxPrice ?? ""}
+                        onChange={handleMaxChange}
+                        placeholder={"최고가"}
+                        className="w-full h-full m-0 md:mx-2 md:mb-2 placeholder-gray-400 "
+                      />
+                    </span>
 
                     <ButtonStrong
                       text="다음"
@@ -289,11 +293,41 @@ export default function RecommendPage() {
 
               {step === 5 && (
                 <RecommendBox title="기타 상세 스펙">
-                  {specs?.map((spec, index) => (
+                  {specs?.map((spec, index) => {
+                    const isSelected = selectedSpecs.some(
+                      (s) => s.type === spec.type && s.value === spec.value
+                    );
+
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          setSelectedSpecs((prev) =>
+                            isSelected
+                              ? prev.filter(
+                                  (s) =>
+                                    !(
+                                      s.type === spec.type &&
+                                      s.value === spec.value
+                                    )
+                                )
+                              : [...prev, spec]
+                          );
+                        }}
+                        className={`border px-3 py-1 rounded ${
+                          isSelected ? "bg-primary text-white" : "bg-white"
+                        }`}
+                      >
+                        {spec.type} : {spec.value}
+                      </button>
+                    );
+                  })}
+
+                  {/* {specs?.map((spec, index) => (
                     <p key={index}>
                       {spec.type} : {spec.value}
                     </p>
-                  ))}
+                  ))} */}
 
                   <ButtonStrong
                     text="완료"

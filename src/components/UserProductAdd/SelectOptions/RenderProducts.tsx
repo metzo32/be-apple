@@ -22,7 +22,11 @@ export default function RenderProducts({
   const { data: productsData } = useProductLoadQuery(selectedCategory);
 
   if (!productsData) {
-    return <p>데이터 불러오는 도중 문제가 발생했습니다.</p>;
+    return <p className="text-xs md:text-sm">데이터 불러오는 도중 문제가 발생했습니다.</p>;
+  }
+
+  if (productsData.length === 0) {
+    return <p className="text-xs md:text-sm">해당 카테고리에 등록된 제품이 없습니다.</p>;
   }
 
   // 각 아이템의 detail 불러오기
@@ -48,7 +52,7 @@ export default function RenderProducts({
   return (
     <div className="max-h-[80vh] overflow-y-scroll">
       {/* 카테고리 별 상품 목록 */}
-      <ul className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 overflow-y-scroll">
+      <ul className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
         {productsData.map((product) => (
           <div key={product.id} className="relative">
             <li
@@ -70,9 +74,7 @@ export default function RenderProducts({
                   />
                 </span>
                 <div>
-                  <p className="text-sm font-bold">
-                    {product.name}
-                  </p>
+                  <p className="text-sm font-bold">{product.name}</p>
                   <p className="text-sm text-center">{product.generation}</p>
                 </div>
               </div>

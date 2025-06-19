@@ -1,3 +1,5 @@
+
+  import { useEffect } from "react";
 import {
   UserProductStatus,
   UserProductStatusLabels,
@@ -10,19 +12,25 @@ import OptionTitle from "./OptionTitleForm";
 interface SelectStatusProps {
   selectedStatus: string;
   onStatusChange: (value: UserProductStatus) => void;
-  purchasedDate?: string;
+  soldDate?: string;
+  onSoldDateChange: (date: Date) => void;
 }
 
 export default function SelectStatus({
   onStatusChange,
   selectedStatus,
-  purchasedDate,
+  soldDate,
+  onSoldDateChange,
 }: SelectStatusProps) {
   const currentStatus = Object.values(UserProductStatus);
 
-  const minDate = purchasedDate
-    ? formatStringToDate(purchasedDate)
-    : new Date();
+  const minDate = soldDate ? formatStringToDate(soldDate) : new Date();
+
+
+
+useEffect(() => {
+  console.log("선택된 상태:", selectedStatus, UserProductStatus);
+}, [selectedStatus]);
 
   return (
     <OptionTitle title="이 제품을...">
@@ -45,14 +53,14 @@ export default function SelectStatus({
         ))}
       </ul>
 
-      <div className="w-full flex justify-end">
-        {selectedStatus === "SOLD" && (
-          <div className="absolute bottom-0 right-0 transform translate-y-full">
+      <div className="w-full flex">
+        {selectedStatus === UserProductStatus.SOLD && (
+          // <div className="absolute bottom-0 right-0 transform translate-y-full">
+          <div>
             <h4>판매 시기</h4>
             <PickDate
-              pickedDate={soldDate}
+              pickedDate={soldDate ? formatStringToDate(soldDate) : null}
               changeDate={onSoldDateChange}
-              minDate={minDate}
             />
           </div>
         )}

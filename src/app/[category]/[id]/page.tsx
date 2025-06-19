@@ -82,7 +82,7 @@ export default async function DetailPage({ params }: DetailPageProps) {
           가로 세로 px {product.displayHorizontalPixel} *{" "}
           {product.displayVerticalPixel}
         </p>
-        <p>{product.weight}kg</p>
+        <p>{product.weight}</p>
 
         {isMacProduct(product) && (
           <div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-10">

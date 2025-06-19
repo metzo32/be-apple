@@ -152,7 +152,7 @@ export default function UserProduct({ userId }: UserProductProps) {
           />
         </div>
 
-        <div className="min-h-[100px] md:min-h-[300px]">
+        <div className="min-h-[100px] md:min-h-[200px]">
           {userProducts.length > 0 ? (
             <div className="w-full flex flex-col gap-5">
               {userProducts.map((userProduct, index) => (

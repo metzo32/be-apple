@@ -255,13 +255,6 @@ export default function SelectComp({
                   )}
                 </span>
 
-                {/* 검색바 */}
-                {currentPageNumber === 0 && (
-                  <span className="hidden xl:flex w-[260px] h-[40px] md:w-full xl:w-[500px] ml-0 xl:ml-16 items-center justify-center gap-5">
-                    검색바
-                  </span>
-                )}
-
                 <span>
                   {currentPageNumber !== MAX_PAGE && (
                     <ButtonStrong
@@ -277,12 +270,7 @@ export default function SelectComp({
                 </span>
               </div>
 
-              {/* 검색바 */}
-              {currentPageNumber === 0 && (
-                <span className="block xl:hidden">검색바</span>
-              )}
-
-              {currentPageNumber === 0 && ( // 카테고리 선택바 및 검색바
+              {currentPageNumber === 0 && ( // 카테고리 선택 버튼 목록, 상품 카드
                 <SelectCategory
                   productSelectInfo={{
                     productId: formData.productId!,
@@ -320,7 +308,8 @@ export default function SelectComp({
                 <SelectStatus
                   onStatusChange={handleStatusSelect}
                   selectedStatus={formData.status}
-                  purchasedDate={formData.purchasedAt}
+                  soldDate={formData.soldAt}
+                  onSoldDateChange={handleSoldDateChange}
                 />
               )}
 

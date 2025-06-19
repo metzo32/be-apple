@@ -11,7 +11,7 @@ export default function OptionTitle({
 }: OptionTitleFormProps) {
   return (
     <div className="w-full h-full flex items-center">
-      <div className="w-full flex flex-col gap-10">
+      <div className="w-full flex flex-col gap-5 md:gap-10">
         <h3 className="user-product-h3">{title}</h3>
         {children}
       </div>

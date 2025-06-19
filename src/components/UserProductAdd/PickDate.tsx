@@ -4,8 +4,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 
 interface PickDateProps {
-  pickedDate: Date | null; // 선택된 날짜
-  changeDate: (newValue: Date) => void; // 변경 시 상위 컴포넌트에 알림
+  pickedDate: Date | null;
+  changeDate: (newValue: Date) => void;
   minDate?: Date;
 }
 
@@ -18,14 +18,35 @@ export default function PickDate({
     if (newValue) changeDate(newValue);
   };
 
-  // new Date("April 11, 1976")
   return (
-    <DemoContainer components={["DatePicker"]}>
+    <DemoContainer
+      components={["DatePicker"]}
+      sx={{
+        "& .MuiFormControl-root": {
+          fontSize: {
+            xs: "0.8rem", 
+            md: "0.95rem", 
+          },
+        },
+        "& .MuiInputBase-root": {
+          padding: {
+            xs: "6px 8px", 
+            md: "8px 12px",
+          },
+        },
+      }}
+    >
       <DatePicker
         minDate={minDate}
-        maxDate={new Date()} // 오늘 날짜
+        maxDate={new Date()}
         value={pickedDate}
         onChange={handleChange}
+        slotProps={{
+          textField: {
+            size: "small",
+            fullWidth: true,
+          },
+        }}
       />
     </DemoContainer>
   );

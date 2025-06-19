@@ -246,7 +246,7 @@ select:hover {
   }
 
   .user-product-h3 {
-    @apply text-lg md:text-2xl font-normal text-light;
+    @apply text-base md:text-2xl font-normal text-light;
   }
 
   .custom-round-s {

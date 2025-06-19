@@ -19,7 +19,7 @@ export default function SelectMultiplePurchased({
 
   return (
     <OptionTitle title="이 제품을 재구매한 적 있나요?">
-      <ul className="h-[30px] flex flex-col xl:flex-row gap-3 xl:gap-26 text-sm md:text-base items-center">
+      <ul className="h-[100px] flex flex-col xl:flex-row gap-3 xl:gap-26 text-sm md:text-base ">
         <li
           className={`cursor-pointer select-none flex items-center gap-3 hover:text-mid ${
             !isMultiplePurchased ? "text-green-600" : ""
@@ -54,6 +54,7 @@ export default function SelectMultiplePurchased({
             <input
               type="number"
               min={1}
+              max={9}
               value={value}
               onChange={handleMultiplePurchased}
               onBlur={handleMultiplePurchasedBlur}
