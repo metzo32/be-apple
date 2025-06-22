@@ -17,6 +17,7 @@ export default function SelectCategory({
   productSelectInfo,
   setproductSelectInfo,
 }: SelectCategoryProps) {
+  
   const [selectedCategory, setSelectedCategory] = useState<ProductCategoryEnum>(
     ProductCategoryEnum.MAC
   );

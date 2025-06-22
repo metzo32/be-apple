@@ -32,6 +32,7 @@ export const initialUserProductForm: UserProductFormData = {
 
 export default function UserProduct({ userId }: UserProductProps) {
   const [selectOpen, setSelectOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false)
   const [isOpenSaturationInfo, setIsOpenSaturationInfo] = useState(false);
   const [formData, setFormData] = useState<UserProductFormData>(
     initialUserProductForm
@@ -94,6 +95,7 @@ export default function UserProduct({ userId }: UserProductProps) {
   };
 
   const handleEdit = (userProduct: GetUserProductResponse) => {
+    setIsEditMode(true);
     setUserProductIdToUpdate(userProduct.id);
     setFormData({
       productId: userProduct.product.id,
@@ -180,6 +182,7 @@ export default function UserProduct({ userId }: UserProductProps) {
         userProductIdToUpdate={userProductIdToUpdate}
         formData={formData}
         setFormData={setFormData}
+        isEditMode={isEditMode}
       />
     </>
   );

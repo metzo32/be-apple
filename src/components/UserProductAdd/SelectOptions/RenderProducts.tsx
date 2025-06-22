@@ -19,14 +19,23 @@ export default function RenderProducts({
   setproductSelectInfo,
 }: RenderProductsProps) {
   // 카테고리별 전체 제품 목록 불러오기
+
   const { data: productsData } = useProductLoadQuery(selectedCategory);
 
   if (!productsData) {
-    return <p className="text-xs md:text-sm">데이터 불러오는 도중 문제가 발생했습니다.</p>;
+    return (
+      <p className="text-xs md:text-sm">
+        데이터 불러오는 도중 문제가 발생했습니다.
+      </p>
+    );
   }
 
   if (productsData.length === 0) {
-    return <p className="text-xs md:text-sm">해당 카테고리에 등록된 제품이 없습니다.</p>;
+    return (
+      <p className="text-xs md:text-sm">
+        해당 카테고리에 등록된 제품이 없습니다.
+      </p>
+    );
   }
 
   // 각 아이템의 detail 불러오기
@@ -57,7 +66,9 @@ export default function RenderProducts({
           <div key={product.id} className="relative">
             <li
               value={product.id}
-              onClick={() => handleItemClick(product.id)}
+              onClick={() => {
+                if (!product.userProductId) handleItemClick(product.id);
+              }}
               className={`${
                 productSelectInfo.productId === product.id
                   ? "border-secondaryLight bg-bglight brightness-70"
@@ -70,13 +81,21 @@ export default function RenderProducts({
                     src={product.photos[0]}
                     alt={product.name}
                     fill
-                    className="flex items-center justify-center object-cover"
+                    className={`flex items-center justify-center object-cover ${
+                      product.userProductId && "grayscale-100 opacity-20"
+                    }`}
                   />
                 </span>
                 <div>
                   <p className="text-sm font-bold">{product.name}</p>
                   <p className="text-sm text-center">{product.generation}</p>
                 </div>
+
+                {product.userProductId &&  (
+                  <div className="absolute inset-0 z-10 pointer-events-none flex justify-center items-center">
+                    <p className="mb-12 text-xs md:text-sm">이미 추가된 아이템입니다.</p>
+                  </div>
+                )}
               </div>
             </li>
             <Options

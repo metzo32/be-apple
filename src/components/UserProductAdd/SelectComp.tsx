@@ -18,9 +18,8 @@ import SelectStatus from "./SelectOptions/SelectStatus";
 import SelectCondition from "./SelectOptions/SelectCondition";
 import SelectMultiplePurchased from "./SelectOptions/SelectMultiplePurchased";
 import SelectMemo from "./SelectOptions/SelectMemo";
-import ButtonStrong from "../designs/ButtonStrong";
+import ButtonStrong, { ButtonDisabled } from "../designs/ButtonStrong";
 import { ButtonBasic } from "../designs/ButtonBasic";
-import { Button } from "@mui/material";
 import {
   useAddUserProductMutation,
   useEditUserProductMutation,
@@ -36,6 +35,7 @@ interface SelectCompProps {
   userProductIdToUpdate: number | null;
   formData: UserProductFormData;
   setFormData: Dispatch<SetStateAction<UserProductFormData>>;
+  isEditMode: boolean;
 }
 
 export default function SelectComp({
@@ -44,6 +44,7 @@ export default function SelectComp({
   userProductIdToUpdate,
   formData,
   setFormData,
+  isEditMode,
 }: SelectCompProps) {
   const { user } = useUserStore();
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -60,7 +61,7 @@ export default function SelectComp({
     handlePrevPage,
     handleNextPage,
     initializePageNumber,
-  } = useUserProductModalPage();
+  } = useUserProductModalPage(isEditMode);
 
   // 제품 추가 뮤테이션 함수
   const { mutate: addUserProductMutationFn } =
@@ -84,10 +85,10 @@ export default function SelectComp({
   // 보유 제품 작성 중 이탈 시, 모달 확인 로직
   const handleResetForm = () => {
     setFormData(initialUserProductForm);
-    initializePageNumber();
     setIsLoading(false);
     closeModal();
     setIsSelectWindowOpened(false);
+    initializePageNumber();
   };
 
   // 타입 검증
@@ -97,20 +98,25 @@ export default function SelectComp({
     return !!formData.productId && !!formData.productOptionId;
   };
 
+  const handleSubmitSuccess = () => {
+    setIsLoading(false);
+    setIsSelectWindowOpened(false);
+    initializePageNumber();
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    initializePageNumber();
+    setIsLoading(true);
 
     // 수정 로직
     if (editMode) {
       editUserProductMutationFn(
         { userProduct: formData, userProductId: userProductIdToUpdate },
         {
-          onSuccess: () => {
-            setIsSelectWindowOpened(false);
-          },
+          onSuccess: handleSubmitSuccess,
           onError: () => {
             console.error("유저 보유 목록 수정 실패");
+            setIsLoading(false); // ✅ 에러 시에도 종료
           },
         }
       );
@@ -121,18 +127,18 @@ export default function SelectComp({
     if (isValidDto(formData)) {
       setTimeout(() => {
         addUserProductMutationFn(formData, {
-          onSuccess: () => {
-            setIsSelectWindowOpened(false);
-          },
+          onSuccess: handleSubmitSuccess,
           onError: () => {
             console.error("유저 보유 목록 생성 실패");
+            setIsLoading(false);
           },
         });
-      }, 2000);
+      }, 500);
       return;
     }
 
-    return alert("유효하지 않습니다.");
+    alert("유효하지 않습니다.");
+    setIsLoading(false); // ✅ 검증 실패 시도에도 종료
   };
 
   // 구매가 작성
@@ -246,13 +252,14 @@ export default function SelectComp({
             >
               <div className="w-full h-[40px] flex items-center justify-between">
                 <span className="ml-5 md:m-0">
-                  {currentPageNumber !== 0 && (
-                    <ButtonBasic
-                      type="button"
-                      onClick={() => handlePrevPage(isLoading)}
-                      text="이전"
-                    />
-                  )}
+                  {currentPageNumber !== 0 &&
+                    !(isEditMode && currentPageNumber === 1) && (
+                      <ButtonBasic
+                        type="button"
+                        onClick={() => handlePrevPage(isLoading)}
+                        text="이전"
+                      />
+                    )}
                 </span>
 
                 <span>
@@ -346,21 +353,14 @@ export default function SelectComp({
               <span className="w-full flex items-center justify-center">
                 {currentPageNumber === MAX_PAGE &&
                   (isLoading ? (
-                    <Button
-                      size="medium"
-                      variant="outlined"
-                      disabled={isLoading}
-                      sx={{
-                        width: "60px",
-                      }}
-                    >
-                      로딩 중
-                    </Button>
+                    <ButtonDisabled text="로딩 중..." />
                   ) : (
-                    <ButtonStrong
-                      type="submit"
-                      text={editMode ? "수정 완료" : "등록하기"}
-                    />
+                    <>
+                      <ButtonStrong
+                        type="submit"
+                        text={editMode ? "수정 완료" : "등록하기"}
+                      />
+                    </>
                   ))}
               </span>
             </form>
