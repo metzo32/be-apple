@@ -24,21 +24,19 @@ export default function UserWishCard({
     e.stopPropagation();
     onDelete();
   };
-
-  console.log("위시리스트ㅡㅡ", wishList)
-
+  
   return (
     <div className="flex flex-col mt-5">
       <Link
         href={`/${wishList.product.category}/${wishList.product.id}`}
-        className="w-[130px] md:w-[200px] aspect-square relative bg-lineLight"
+        className="w-[138px] md:w-[200px] aspect-square relative flex items-center justify-center"
       >
-        {/* <Image
+        <Image
           src={wishList.product.photos[0]}
           alt="제품 이미지"
           width={250}
           height={150}
-        /> */}
+        />
         <button
           onClick={handleDelete}
           className="absolute bottom-0 right-0 w-8 md:w-12 aspect-square text-base md:text-3xl p-2"
@@ -46,8 +44,6 @@ export default function UserWishCard({
           <GoHeartFill className="text-primary" />
         </button>
       </Link>
-
-      {/* TODO: 실제 이미지로 교체 */}
 
       <div className="h-[100px] md:h-[120px] py-1 md:py-3 flex flex-col justify-between">
         <div className="flex flex-col gap-1 md:gap-2">

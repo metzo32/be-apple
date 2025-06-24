@@ -9,7 +9,6 @@ import { ButtonBasic } from "@/components/designs/ButtonBasic";
 import ButtonStrong from "@/components/designs/ButtonStrong";
 import LoadingScreen from "@/components/LoadingScreen";
 import { GoogleButton, KakaoButton } from "@/components/SocialLoginButton";
-import { TextField } from "@mui/material";
 import CustomTextField from "@/components/designs/CustomTextField";
 
 export default function LoginPage() {
@@ -19,8 +18,12 @@ export default function LoginPage() {
   const { setUserInfo } = useUserStore();
   const router = useRouter();
 
-  //TODO MUI Backdrop 으로 로그인 로딩 구현
+  const { user } = useUserStore();
 
+  // if (!user) {
+  //   router.push("/user");
+  // }
+  
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
 
@@ -72,10 +75,7 @@ export default function LoginPage() {
     <LoadingScreen />
   ) : (
     <section className="py-18 md:py-32 flex flex-col items-center justify-center">
-      <form
-        className="auth-form"
-        onSubmit={handleSubmit}
-      >
+      <form className="auth-form" onSubmit={handleSubmit}>
         <div className="w-full flex flex-col gap-5">
           <CustomTextField
             id="email"

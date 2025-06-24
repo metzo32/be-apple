@@ -30,8 +30,6 @@ export const useUserProductQuery = (userId: number | null) => {
         fetchReviewMe(),
       ]);
 
-      console.log("유저프로덕트 데이터", userProductData);
-
       return {
         userProducts: userProductData.reverse(),
         userReviews: userReviews?.data || [],

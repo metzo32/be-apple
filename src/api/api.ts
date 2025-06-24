@@ -53,3 +53,12 @@ export const deleteCall = (url: string, data?: any) => {
   const options = _getHeader();
   return axios.delete(url, { ...options, data });
 };
+
+export function put<T = any>(
+  url: string,
+  data: any,
+  config?: AxiosRequestConfig
+): Promise<AxiosResponse<T>> {
+  const options = _getHeader(config); // Authorization 등 포함된 헤더 세팅
+  return axios.put(url, data, options); // PUT 요청
+}

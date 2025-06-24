@@ -37,7 +37,7 @@ export const useWishAddMutation = () => {
       });
     },
     onError: (error: any) => {
-      console.error("위시리스트 추가 실패:", error || error.message);
+      console.log("위시리스트 추가 실패:", error || error.message);
     },
   });
 };
@@ -57,7 +57,7 @@ export const useWishDeleteMutation = () => {
       });
     },
     onError: (error) => {
-      console.error("위시리스트 삭제에 실패했습니다.", error);
+      console.log("위시리스트 삭제에 실패했습니다.", error);
     },
   });
 };

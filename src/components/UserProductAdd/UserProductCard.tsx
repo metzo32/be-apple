@@ -54,25 +54,22 @@ export default function UserProductCard({
 
   const { myOption, displaySize } = userProduct.product;
 
-  console.log("유저프로덕트", userProduct)
-
   return (
     <>
       <Link
         href={`/${userProduct.product.category}/${userProduct.product.id}`}
         className="user-product-card"
       >
-        {/* TODO 이미지로 대체 */}
-        <div className="w-16 h-16 relative bg-lineLight">
-          {/* <Image
-            src={}
-            alt={product.name}
-            className="object-cover"
+        <div className="w-20 aspect-square relative overflow-auto">
+          <Image
+            src={userProduct.product.photos[0]}
+            alt={userProduct.product.name}
+            className="object-contain"
             fill
-          /> */}
+          />
         </div>
 
-        <div className="flex flex-col items-start gap-1 col-span-2">
+        <div className="flex flex-col items-start gap-1 col-span-1">
           <h3
             className={`justify-self-start font-bold ${
               userProduct.status === "SOLD" && "line-through text-light"
@@ -105,7 +102,7 @@ export default function UserProductCard({
           </div>
         </div>
 
-        <span className="justify-self-center">
+        <span className="justify-self-end">
           {userProduct.status !== "SOLD" && (
             <MonthDiff purchasedAt={userProduct.purchasedAt} category="Mac" />
           )}

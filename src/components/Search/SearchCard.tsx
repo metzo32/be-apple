@@ -55,7 +55,7 @@ export default function SearchCard({ userId, product }: SearchCardProps) {
               )}
             </div>
 
-            <p className="text-[10px] text-light">리뷰 및 평점</p>
+            <p className="text-[10px] text-light">{product.reviewCount}개의 리뷰</p>
           </div>
           <WishButton product={product} />
         </div>

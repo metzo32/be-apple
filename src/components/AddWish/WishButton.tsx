@@ -33,8 +33,6 @@ export default function WishButton({ product }: WishButtonProps) {
   const productId = product.id;
   const wishId = product.wishId;
 
-  console.log("디테일페이지의 위시id", wishId)
-
   const handleRoute = () => {
     router.push("/login");
   };

@@ -16,6 +16,9 @@ generation: string;
 // 출시일
 releasedDate: string;
 
+// 리뷰 수 
+reviewCount: number;
+
 // 상품 기본가격
 price: number;
 

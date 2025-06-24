@@ -18,7 +18,9 @@ export default function SortButton({
   const searchParams = useSearchParams();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const currentSortBy = searchParams.get("sortBy") as ProductQueryString["sortBy"];
+  const currentSortBy = searchParams.get(
+    "sortBy"
+  ) as ProductQueryString["sortBy"];
   const currentOrder = searchParams.get("order") as ProductQueryString["order"];
 
   const sortOptions: {
@@ -31,13 +33,18 @@ export default function SortButton({
     { label: "오래된순", value: "releasedDate", order: "asc" },
     { label: "높은가격순", value: "price", order: "desc" },
     { label: "낮은가격순", value: "price", order: "asc" },
-    { label: "리뷰많은순", value: "reviewCount", order: "desc" },
+    { label: "리뷰많은순", value: "reviewCount", order: "asc" },
   ];
 
   const handleSortSelect = (
     option: ProductQueryString["sortBy"],
     order: ProductQueryString["order"]
   ) => {
+    if (option === currentSortBy && order === currentOrder) {
+      setIsDropdownOpen(false);
+      return;
+    }
+
     onChangeSortBy(option);
     onChangeOrder(order);
     setIsDropdownOpen(false);
@@ -45,17 +52,18 @@ export default function SortButton({
 
   const selectedLabel =
     sortOptions.find(
-      (option) => option.value === currentSortBy && option.order === currentOrder
+      (option) =>
+        option.value === currentSortBy && option.order === currentOrder
     )?.label || sortOptions[0].label;
 
   return (
     <div className="w-full flex justify-end relative h-[65px] md:h-[110px]">
       <div
         onClick={() => setIsDropdownOpen((prev) => !prev)}
-        className="absolute top-0 right-0 z-10 w-[80px] md:w-[120px] my-5 md:my-10 border border-lineLight bg-white flex flex-col items-start"
+        className="absolute top-0 right-0 z-5 w-[80px] md:w-[120px] my-5 md:my-10 border border-lineLight bg-white flex flex-col items-start"
       >
         <button className="btn w-full flex items-center justify-between px-2 py-1 md:px-3 md:py-2">
-          <span>{selectedLabel}</span>
+          {selectedLabel}
           <RiArrowDownSFill />
         </button>
 
