@@ -39,7 +39,7 @@ export default function UserWishCard({
         />
         <button
           onClick={handleDelete}
-          className="absolute bottom-0 right-0 w-8 md:w-12 aspect-square text-base md:text-3xl p-2"
+          className="absolute bottom-0 right-0 text-base md:text-2xl p-2"
         >
           <GoHeartFill className="text-primary" />
         </button>

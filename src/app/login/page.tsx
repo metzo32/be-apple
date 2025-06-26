@@ -18,12 +18,6 @@ export default function LoginPage() {
   const { setUserInfo } = useUserStore();
   const router = useRouter();
 
-  const { user } = useUserStore();
-
-  // if (!user) {
-  //   router.push("/user");
-  // }
-  
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
 

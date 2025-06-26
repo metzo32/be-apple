@@ -15,20 +15,14 @@ export interface CreateUserProductReqDto {
 }
 
 // 유저 프로덕트 수정 요청 타입
-export type UpdateUserProductReqDto = Partial<CreateUserProductReqDto>
+export type UpdateUserProductReqDto = Partial<CreateUserProductReqDto>;
 
 export enum UserProductStatus {
-  /**
-   * 사용 중
-   */
+  // 사용 중
   ACTIVE = "ACTIVE",
-  /**
-   * 미사용 중
-   */
+  // 미사용 중
   INACTIVE = "INACTIVE",
-  /**
-   * 판매(처분)
-   */
+  // 판매(처분)
   SOLD = "SOLD",
 }
 
@@ -39,25 +33,15 @@ export const UserProductStatusLabels = {
 };
 
 export enum UserProductCondition {
-  /**
-   * 새것
-   */
+  // 새것
   NEW = "NEW",
-  /**
-   * 좋음
-   */
+  // 좋음
   GOOD = "GOOD",
-  /**
-   * 보통
-   */
+  // 보통
   FAIR = "FAIR",
-  /**
-   * 미흡
-   */
+  // 미흡
   POOR = "POOR",
-  /**
-   * 손상
-   */
+  // 손상
   DAMAGED = "DAMAGED",
 }
 

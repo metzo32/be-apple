@@ -1,5 +1,4 @@
 
-  import { useEffect } from "react";
 import {
   UserProductStatus,
   UserProductStatusLabels,
@@ -26,11 +25,6 @@ export default function SelectStatus({
 
   const minDate = soldDate ? formatStringToDate(soldDate) : new Date();
 
-
-
-useEffect(() => {
-  console.log("선택된 상태:", selectedStatus, UserProductStatus);
-}, [selectedStatus]);
 
   return (
     <OptionTitle title="이 제품을...">

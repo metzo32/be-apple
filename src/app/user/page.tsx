@@ -12,11 +12,15 @@ import ChangePassword from "@/components/ChangePassword";
 import UserAuth from "@/components/UserPage/UserAuth";
 import { ButtonBasic } from "@/components/designs/ButtonBasic";
 import GradeChart from "@/components/UserPage/GradeChart";
+import { useUserTierQuery } from "@/hooks/useTierQuery";
+import { TierEnum, TierEnumLabels } from "@/types/tier";
 
 export default function UserPage() {
   const { user } = useUserStore();
   const [checking, setChecking] = useState(true);
   const [isGradeOpen, setIsGradeOpen] = useState(false);
+
+  const { data: tierData } = useUserTierQuery();
 
   const router = useRouter();
 
@@ -39,6 +43,11 @@ export default function UserPage() {
     setIsGradeOpen(false);
   };
 
+   const currentStatus = Object.values(TierEnum); 
+
+  console.log(currentStatus);
+  
+
   return (
     <div className="relative flex flex-col md:flex-row md:gap-10 pt-5 md:py-12">
       <section
@@ -55,12 +64,17 @@ export default function UserPage() {
       >
         <h1 className="text-2xl md:text-3xl text-white md:text-text">
           {user?.name}
-          <span className="font-medium text-lg md:text-xl text-light ml-1">님</span>
+          <span className="font-medium text-lg md:text-xl text-light ml-1">
+            님
+          </span>
         </h1>
 
         <div className="hidden md:flex flex-col gap-3 items-start">
           <h2 className="md:text-lg font-bold">나의 등급</h2>
-          <ButtonBasic text="모시깽" />
+          <ButtonBasic
+            text={tierData ? TierEnumLabels[currentStatus[0]] : "등급 없음"}
+          />
+
           <span className="relative">
             <ButtonBasic
               text="등급표 확인하기"
