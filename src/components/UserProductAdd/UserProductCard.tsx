@@ -48,7 +48,8 @@ export default function UserProductCard({
       openModal();
     } else {
       // 리뷰가 없는 경우 즉시 삭제
-      deleteUserProductMutationFn({ id: userProduct.id });
+      openModal();
+      // deleteUserProductMutationFn({ id: userProduct.id });
     }
   };
 
@@ -140,8 +141,12 @@ export default function UserProductCard({
           closeModal();
         }}
         onCancel={() => closeModal()}
-        title="정말 삭제할까요?"
-        content="이 제품에는 리뷰가 작성되어 있어요. 그래도 삭제하시겠어요?"
+        title="잠깐!"
+        content={
+          userProduct.reviews.some((review) => review.userId === userId)
+            ? "이 제품에는 리뷰가 작성되어 있어요. 그래도 삭제하시겠어요?"
+            : "정말 삭제할까요?"
+        }
         confirmBtnText="삭제하기"
       />
     </>

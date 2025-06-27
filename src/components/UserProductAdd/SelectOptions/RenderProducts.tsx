@@ -56,8 +56,6 @@ export default function RenderProducts({
     });
   };
 
-  // TODO 로딩처리 추가할것
-  // TODO 이미 로드된 정보 캐싱
   return (
     <div className="max-h-[80vh] overflow-y-scroll">
       {/* 카테고리 별 상품 목록 */}

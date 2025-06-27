@@ -13,9 +13,6 @@ export default function HomePage() {
             필요한 제품.
           </h1>
         </div>
-        <h2 className="text-base md:text-xl font-bold">
-          다음 레벨까지 n점 남았습니다.
-        </h2>
         <div className="xl:w-1/2">
           <GoRecommendButton />
         </div>

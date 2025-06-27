@@ -13,7 +13,6 @@ import UserAuth from "@/components/UserPage/UserAuth";
 import { ButtonBasic } from "@/components/designs/ButtonBasic";
 import GradeChart from "@/components/UserPage/GradeChart";
 import { useUserTierQuery } from "@/hooks/useTierQuery";
-import { TierEnum, TierEnumLabels } from "@/types/tier";
 
 export default function UserPage() {
   const { user } = useUserStore();
@@ -43,10 +42,8 @@ export default function UserPage() {
     setIsGradeOpen(false);
   };
 
-   const currentStatus = Object.values(TierEnum); 
+  console.log("총합 포인트", tierData?.totalPoint)
 
-  console.log(currentStatus);
-  
 
   return (
     <div className="relative flex flex-col md:flex-row md:gap-10 pt-5 md:py-12">
@@ -71,9 +68,12 @@ export default function UserPage() {
 
         <div className="hidden md:flex flex-col gap-3 items-start">
           <h2 className="md:text-lg font-bold">나의 등급</h2>
-          <ButtonBasic
-            text={tierData ? TierEnumLabels[currentStatus[0]] : "등급 없음"}
-          />
+          <p className="text-primary">티어 {tierData?.tier ?? "등급 없음"}</p>
+          <p className="text-primary">총합 포인트 {tierData?.totalPoint ?? 0}</p>
+          <p className="text-primary">기기 수 {tierData?.productCountPoint ?? 0}</p>
+          <p className="text-primary">돈 {tierData?.productPricePoint ?? 0}</p>
+          <p className="text-primary">오래 {tierData?.purchasedYearPoint ?? 0}</p>
+          <p className="text-primary">포화도 {tierData?.categoryPoint ?? 0}</p>
 
           <span className="relative">
             <ButtonBasic
@@ -92,7 +92,7 @@ export default function UserPage() {
       </section>
 
       <div className="w-full">
-        <UserInfo userId={userId} />
+        <UserInfo userId={userId} tierData={tierData}/>
 
         <UserProduct userId={userId} />
 

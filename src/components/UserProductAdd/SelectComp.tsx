@@ -116,7 +116,7 @@ export default function SelectComp({
           onSuccess: handleSubmitSuccess,
           onError: () => {
             console.error("유저 보유 목록 수정 실패");
-            setIsLoading(false); // ✅ 에러 시에도 종료
+            setIsLoading(false); 
           },
         }
       );
@@ -138,7 +138,7 @@ export default function SelectComp({
     }
 
     alert("유효하지 않습니다.");
-    setIsLoading(false); // ✅ 검증 실패 시도에도 종료
+    setIsLoading(false); 
   };
 
   // 구매가 작성

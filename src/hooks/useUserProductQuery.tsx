@@ -47,9 +47,13 @@ export const useAddUserProductMutation = (userId: number | null) => {
       return addUserProduct(userProduct);
     },
     onSuccess: () => {
-      if (userId !== null) {
+      if (!isNil(userId)) {
         queryClient.invalidateQueries({
           queryKey: ["loadUserProduct", userId],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["myTier"],
           refetchType: "all",
         });
       }
@@ -74,9 +78,14 @@ export const useEditUserProductMutation = (userId: number | null) => {
       return editUserProduct(userProduct, userProductId);
     },
     onSuccess: () => {
-      if (userId !== null) {
+      if (!isNil(userId)) {
         queryClient.invalidateQueries({
           queryKey: ["loadUserProduct", userId],
+          refetchType: "all",
+        });
+
+        queryClient.invalidateQueries({
+          queryKey: ["myTier"],
           refetchType: "all",
         });
       }
@@ -98,11 +107,16 @@ export const useDeleteUserProductMutation = (userId: number | null) => {
       id: number;
       options?: { force: boolean };
     }) => deleteUserProduct(id, options),
-    
+
     onSuccess: () => {
-      if (userId !== null) {
+      if (!isNil(userId)) {
         queryClient.invalidateQueries({
           queryKey: ["loadUserProduct", userId],
+        });
+
+        queryClient.invalidateQueries({
+          queryKey: ["myTier"],
+          refetchType: "all",
         });
       }
     },
