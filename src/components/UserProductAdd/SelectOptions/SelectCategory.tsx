@@ -33,7 +33,7 @@ export default function SelectCategory({
   return (
     <>
       <div className="pb-7 flex justify-center">
-        <div className="px-5 py-3 flex flex-wrap gap-2 md:gap-15">
+        <div className="p-0 md:px-5 md:py-3 flex flex-wrap gap-2 md:gap-15">
           {categories.map((category) => (
             <span key={category} className="px-3 pb-1 pt-0 md:px-5 md:pt-1 md:pb-2 bg-bglight rounded-lg">
               <button

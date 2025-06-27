@@ -65,7 +65,7 @@ export default function UserWishCard({
                   <IoDocumentOutline />
                 </button>
                 {isOpen && (
-                  <span className="select-none absolute top-full transform translate-y-0 md:translate-y-4 -translate-x-0  md:translate-x-0 z-30 w-[200px] xl:w-[300px] h-[120px] bg-white p-5 border-2 border-secondaryLight shadow-strong">
+                  <span className="wishcard-memo">
                     <p className="text-xs md:text-sm text-mid">
                       {wishList.memo}
                     </p>

@@ -18,7 +18,7 @@ export default function SelectCondition({
 
   return (
     <OptionTitle title="제품 상태는...">
-      <ul className="flex flex-col xl:flex-row gap-3 xl:gap-26">
+      <ul className="select-ul">
         {conditions.map((condition) => (
           <li
             key={condition}

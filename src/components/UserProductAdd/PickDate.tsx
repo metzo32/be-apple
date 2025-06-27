@@ -24,14 +24,20 @@ export default function PickDate({
       sx={{
         "& .MuiFormControl-root": {
           fontSize: {
-            xs: "0.8rem", 
-            md: "0.95rem", 
+            xs: "12px",
+            md: "16px",
           },
         },
         "& .MuiInputBase-root": {
           padding: {
-            xs: "6px 8px", 
+            xs: "6px 8px",
             md: "8px 12px",
+          },
+        },
+        "& .MuiStack-root": {
+          fontSize: {
+            xs: "12px",
+            md: "16px",
           },
         },
       }}

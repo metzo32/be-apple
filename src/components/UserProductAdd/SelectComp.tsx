@@ -18,8 +18,10 @@ import SelectStatus from "./SelectOptions/SelectStatus";
 import SelectCondition from "./SelectOptions/SelectCondition";
 import SelectMultiplePurchased from "./SelectOptions/SelectMultiplePurchased";
 import SelectMemo from "./SelectOptions/SelectMemo";
-import ButtonStrong, { ButtonDisabled } from "../designs/ButtonStrong";
-import { ButtonBasic } from "../designs/ButtonBasic";
+import ButtonStrong, {
+  ButtonDisabled,
+  ButtonMedium,
+} from "../designs/ButtonStrong";
 import {
   useAddUserProductMutation,
   useEditUserProductMutation,
@@ -54,6 +56,9 @@ export default function SelectComp({
   const userId = user?.id ?? null;
 
   const [isLoading, setIsLoading] = useState(false);
+  const [displayedPrice, setDisplayedPrice] = useState("");
+  const [displayedRepurchasedCount, setDisplayedRepurchasedCount] =
+    useState<string>(formData.repurchasedCount.toLocaleString());
 
   const {
     MAX_PAGE,
@@ -82,7 +87,7 @@ export default function SelectComp({
     }
   };
 
-  // 보유 제품 작성 중 이탈 시, 모달 확인 로직
+  // 보유 제품 작성 중 이탈 시, 모달 팝업 후 컨펌 로직
   const handleResetForm = () => {
     setFormData(initialUserProductForm);
     setIsLoading(false);
@@ -98,47 +103,41 @@ export default function SelectComp({
     return !!formData.productId && !!formData.productOptionId;
   };
 
-  const handleSubmitSuccess = () => {
-    setIsLoading(false);
-    setIsSelectWindowOpened(false);
-    initializePageNumber();
-  };
-
+  // 최종 제출
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // 수정 로직
+    const onSuccess = () => {
+      setIsLoading(false);
+      setIsSelectWindowOpened(false);
+      initializePageNumber();
+    };
+
+    const onError = () => {
+      console.log(
+        editMode ? "유저 보유 목록 수정 실패" : "유저 보유 목록 생성 실패"
+      );
+      setIsLoading(false);
+    };
+
     if (editMode) {
       editUserProductMutationFn(
         { userProduct: formData, userProductId: userProductIdToUpdate },
-        {
-          onSuccess: handleSubmitSuccess,
-          onError: () => {
-            console.error("유저 보유 목록 수정 실패");
-            setIsLoading(false); 
-          },
-        }
+        { onSuccess, onError }
       );
       return;
     }
 
-    // 생성 로직
     if (isValidDto(formData)) {
       setTimeout(() => {
-        addUserProductMutationFn(formData, {
-          onSuccess: handleSubmitSuccess,
-          onError: () => {
-            console.error("유저 보유 목록 생성 실패");
-            setIsLoading(false);
-          },
-        });
+        addUserProductMutationFn(formData, { onSuccess, onError });
       }, 500);
       return;
     }
 
     alert("유효하지 않습니다.");
-    setIsLoading(false); 
+    setIsLoading(false);
   };
 
   // 구매가 작성
@@ -146,7 +145,13 @@ export default function SelectComp({
     if (value.length > 9) {
       return;
     }
-    const numberPrice = value.replace(/[^0-9]/g, "");
+    const numberPrice = value.replace(/[^0-9]/g, ""); // form에 재출할 숫자값
+    const formattedPrice = numberPrice // ui상 보여질 값
+      ? Number(numberPrice).toLocaleString() + "원"
+      : "";
+
+    setDisplayedPrice(formattedPrice);
+
     setFormData((prev) => ({ ...prev, purchasePrice: Number(numberPrice) }));
   };
 
@@ -196,31 +201,31 @@ export default function SelectComp({
 
   // 함수 시그니처....
   const handleMultiplePurchased = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const purchaseCount = Number(e.target.value.replace(/[^0-9]/g, ""));
-
-    setFormData({
-      ...formData,
-      repurchasedCount: purchaseCount,
-    });
+    const value = e.target.value.replace(/[^0-9]/g, "");
+    setDisplayedRepurchasedCount(value);
   };
-
   const handleMultiplePurchasedBlur = () => {
-    if (formData.repurchasedCount < 1) {
+    const parsed = Number(displayedRepurchasedCount);
+
+    if (parsed < 1) {
       alert("1 이상의 숫자를 써주세요");
+      setDisplayedRepurchasedCount("1");
       setFormData((prev) => ({
         ...prev,
         repurchasedCount: 1,
       }));
-    } else if (formData.repurchasedCount > 99) {
-      alert("100 미만의 숫자를 써주세요");
+    } else if (parsed > 9) {
+      alert("10 미만의 숫자를 써주세요");
+      setDisplayedRepurchasedCount("9");
+
       setFormData((prev) => ({
         ...prev,
-        repurchasedCount: 99,
+        repurchasedCount: 9,
       }));
     } else {
       setFormData((prev) => ({
         ...prev,
-        repurchasedCount: Number(formData.repurchasedCount) - 1, // 총 구매횟수 - 1 = 재구매 횟수
+        repurchasedCount: parsed,
       }));
     }
   };
@@ -251,10 +256,10 @@ export default function SelectComp({
               className="w-full h-full flex flex-col gap-5"
             >
               <div className="w-full h-[40px] flex items-center justify-between">
-                <span className="ml-5 md:m-0">
+                <span>
                   {currentPageNumber !== 0 &&
                     !(isEditMode && currentPageNumber === 1) && (
-                      <ButtonBasic
+                      <ButtonMedium
                         type="button"
                         onClick={() => handlePrevPage(isLoading)}
                         text="이전"
@@ -295,10 +300,8 @@ export default function SelectComp({
 
               {currentPageNumber === 1 && ( // 구매가
                 <SelectPurchasedPrice
-                  displayedPrice={
-                    formData.purchasePrice.toLocaleString() + "원"
-                  }
-                  onChange={handlePriceChange}
+                  displayedPrice={displayedPrice}
+                  onPriceChange={handlePriceChange}
                 />
               )}
 
@@ -315,6 +318,7 @@ export default function SelectComp({
                 <SelectStatus
                   onStatusChange={handleStatusSelect}
                   selectedStatus={formData.status}
+                  purchasedAt={formData.purchasedAt}
                   soldDate={formData.soldAt}
                   onSoldDateChange={handleSoldDateChange}
                 />
@@ -327,18 +331,19 @@ export default function SelectComp({
                 />
               )}
 
-              {currentPageNumber === 5 && ( // 재구매 여부
+              {currentPageNumber === 5 && (
                 <SelectMultiplePurchased
-                  isMultiplePurchased={isMultiplePurchased}
+                  isMultiplePurchased={Number(displayedRepurchasedCount) > 0}
+                  repurchasedNum={Number(displayedRepurchasedCount)}
+                  handleRepurchased={handleMultiplePurchased}
+                  handleRepurchasedBlur={handleMultiplePurchasedBlur}
                   handleRepurchasedCountChange={(repurchasedCount) => {
-                    setFormData({
-                      ...formData,
-                      repurchasedCount,
-                    });
+                    setDisplayedRepurchasedCount(repurchasedCount.toLocaleString());
+                    setFormData((prev) => ({
+                      ...prev,
+                      repurchasedCount: repurchasedCount,
+                    }));
                   }}
-                  value={formData.repurchasedCount}
-                  handleMultiplePurchased={handleMultiplePurchased}
-                  handleMultiplePurchasedBlur={handleMultiplePurchasedBlur}
                 />
               )}
 
