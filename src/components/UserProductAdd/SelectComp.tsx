@@ -60,6 +60,7 @@ export default function SelectComp({
   const [displayedRepurchasedCount, setDisplayedRepurchasedCount] =
     useState<string>(formData.repurchasedCount.toLocaleString());
 
+
   const {
     MAX_PAGE,
     currentPageNumber,
@@ -90,6 +91,7 @@ export default function SelectComp({
   // 보유 제품 작성 중 이탈 시, 모달 팝업 후 컨펌 로직
   const handleResetForm = () => {
     setFormData(initialUserProductForm);
+    setDisplayedPrice("")
     setIsLoading(false);
     closeModal();
     setIsSelectWindowOpened(false);
@@ -109,9 +111,7 @@ export default function SelectComp({
     setIsLoading(true);
 
     const onSuccess = () => {
-      setIsLoading(false);
-      setIsSelectWindowOpened(false);
-      initializePageNumber();
+      handleResetForm();
     };
 
     const onError = () => {
@@ -119,6 +119,7 @@ export default function SelectComp({
         editMode ? "유저 보유 목록 수정 실패" : "유저 보유 목록 생성 실패"
       );
       setIsLoading(false);
+      setFormData(initialUserProductForm);
     };
 
     if (editMode) {
@@ -138,6 +139,7 @@ export default function SelectComp({
 
     alert("유효하지 않습니다.");
     setIsLoading(false);
+    setFormData(initialUserProductForm);
   };
 
   // 구매가 작성
@@ -308,7 +310,9 @@ export default function SelectComp({
               {currentPageNumber === 2 && ( // 구매 시기
                 <SelectPurchasedDate
                   pickedDate={
-                    formData.purchasedAt ? new Date(formData.purchasedAt) : null
+                    formData.purchasedAt
+                      ? new Date(formData.purchasedAt)
+                      : undefined
                   }
                   onChangePurchasedDate={handlePurchasedDateChange}
                 />
@@ -338,7 +342,9 @@ export default function SelectComp({
                   handleRepurchased={handleMultiplePurchased}
                   handleRepurchasedBlur={handleMultiplePurchasedBlur}
                   handleRepurchasedCountChange={(repurchasedCount) => {
-                    setDisplayedRepurchasedCount(repurchasedCount.toLocaleString());
+                    setDisplayedRepurchasedCount(
+                      repurchasedCount.toLocaleString()
+                    );
                     setFormData((prev) => ({
                       ...prev,
                       repurchasedCount: repurchasedCount,

@@ -12,9 +12,6 @@ interface OptionsProps {
   selectedOptionId: number | null;
 }
 
-// props를 설정할 때도- 이 컴포넌트가 필요한 데이터 타입과 내용을 생각하고 넣는게 중요해요.
-
-// TODO 여기서 options 불러오는 쿼리를 호출하고, 상위에서 productId를 동적으로 받아온다.
 export default function Options({
   productId,
   clickedProductId,
@@ -27,7 +24,6 @@ export default function Options({
     enabled: isOptionOpen,
   });
 
-  console.log("옵션 데이터", optionsData);
 
   return isOptionOpen ? (
     <div className="flex absolute top-2 right-2 z-20">

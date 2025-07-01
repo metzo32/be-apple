@@ -10,8 +10,8 @@ export async function fetchSignIn(userData: {
     const token = response.data?.accessToken; // 해당 유저 토큰 추출
     if (token) {
       localStorage.setItem("accessToken", token); // 로컬 스토리지에 저장
-
-      const userResponse = await get("/user/me"); //
+      
+      const userResponse = await get("/user/me");
       const userInfo = userResponse.data;
 
       return {

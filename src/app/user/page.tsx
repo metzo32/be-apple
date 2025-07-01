@@ -42,9 +42,6 @@ export default function UserPage() {
     setIsGradeOpen(false);
   };
 
-  console.log("총합 포인트", tierData?.totalPoint)
-
-
   return (
     <div className="relative flex flex-col md:flex-row md:gap-10 pt-5 md:py-12">
       <section
@@ -68,19 +65,18 @@ export default function UserPage() {
 
         <div className="hidden md:flex flex-col gap-3 items-start">
           <h2 className="md:text-lg font-bold">나의 등급</h2>
-          <p className="text-primary">티어 {tierData?.tier ?? "등급 없음"}</p>
-          <p className="text-primary">총합 포인트 {tierData?.totalPoint ?? 0}</p>
-          <p className="text-primary">기기 수 {tierData?.productCountPoint ?? 0}</p>
-          <p className="text-primary">돈 {tierData?.productPricePoint ?? 0}</p>
-          <p className="text-primary">오래 {tierData?.purchasedYearPoint ?? 0}</p>
-          <p className="text-primary">포화도 {tierData?.categoryPoint ?? 0}</p>
+          <p className="text-primary">{tierData?.tier ?? "등급 없음"}</p>
 
           <span className="relative">
             <ButtonBasic
               text="등급표 확인하기"
               onClick={() => setIsGradeOpen(!isGradeOpen)}
             />
-            <GradeChart isGradeOpen={isGradeOpen} onClose={handleClose} />
+            <GradeChart
+              isGradeOpen={isGradeOpen}
+              onClose={handleClose}
+              isWideView
+            />
           </span>
         </div>
 
@@ -92,7 +88,13 @@ export default function UserPage() {
       </section>
 
       <div className="w-full">
-        <UserInfo userId={userId} tierData={tierData}/>
+        <UserInfo
+          userId={userId}
+          tierData={tierData}
+          isGradeOpen={isGradeOpen}
+          setIsGradeOpen={setIsGradeOpen}
+          onClose={handleClose}
+        />
 
         <UserProduct userId={userId} />
 

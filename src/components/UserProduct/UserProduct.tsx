@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { useUserProductQuery } from "@/hooks/useUserProductQuery";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useDeleteUserProductMutation,
+  useUserProductQuery,
+} from "@/hooks/useUserProductQuery";
 import {
   GetUserProductResponse,
   UserProductCondition,
   UserProductStatus,
 } from "@/types/userProduct";
-import { deleteUserProduct } from "../fetch/fetchUserProduct";
 import type { UserProductFormData } from "@/types/addUserProducts";
 import { ProductCategoryLabels } from "@/types/productCategory";
 import UserProductCard from "../UserProductAdd/UserProductCard";
@@ -31,37 +32,19 @@ export const initialUserProductForm: UserProductFormData = {
 };
 
 export default function UserProduct({ userId }: UserProductProps) {
-  const [selectOpen, setSelectOpen] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false)
-  const [isOpenSaturationInfo, setIsOpenSaturationInfo] = useState(false);
   const [formData, setFormData] = useState<UserProductFormData>(
     initialUserProductForm
   );
+  const [selectOpen, setSelectOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [isOpenSaturationInfo, setIsOpenSaturationInfo] = useState(false);
   const [userProductIdToUpdate, setUserProductIdToUpdate] = useState<
     number | null
   >(null);
 
-  const queryClient = useQueryClient();
-
   const { data: userProductData } = useUserProductQuery(userId);
-
-  const { mutate: deleteUserProductMutaionFn } = useMutation({
-    mutationFn: (userProduct: GetUserProductResponse) => {
-      if (!userId) {
-        return Promise.reject(new Error("유저 정보가 올바르지 않습니다."));
-      }
-      return deleteUserProduct(userProduct.id);
-    },
-    onSuccess: async () => {
-      queryClient.invalidateQueries({
-        refetchType: "all",
-        queryKey: ["loadUserProduct"],
-      });
-    },
-    onError: (error) => {
-      console.error("보유 상품 삭제에 실패했습니다.", error);
-    },
-  });
+  const { mutate: deleteUserProductMutationFn } =
+    useDeleteUserProductMutation(userId);
 
   if (!userProductData) return null;
 
@@ -94,6 +77,8 @@ export default function UserProduct({ userId }: UserProductProps) {
     setIsOpenSaturationInfo(!isOpenSaturationInfo);
   };
 
+
+  // 수정모드에서 최초 폼 데이터
   const handleEdit = (userProduct: GetUserProductResponse) => {
     setIsEditMode(true);
     setUserProductIdToUpdate(userProduct.id);
@@ -112,6 +97,7 @@ export default function UserProduct({ userId }: UserProductProps) {
   };
 
   const handleCloseSelect = () => {
+    setIsEditMode(false)
     setSelectOpen(false);
     setUserProductIdToUpdate(null);
     setFormData(initialUserProductForm);
@@ -161,7 +147,7 @@ export default function UserProduct({ userId }: UserProductProps) {
                 <div key={index}>
                   <UserProductCard
                     userProduct={userProduct}
-                    onDelete={() => deleteUserProductMutaionFn(userProduct)}
+                    onDelete={() => deleteUserProductMutationFn(userProduct)}
                     userId={userId}
                     onEditSubmit={handleEdit}
                   />

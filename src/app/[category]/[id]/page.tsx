@@ -18,7 +18,6 @@ export default async function DetailPage({ params }: DetailPageProps) {
   if (!product) {
     return <p>제품 상세 페이지를 불러오지 못했습니다.</p>;
   }
-  // TODO 서버 컴포넌트라서 현재 보유여부 & 위시여부 가져오지 못하고 있다. 한번 더 페칭하는 방법 생각해보자.
 
   return (
     <>
@@ -42,7 +41,6 @@ export default async function DetailPage({ params }: DetailPageProps) {
             <span className="thick-line mt-0" />
             <div className="flex items-center gap-3 md:justify-between">
               <h2 className="text-xl md:text-3xl font-bold">{product.name}</h2>
-              {/* TODO 이미 위시에 추가되었는지 확인 */}
               <DetailPageWishButton productId={product.id} />
             </div>
             <p className="text-sm md:text-lg font-bold">

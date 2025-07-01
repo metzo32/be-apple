@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const useUserProductModalPage = (isEditMode = false) => {
+export const useUserProductModalPage = (isEditMode: boolean) => {
   // 전체 페이지
   const MAX_PAGE = 6;
 
@@ -11,6 +11,8 @@ export const useUserProductModalPage = (isEditMode = false) => {
   useEffect(() => {
     if (isEditMode) {
       setCurrentPageNumber(1);
+    } else {
+      setCurrentPageNumber(0);
     }
   }, [isEditMode]);
 
