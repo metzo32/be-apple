@@ -125,7 +125,7 @@ export default function ReviewClient({
           </div>
         ) : (
           sortedReviews?.map((review) => (
-            <ReviewCard key={review.id} review={review} productId={productId} />
+            <ReviewCard key={review.id} review={review} productId={productId} product={product}/>
           ))
         )}
       </div>

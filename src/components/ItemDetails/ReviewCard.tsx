@@ -10,13 +10,19 @@ import Modal from "../Modal/Modal";
 import { useDeleteReviewMutation } from "@/hooks/useReviewsQuery";
 import WriteReview from "./WriteReview";
 import { BsStarFill } from "react-icons/bs";
+import { ProductDetail } from "@/types/productDetail";
 
 interface ReviewCardProps {
   review: Review;
-  productId: number; // 부모 컴포넌트에서 전달 필요
+  productId: number;
+  product: ProductDetail;
 }
 
-export default function ReviewCard({ review, productId }: ReviewCardProps) {
+export default function ReviewCard({
+  review,
+  productId,
+  product,
+}: ReviewCardProps) {
   const { user } = useUserStore();
   const currentUserId = user?.id;
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -29,6 +35,10 @@ export default function ReviewCard({ review, productId }: ReviewCardProps) {
     setIsEditOpen(true);
   };
 
+  console.log("리뷰카드의 프로덕트", product)
+
+  // TODO product - 각 reviews - userId를 바탕으로 userProduct 호출 - 가지고 있는 옵션 추출
+  
   const createdTime = formatDate(review.createdAt, "yyyy년 M월 d일 E요일");
   const updatedTime = formatDate(review.updatedAt, "yyyy년 M월 d일 E요일");
 

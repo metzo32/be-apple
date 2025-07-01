@@ -68,45 +68,63 @@ export default async function DetailPage({ params }: DetailPageProps) {
 
       <section className="flex flex-col gap-3 md:gap-7">
         <span className="thick-line" />
-        <h1 className="text-lg md:text-2xl">상세 옵션</h1>
+        <h1 className="text-lg md:text-2xl">공통 옵션</h1>
 
-        <p>{product.generation}세대</p>
-        <p>밝기{product.displayBrightness}</p>
-        <p>
-          가로 세로 두께cm {product.width} * {product.height} *{" "}
-          {product.thickness}
-        </p>
-        <p>
-          가로 세로 px {product.displayHorizontalPixel} *{" "}
-          {product.displayVerticalPixel}
-        </p>
-        <p>{product.weight}</p>
+        <div className="flex flex-col gap-3 md:gap-5 mb-10">
+          <p>{product.generation}세대</p>
+          <p>
+            {product.width} * {product.height} * {product.thickness}
+          </p>
+          <p>{product.weight}</p>
+          <p>
+            해상도 {product.displayHorizontalPixel} *{" "}
+            {product.displayVerticalPixel}
+          </p>
+          <p>화면 밝기 {product.displayBrightness}</p>
+        </div>
 
+        {/* TODO 맥 외 다른 프로덕트 옵션 추가 */}
         {isMacProduct(product) && (
-          <div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-10">
-            {product.options.map((option, index) => (
-              <div
-                key={option.id}
-                className="w-[150px] h-[225px] md:w-[200px] md:h-[300px] flex flex-col gap-1 md:gap-3"
-              >
-                <h5 className="text-lg md:text-2xl font-bold">
-                  옵션 {index + 1}
-                </h5>
-
-                <p className="text-xs md:text-sm">
-                  CPU <span className="font-bold">{option.cpu}</span>{" "}
-                </p>
-                <p className="text-xs md:text-sm">GPU {option.gpu}</p>
-                <p className="text-xs md:text-sm">
-                  Processor {option.processor}
-                </p>
-                <p className="text-xs md:text-sm">RAM {option.ram}</p>
-                <p className="text-xs md:text-sm">Storage {option.storage}</p>
-                <p className="text-xs md:text-sm">
-                  추가 {option.additionalPrice}
-                </p>
-              </div>
-            ))}
+          <div className="flex flex-col items-center md:grid md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-10">
+            {product.options
+              .sort(
+                (a, b) =>
+                  product.price +
+                  a.additionalPrice -
+                  (product.price + b.additionalPrice)
+              )
+              .map((option) => (
+                <div
+                  key={option.id}
+                  className="w-[150px] md:w-[200px] flex flex-col gap-1 md:gap-3"
+                >
+                  <span className="relative w-[150px] md:w-[200px] h-[150px] md:h-[200px]">
+                    <Image
+                      src={product.photos[0]}
+                      alt="제품 이미지"
+                      fill
+                      className="object-contain"
+                    />
+                  </span>
+                  <div className="flex flex-col items-center gap-1 md:gap-3">
+                    <p className="text-lg md:text-xl font-bold">
+                      저장공간 {option.storage}
+                    </p>
+                    <p className="text-xs md:text-sm">CPU {option.cpu}</p>
+                    <p className="text-xs md:text-sm">GPU {option.gpu}</p>
+                    <p className="text-xs md:text-sm">
+                      Processor {option.processor}
+                    </p>
+                    <p className="text-xs md:text-sm">RAM {option.ram}</p>
+                    <p className="text-lg md:text-xl font-bold">
+                      {(
+                        product.price + option.additionalPrice
+                      ).toLocaleString()}
+                      원
+                    </p>
+                  </div>
+                </div>
+              ))}
           </div>
         )}
       </section>
