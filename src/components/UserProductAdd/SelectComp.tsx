@@ -60,7 +60,6 @@ export default function SelectComp({
   const [displayedRepurchasedCount, setDisplayedRepurchasedCount] =
     useState<string>(formData.repurchasedCount.toLocaleString());
 
-
   const {
     MAX_PAGE,
     currentPageNumber,
@@ -91,7 +90,7 @@ export default function SelectComp({
   // 보유 제품 작성 중 이탈 시, 모달 팝업 후 컨펌 로직
   const handleResetForm = () => {
     setFormData(initialUserProductForm);
-    setDisplayedPrice("")
+    setDisplayedPrice("");
     setIsLoading(false);
     closeModal();
     setIsSelectWindowOpened(false);
@@ -104,6 +103,8 @@ export default function SelectComp({
   ): formData is CreateUserProductReqDto => {
     return !!formData.productId && !!formData.productOptionId;
   };
+  
+  console.log("폼데이터", formData)
 
   // 최종 제출
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -185,7 +186,6 @@ export default function SelectComp({
     });
   };
 
-  // TODO 판매일 선택
   const handleSoldDateChange = (date: Date) => {
     if (formData.soldAt === formatDate(String(date))) return;
     setFormData({
@@ -302,7 +302,11 @@ export default function SelectComp({
 
               {currentPageNumber === 1 && ( // 구매가
                 <SelectPurchasedPrice
-                  displayedPrice={displayedPrice}
+                  displayedPrice={
+                    isEditMode
+                      ? formData.purchasePrice.toLocaleString() + "원"
+                      : displayedPrice
+                  }
                   onPriceChange={handlePriceChange}
                 />
               )}
@@ -337,7 +341,7 @@ export default function SelectComp({
 
               {currentPageNumber === 5 && (
                 <SelectMultiplePurchased
-                  isMultiplePurchased={Number(displayedRepurchasedCount) > 0}
+                  isMultiplePurchased={isMultiplePurchased}
                   repurchasedNum={Number(displayedRepurchasedCount)}
                   handleRepurchased={handleMultiplePurchased}
                   handleRepurchasedBlur={handleMultiplePurchasedBlur}

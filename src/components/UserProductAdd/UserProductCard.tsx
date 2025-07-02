@@ -43,13 +43,12 @@ export default function UserProductCard({
     e.preventDefault();
     e.stopPropagation();
 
-    // 리뷰가 있는 경우 모달 확인
+    // 리뷰가 있는 경우
     if (userProduct.reviews.some((review) => review.userId === userId)) {
       openModal();
     } else {
-      // 리뷰가 없는 경우 즉시 삭제
+      // 리뷰가 없는 경우
       openModal();
-      // deleteUserProductMutationFn({ id: userProduct.id });
     }
   };
 
@@ -105,7 +104,7 @@ export default function UserProductCard({
 
         <span className="justify-self-end">
           {userProduct.status !== "SOLD" && (
-            <MonthDiff purchasedAt={userProduct.purchasedAt} category="Mac" />
+            <MonthDiff purchasedAt={userProduct.purchasedAt ?? null} category={userProduct.product.category} />
           )}
         </span>
 
