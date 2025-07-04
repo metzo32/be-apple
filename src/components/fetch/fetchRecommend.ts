@@ -1,8 +1,7 @@
 import { get, post, deleteCall, patch } from "@/api/api";
 import { ProductCategoryEnum } from "@/types/productCategory";
 
-// 상품 추천 생성 (상품 추천 시작)
-// TODO 임시로 "t" 설정해둔 것 수정하기
+// 상품 추천 생성 (상품 추천 시작) → 카테고리 응답
 export async function createNewRecommend() {
   const response = await post(`/product-recommendation`, { force: "t" });
 
