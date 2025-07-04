@@ -104,8 +104,6 @@ export default function SelectComp({
     return !!formData.productId && !!formData.productOptionId;
   };
   
-  console.log("폼데이터", formData)
-
   // 최종 제출
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

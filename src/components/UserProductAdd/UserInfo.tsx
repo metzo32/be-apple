@@ -1,7 +1,6 @@
 import { TierResponse } from "@/types/tier";
 import ButtonStrong from "../designs/ButtonStrong";
 import UserSectionSm from "../UserPage/UserSectionSm";
-import { useState } from "react";
 import GradeChart from "../UserPage/GradeChart";
 
 interface UserInfoProps {
@@ -31,12 +30,6 @@ export default function UserInfo({
           />
 
           <GradeChart isGradeOpen={isGradeOpen} onClose={onClose} />
-        </div>
-      </UserSectionSm>
-
-      <UserSectionSm title="다음 단계까지" line={true}>
-        <div className="w-full">
-          <h1 className="text-2xl">n점</h1>
         </div>
       </UserSectionSm>
     </section>

@@ -103,9 +103,6 @@ export default function UserProduct({ userId }: UserProductProps) {
     setFormData(initialUserProductForm);
   };
 
-  console.log("유저 프로덕트", userProducts)
-
-
   return (
     <>
       <section className="userSection">

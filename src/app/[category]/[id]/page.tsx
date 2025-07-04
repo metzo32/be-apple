@@ -5,13 +5,11 @@ import { ProductDetail } from "@/types/productDetail";
 import { isMacProduct } from "@/types/productTypeGurards";
 import DetailPageWishButton from "@/components/ItemDetails/DetailPageWishButton";
 
-interface DetailPageProps {
-  params: { id: string; category: string };
-}
-
-export default async function DetailPage({ params }: DetailPageProps) {
-  const productId = Number(params.id);
+export default async function DetailPage({ params }: { params: Promise<{ id: string; category: string }> }) {
+ const { id, category } = await params;
+  const productId = Number(id);
   const product: ProductDetail | null = await getProductDetail(productId);
+
 
   console.log("서버에서의 프로덕트", product);
 

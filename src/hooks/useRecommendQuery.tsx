@@ -12,9 +12,7 @@ import { ProductCategoryEnum } from "@/types/productCategory";
 import { GetProductRecommendationResDto } from "@/types/recommend";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { isNil, isNumber } from "lodash";
-import { useRouter } from "next/router";
 
-// ✅ 추천 상세 로드
 export const useGetRecommendDetail = (recommendId: number | null) => {
   return useQuery<GetProductRecommendationResDto>({
     queryKey: ["recommendList", recommendId],
