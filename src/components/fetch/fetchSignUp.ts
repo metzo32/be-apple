@@ -25,9 +25,3 @@ export async function fetchSignUp(userData: {
     return null;
   }
 }
-
-//TODO
-export async function postChangePassword(changePasswordData: {
-  password: string;
-  newPassword: string;
-}) {}
