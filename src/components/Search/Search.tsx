@@ -46,8 +46,6 @@ export default function Search({
 
   const userId: number | null = user?.id ?? null;
 
-  console.log("리뷰 수 확인", productsList);
-
   const {
     data: wishList,
     isLoading: wishLoading,

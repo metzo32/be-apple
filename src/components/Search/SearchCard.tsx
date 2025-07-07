@@ -44,7 +44,7 @@ export default function SearchCard({ userId, product }: SearchCardProps) {
             <h5 className="text-sm lg:text-base font-bold whitespace-nowrap">
               {originalName}
             </h5>
-            <p className="light-p">{product.generation}</p>
+            <p className="light-p">{product.generation}세대</p>
 
             <div className="flex gap-3 items-center">
               <p className="light-p">{product.price.toLocaleString()}원</p>

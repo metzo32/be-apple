@@ -6,7 +6,6 @@ import PickDate from "../PickDate";
 import { FaCheck } from "react-icons/fa6";
 import { formatStringToDate } from "@/module/formatDate";
 import OptionTitle from "./OptionTitleForm";
-import { useEffect } from "react";
 
 interface SelectStatusProps {
   selectedStatus: string;
@@ -26,7 +25,7 @@ export default function SelectStatus({
   const currentStatus = Object.values(UserProductStatus);
 
   // 구매일이 등록되어 있다면 구매일 기준, 없다면 전체 시기
-  const minDate = purchasedAt ? formatStringToDate(purchasedAt) : new Date();
+  const minDate = purchasedAt ? formatStringToDate(purchasedAt) : new Date("April 11, 1976");
 
   return (
     <OptionTitle title="이 제품을...">

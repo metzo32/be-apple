@@ -70,6 +70,10 @@ export default function RecommendPage() {
 
   const [userMinPrice, setUserMinPrice] = useState<number | null>(minPrice);
   const [userMaxPrice, setUserMaxPrice] = useState<number | null>(maxPrice);
+  // const [displayedPrice, setDisplayedPrice] = useState<{
+  //   min: number | null;
+  //   max: number | null;
+  // }>({ min: null, max: null });
   const [selectedMinReleasedDate, setSelectedMinReleasedDate] =
     useState<Date | null>(formatStringToDate(minReleasedDate));
 
@@ -131,6 +135,8 @@ export default function RecommendPage() {
       minPrice,
       maxPrice,
     });
+    // setDisplayedPrice({ min: minPrice, max: maxPrice });
+    setUserMinPrice(minPrice);
     setStep(step + 1);
   };
 
@@ -141,7 +147,8 @@ export default function RecommendPage() {
   ) => {
     recommendMutationStep04.mutate({
       productRecommendationId,
-      minReleasedDate,
+      // minReleasedDate,
+      minReleasedDate: "2010-10-10"
     });
     setStep(step + 1);
   };
@@ -152,7 +159,7 @@ export default function RecommendPage() {
       specs: selectedSpecs,
     });
 
-       router.push(`/recommend/${productRecommendationId}`);
+    router.push(`/recommend/${productRecommendationId}`);
   };
 
   const handleMinDateChange = (date: Date) => {
@@ -236,7 +243,7 @@ export default function RecommendPage() {
                         type="text"
                         name="tag"
                         maxLength={7}
-                        value={userMinPrice ?? ""}
+                        value={userMinPrice ?? 0}
                         onChange={handleMinChange}
                         placeholder={"최저가"}
                         className="w-full h-full m-0 md:mx-2 md:mb-2 placeholder-gray-400 "
@@ -248,7 +255,7 @@ export default function RecommendPage() {
                         type="text"
                         name="tag"
                         maxLength={7}
-                        value={userMaxPrice ?? ""}
+                        value={userMaxPrice ?? Infinity}
                         onChange={handleMaxChange}
                         placeholder={"최고가"}
                         className="w-full h-full m-0 md:mx-2 md:mb-2 placeholder-gray-400 "
@@ -284,6 +291,7 @@ export default function RecommendPage() {
                           selectedMinReleasedDate,
                           "yyyy-MM-dd"
                         );
+                        console.log("formatted", formatted);
                         handleStep04(productRecommendationId, formatted ?? "");
                       }}
                     />
@@ -323,11 +331,11 @@ export default function RecommendPage() {
                     );
                   })}
 
-                  {/* {specs?.map((spec, index) => (
+                  {specs?.map((spec, index) => (
                     <p key={index}>
                       {spec.type} : {spec.value}
                     </p>
-                  ))} */}
+                  ))}
 
                   <ButtonStrong
                     text="완료"

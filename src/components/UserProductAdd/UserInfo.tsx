@@ -20,7 +20,6 @@ export default function UserInfo({
 }: UserInfoProps) {
   return (
     // md미만 뷰
-    <section>
       <UserSectionSm title="나의 등급" line={true}>
         <div className="w-full flex items-center justify-between relative">
           <h1 className="text-2xl">{tierData?.tier}</h1>
@@ -32,6 +31,5 @@ export default function UserInfo({
           <GradeChart isGradeOpen={isGradeOpen} onClose={onClose} />
         </div>
       </UserSectionSm>
-    </section>
   );
 }

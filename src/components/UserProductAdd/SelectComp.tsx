@@ -105,8 +105,7 @@ export default function SelectComp({
   };
   
   // 최종 제출
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     setIsLoading(true);
 
     const onSuccess = () => {
@@ -252,7 +251,7 @@ export default function SelectComp({
           <div className="overflow-hidden w-[300px] h-[500px] md:w-[800px] md:h-[600px] xl:w-[1200px] xl:h-[800px] p-5 pt-10 md:p-12 md:pt-18 xl:p-16 bg-white relative">
             <CloseButton onClick={handleCloseSelectWindow} />
             <form
-              onSubmit={handleSubmit}
+              // onSubmit={handleSubmit}
               className="w-full h-full flex flex-col gap-5"
             >
               <div className="w-full h-[40px] flex items-center justify-between">
@@ -371,6 +370,7 @@ export default function SelectComp({
                     <>
                       <ButtonStrong
                         type="submit"
+                        onClick={handleSubmit}
                         text={editMode ? "수정 완료" : "등록하기"}
                       />
                     </>

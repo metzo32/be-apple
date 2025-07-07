@@ -8,9 +8,9 @@ interface SectionCompProps {
 
 export default function UserSectionSm({ title, children, line }: SectionCompProps) {
   return (
-    <div className={`userSection block md:hidden ${line ? "userSection-line" : ""}`}>
+    <section className={`userSection block md:hidden ${line ? "userSection-line" : ""}`}>
       <h2 className="user-title-sm">{title}</h2>
       {children}
-    </div>
+    </section>
   );
 }

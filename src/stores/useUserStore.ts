@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { get } from "@/api/api";
 import { persist } from "zustand/middleware";
+import { AxiosError } from "axios";
 
 type User = {
   id: number;
@@ -17,7 +18,7 @@ type UserStore = {
 };
 
 export const useUserStore = create<UserStore>()(
-	// 기존 상태 객체를 감싸준다.
+  // 기존 상태 객체를 감싸준다.
   persist(
     (set) => ({
       user: null,
@@ -34,6 +35,12 @@ export const useUserStore = create<UserStore>()(
           set({ user: res.data, isLoading: false });
         } catch (err) {
           console.error("유저 정보 불러오기 실패:", err);
+
+          if ((err as AxiosError).response?.status === 401) {
+            localStorage.removeItem("accessToken");
+            set({ user: null, isLoading: false });
+          }
+
           localStorage.removeItem("accessToken");
           set({ user: null, isLoading: false });
         }

@@ -108,7 +108,7 @@ export default function UserProductCard({
           )}
         </span>
 
-        <span className="w-full flex justify-between md:justify-end items-center">
+        <span className="w-full flex justify-between lg:justify-end items-center">
           {userProduct.purchasePrice && userProduct.purchasePrice !== 0 ? (
             <p className="justify-self-end light-p whitespace-nowrap">{`${userProduct.purchasePrice.toLocaleString()}`}</p>
           ) : (
@@ -117,13 +117,13 @@ export default function UserProductCard({
             </p>
           )}
 
-          <div className="flex gap-3 md:hidden">
+          <div className="flex gap-3 lg:hidden">
             <ButtonBasic text="수정하기" onClick={handleEdit} />
             <ButtonBasic text="삭제하기" onClick={handleDelete} />
           </div>
         </span>
 
-        <div className="ml-10 hidden md:flex flex-col">
+        <div className="ml-10 hidden lg:flex flex-col">
           <ButtonBasic text="수정하기" onClick={handleEdit} />
           <ButtonBasic text="삭제하기" onClick={handleDelete} />
         </div>

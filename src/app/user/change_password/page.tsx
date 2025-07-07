@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { postChangePassword } from "@/components/fetch/fetchSignUp";
 import ButtonStrong from "@/components/designs/ButtonStrong";
 import CustomTextField from "@/components/designs/CustomTextField";
+import { useUserStore } from "@/stores/useUserStore";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export default function ChangePasswordPage() {
   const [formData, setFormData] = useState({
@@ -13,7 +15,20 @@ export default function ChangePasswordPage() {
     newPasswordConfirm: "",
   });
 
+  const { user } = useUserStore();
   const router = useRouter();
+
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token || !user) {
+      router.replace("/login");
+    } else {
+      setChecking(false);
+    }
+  }, [user]);
 
   const NO_WHITESPACE_FIELDS = [
     "currentPassword",
@@ -48,7 +63,9 @@ export default function ChangePasswordPage() {
     });
   };
 
-  return (
+  return checking ? (
+    <LoadingScreen />
+  ) : (
     <section className="py-12 md:py-20 flex flex-col items-center justify-center">
       <form className="auth-form" onSubmit={handleSubmit}>
         <div className="w-full flex flex-col gap-3 md:gap-5">

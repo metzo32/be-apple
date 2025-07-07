@@ -87,6 +87,7 @@ export default function UserPage() {
         </div>
       </section>
 
+      {/* md 미만 뷰 */}
       <div className="w-full">
         <UserInfo
           userId={userId}
