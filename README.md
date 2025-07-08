@@ -45,37 +45,37 @@
 ---
 
 
-### 기능 시연
+## 기능 시연
 
-## 회원가입
+### 회원가입
 ![시연](./public/assets/demo/beApple_회원가입demo.gif)
 
-## 로그인
+### 로그인
 ![시연](./public/assets/demo/beApple_로그인demo.gif)
 
-## 이메일로 부여받은 인증코드 기반의 비밀번호 변경
+### 이메일로 부여받은 인증코드 기반의 비밀번호 변경
 ![시연](./public/assets/demo/beApple_비밀번호변경demo.gif)
 
-## 제품 카드 정렬
+### 제품 카드 정렬
 ![시연](./public/assets/demo/beApple_정렬demo.gif)
 
-## 위시리스트 추가
+### 위시리스트 추가
 ![시연](./public/assets/demo/beApple_위시추가demo.gif)
 
-## 위시리스트 삭제
+### 위시리스트 삭제
 ![시연](./public/assets/demo/beApple_위시시간차삭제demo.gif)
 
-## 회원가입
+### 회원가입
 ![시연](./public/assets/demo/beApple_회원가입demo.gif)
 
-## 제품 상세페이지
+### 제품 상세페이지
 ![시연](./public/assets/demo/beApple_프로덕트디테일페이지demo.gif)
 
-## 사진을 포함한 리뷰 생성 CRUD
+### 사진을 포함한 리뷰 생성 CRUD
 ![시연](./public/assets/demo/beApple_리뷰생성demo.gif)
 
-## 보유 제품 추가
+### 보유 제품 추가
 ![시연](./public/assets/demo/beApple_유저프로덕트추가demo.gif)
 
-## 보유 제품 수정
+### 보유 제품 수정
 ![시연](./public/assets/demo/beApple_유저프로덕트수정demo.gif)
