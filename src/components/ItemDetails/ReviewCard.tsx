@@ -29,16 +29,12 @@ export default function ReviewCard({
 
   const [isEditOpen, setIsEditOpen] = useState(false);
 
-  const { mutate: deleteReviewMutationFn } = useDeleteReviewMutation();
+  const { mutate: deleteReviewMutationFn } = useDeleteReviewMutation(productId);
 
   const handleEditReview = () => {
     setIsEditOpen(true);
   };
 
-  console.log("리뷰카드의 프로덕트", product)
-
-  // TODO product - 각 reviews - userId를 바탕으로 userProduct 호출 - 가지고 있는 옵션 추출
-  
   const createdTime = formatDate(review.createdAt, "yyyy년 M월 d일 E요일");
   const updatedTime = formatDate(review.updatedAt, "yyyy년 M월 d일 E요일");
 
@@ -54,13 +50,14 @@ export default function ReviewCard({
     <div className="w-full flex flex-col gap-3 border-b border-lineLight pb-3 mt-15">
       <div className="w-full flex flex-col gap-3">
         <div className="flex justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col gap-3">
+            <h2 className="text-xs md:text-sm text-light">{maskedName}</h2>
+            {/* 별점 */}
             <div className="flex text-xs gap-[1px]">
               {Array.from({ length: review.rating }).map((_, index) => (
                 <BsStarFill key={index} className="text-text" />
               ))}
             </div>
-            <h2 className="text-xs md:text-sm text-light">{maskedName}</h2>
           </div>
 
           {review.createdAt !== review.updatedAt ? (
@@ -70,13 +67,8 @@ export default function ReviewCard({
           )}
         </div>
 
-        {/* TODO: 실제 옵션 데이터로 바꾸기 */}
-        <p className="text-xs text-light break-words break-keep">
-          Macbook Air 13inch 10코어 CPU 10코어 GPU 16GB 통합 메모리 512GB SSD
-        </p>
-
         <div className="flex flex-col md:grid md:grid-cols-2 gap-3">
-          <p className="text-xs md:text-sm">{review.content}</p>
+          <p className="text-xs md:text-sm mt-5">{review.content}</p>
 
           {review.photos && review.photos.length > 0 && (
             <div className="w-full grid grid-cols-2 gap-3">

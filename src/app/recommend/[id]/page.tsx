@@ -12,6 +12,8 @@ export default function RecommendItemPage() {
 
   if (!recommendData) return <div>잘못된 요청입니다.</div>;
 
+  console.log("최종 추천 결과", recommendData)
+
   return (
     <div>
       <p>추천 ID: {recommendData.id}</p>

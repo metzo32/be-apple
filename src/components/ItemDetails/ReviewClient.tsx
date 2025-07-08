@@ -18,15 +18,15 @@ interface ReviewClientProps {
 
 export default function ReviewClient({
   product,
-  productId, // 이 페이지의 프로덕트id
+  productId,
 }: ReviewClientProps) {
   const { user } = useUserStore();
   const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
-
   const { data: productDetail } = useProductDetailQuery(productId);
   const userProductId = productDetail?.userProductId ?? null;
 
   const reviews = productDetail?.reviews; // 리뷰 배열
+
   const sortedReviews = reviews?.slice().sort((a, b) => {
     return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
   });
@@ -121,11 +121,18 @@ export default function ReviewClient({
       <div className="grid grid-cols-1 lg:grid-cols-1 gap-5 lg:gap-10">
         {product.reviews.length === 0 ? (
           <div className="h-[300px]">
-            <p className="text-sm md:text-base mt-15">아직 등록된 리뷰가 없습니다.</p>
+            <p className="text-sm md:text-base mt-15">
+              아직 등록된 리뷰가 없습니다.
+            </p>
           </div>
         ) : (
           sortedReviews?.map((review) => (
-            <ReviewCard key={review.id} review={review} productId={productId} product={product}/>
+            <ReviewCard
+              key={review.id}
+              review={review}
+              productId={productId}
+              product={product}
+            />
           ))
         )}
       </div>

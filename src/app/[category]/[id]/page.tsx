@@ -5,13 +5,14 @@ import { ProductDetail } from "@/types/productDetail";
 import { isMacProduct } from "@/types/productTypeGurards";
 import DetailPageWishButton from "@/components/ItemDetails/DetailPageWishButton";
 
-export default async function DetailPage({ params }: { params: Promise<{ id: string; category: string }> }) {
- const { id, category } = await params;
+export default async function DetailPage({
+  params,
+}: {
+  params: Promise<{ id: string; category: string }>;
+}) {
+  const { id, category } = await params;
   const productId = Number(id);
   const product: ProductDetail | null = await getProductDetail(productId);
-
-
-  console.log("서버에서의 프로덕트", product);
 
   if (!product) {
     return <p>제품 상세 페이지를 불러오지 못했습니다.</p>;
@@ -82,7 +83,7 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
         </div>
 
         {/* TODO 맥 외 다른 프로덕트 옵션 추가 */}
-        {isMacProduct(product) && (
+        {isMacProduct(product) ? (
           <div className="flex flex-col items-center md:grid md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-10">
             {product.options
               .sort(
@@ -114,6 +115,43 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
                       Processor {option.processor}
                     </p>
                     <p className="text-xs md:text-sm">RAM {option.ram}</p>
+                    <p className="text-lg md:text-xl font-bold">
+                      {(
+                        product.price + option.additionalPrice
+                      ).toLocaleString()}
+                      원
+                    </p>
+                  </div>
+                </div>
+              ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center md:grid md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-10">
+            {product.options
+              .sort(
+                (a, b) =>
+                  product.price +
+                  a.additionalPrice -
+                  (product.price + b.additionalPrice)
+              )
+              .map((option) => (
+                <div
+                  key={option.id}
+                  className="w-[150px] md:w-[200px] flex flex-col gap-1 md:gap-3"
+                >
+                  <span className="relative w-[150px] md:w-[200px] h-[150px] md:h-[200px]">
+                    <Image
+                      src={product.photos[0]}
+                      alt="제품 이미지"
+                      fill
+                      className="object-contain"
+                    />
+                  </span>
+                  <div className="flex flex-col items-center gap-1 md:gap-3">
+                    <p className="text-lg md:text-xl font-bold">
+                      저장공간 {option.storage}
+                    </p>
+
                     <p className="text-lg md:text-xl font-bold">
                       {(
                         product.price + option.additionalPrice

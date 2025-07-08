@@ -2,9 +2,7 @@ import { get, post, deleteCall, patch } from "@/api/api";
 import type { CreateNewReviewReq, Review } from "@/types/Review";
 
 // 리뷰 생성하기
-export async function createNewReview(
-  reviewData: CreateNewReviewReq
-) {
+export async function createNewReview(reviewData: CreateNewReviewReq) {
   const { userProductId, rating, content, photos } = reviewData;
   return post(`/review`, {
     userProductId,
@@ -29,10 +27,10 @@ export async function editReview(
   });
 }
 
-// 제품 별 리뷰 조회
+// 리뷰 상세 조회
 export async function fetchReview(id: number) {
   const response = await get<Review>(`/review/${id}`);
-  return response;
+  return response.data;
 }
 
 // 내가 쓴 리뷰 목록 조회

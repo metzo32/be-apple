@@ -6,15 +6,13 @@ import {
   fetchReview,
 } from "@/components/fetch/fetchReview";
 import { CreateNewReviewReq } from "@/types/Review";
-import { isNil } from "lodash";
 import { useUserStore } from "@/stores/useUserStore";
 
-export const useProductReviewQuery = (productId: number | null) => {
+export const useProductReviewQuery = (reviewId: number) => {
   return useQuery({
-    queryKey: ["productReview", productId],
+    queryKey: ["productReview", reviewId],
     queryFn: () => {
-      if (isNil(productId)) return;
-      return fetchReview(productId);
+      return fetchReview(reviewId);
     },
   });
 };
@@ -28,7 +26,11 @@ export const useAddReviewMutation = (productId: number) => {
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         refetchType: "all",
-        queryKey: ["productDetail"],
+        queryKey: ["productDetail", productId],
+      });
+      await queryClient.invalidateQueries({
+        refetchType: "all",
+        queryKey: ["productReview", productId],
       });
     },
     onError: (error: any) => {
@@ -37,7 +39,7 @@ export const useAddReviewMutation = (productId: number) => {
   });
 };
 
-export const useEditReviewMutation = () => {
+export const useEditReviewMutation = (productId: number) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
@@ -47,13 +49,13 @@ export const useEditReviewMutation = () => {
       id: number;
       reviewData: Partial<CreateNewReviewReq>;
     }) => {
-        return editReview(id, reviewData)
+      return editReview(id, reviewData);
     },
 
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         refetchType: "all",
-        queryKey: ["productDetail"],
+        queryKey: ["productDetail", productId],
       });
     },
 
@@ -63,26 +65,26 @@ export const useEditReviewMutation = () => {
   });
 };
 
-export const useDeleteReviewMutation = () => {
-    const queryClient = useQueryClient();
-    const { user } = useUserStore();
-  
-    return useMutation({
-      mutationFn: (id: number) => {
-        const currentUserId = user?.id;
-        if (!currentUserId) {
-          return Promise.reject(new Error("로그인이 필요합니다."));
-        }
-        return deleteReview(id);
-      },
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: ["productDetail"],
-          refetchType: "all",
-        });
-      },
-      onError: (error) => {
-        console.error("리뷰 삭제 도중 오류가 발생했습니다.", error);
-      },
-    });
-  };
+export const useDeleteReviewMutation = (productId: number) => {
+  const queryClient = useQueryClient();
+  const { user } = useUserStore();
+
+  return useMutation({
+    mutationFn: (id: number) => {
+      const currentUserId = user?.id;
+      if (!currentUserId) {
+        return Promise.reject(new Error("로그인이 필요합니다."));
+      }
+      return deleteReview(id);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["productDetail", productId],
+        refetchType: "all",
+      });
+    },
+    onError: (error) => {
+      console.error("리뷰 삭제 도중 오류가 발생했습니다.", error);
+    },
+  });
+};
