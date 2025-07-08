@@ -42,4 +42,4 @@
 
 시연 영상
 
-![시연](./public/demo/beApple_demo.gif)
+![시연](./public/assets/demo/beApple_demo.gif)
