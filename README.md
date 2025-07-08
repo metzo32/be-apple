@@ -2,7 +2,6 @@
 ### 원하는 사양에 적합한 애플 제품 추천 및 보유 상품 목록에 따른 티어 체크 서비스
 
 
-시연 영상
 
 ![시연](./public/assets/demo/beApple_demo.gif)
 
