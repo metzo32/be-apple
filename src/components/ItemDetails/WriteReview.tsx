@@ -47,7 +47,7 @@ export default function WriteReview({
   const MAX_LENGTH = 200;
 
   const { mutate: createReviewMutationFn } = useAddReviewMutation(productId);
-  const { mutate: editReviewMutationFn } = useEditReviewMutation();
+  const { mutate: editReviewMutationFn } = useEditReviewMutation(productId);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
