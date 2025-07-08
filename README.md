@@ -65,9 +65,6 @@
 ### 위시리스트 삭제
 ![시연](./public/assets/demo/beApple_위시시간차삭제demo.gif)
 
-### 회원가입
-![시연](./public/assets/demo/beApple_회원가입demo.gif)
-
 ### 제품 상세페이지
 ![시연](./public/assets/demo/beApple_프로덕트디테일페이지demo.gif)
 
