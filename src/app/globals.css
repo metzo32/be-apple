@@ -275,7 +275,8 @@ select:hover {
   }
 
   .user-wishcard-btn {
-    @apply w-3 aspect-square text-lg
+    @apply 
+    w-3 aspect-square text-lg
     flex items-center justify-center 
     text-mid 
     hover:text-light 
