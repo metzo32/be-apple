@@ -29,7 +29,7 @@
 ---
 
 
-### 주요 기능
+### 주요 기술 및 기능
 
 + 백엔드 API를 연동하여 비동기 데이터를 페칭하고, 이를 모듈화
 + 한 페이지 내에서도 렌더링 시간 단축을 위해 SSR과 CSR 컴포넌트를 적절하게 구성
@@ -44,3 +44,38 @@
 
 ---
 
+
+### 기능 시연
+
+## 회원가입
+![시연](./public/assets/demo/beApple_회원가입demo.gif)
+
+## 로그인
+![시연](./public/assets/demo/beApple_로그인demo.gif)
+
+## 이메일로 부여받은 인증코드 기반의 비밀번호 변경
+![시연](./public/assets/demo/beApple_비밀번호변경demo.gif)
+
+## 제품 카드 정렬
+![시연](./public/assets/demo/beApple_정렬demo.gif)
+
+## 위시리스트 추가
+![시연](./public/assets/demo/beApple_위시추가demo.gif)
+
+## 위시리스트 삭제
+![시연](./public/assets/demo/beApple_위시시간차삭제demo.gif)
+
+## 회원가입
+![시연](./public/assets/demo/beApple_회원가입demo.gif)
+
+## 제품 상세페이지
+![시연](./public/assets/demo/beApple_프로덕트디테일페이지demo.gif)
+
+## 사진을 포함한 리뷰 생성 CRUD
+![시연](./public/assets/demo/beApple_리뷰생성demo.gif)
+
+## 보유 제품 추가
+![시연](./public/assets/demo/beApple_유저프로덕트추가demo.gif)
+
+## 보유 제품 수정
+![시연](./public/assets/demo/beApple_유저프로덕트수정demo.gif)
